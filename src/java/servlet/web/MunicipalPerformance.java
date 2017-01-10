@@ -10,6 +10,7 @@ import dao.DamageIncidentDAO;
 import dao.DeployedProgramDAO;
 import dao.FarmDAO;
 import dao.FarmerDAO;
+import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
 import dao.PlotDAO;
 import dao.WeeklyPlantingReportDAO;
@@ -33,6 +34,7 @@ import object.DeployedProgram;
 import object.Employee;
 import object.Farm;
 import object.Farmer;
+import object.Municipality;
 import object.PlantingReport;
 import object.Plot;
 import object.WeeklyPlantingReport;
@@ -103,32 +105,22 @@ public class MunicipalPerformance extends BaseServlet {
 
         String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         ArrayList<Barangay> barangays = new BarangayDAO().getListOfBarangaysInMunicipality(userLogged.getMunicipalityID());
+        Municipality municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID());
+        ArrayList<Barangay> barangayCropStage  = new BarangayDAO().getBarangayCropGrowthMonitoring(municipal.getMunicipalityName(), date);
         for (int a = 0; a < barangays.size(); a++) {
-            ArrayList<PlantingReport> plantingReports = new PlantingReportDAO().getListOfOngoingPlantingReportsInBarangayBefore(barangays.get(a).getBarangayID(), date);
-            double newlyPlanted = 0, tillering = 0, reporoductive = 0, harvesting = 0;
-            for (int b = 0; b < plantingReports.size(); b++) {
-                double plotSize = new PlotDAO().getPlotDetails(plantingReports.get(b).getPlotID()).getPlotSize();
-                try {
-                    WeeklyPlantingReport weeklyPlantingReport = new WeeklyPlantingReportDAO().getLatestWeeklyPlantingReportForPlantingReportIDBefore(plantingReports.get(b).getPlantingReportID(), date);
-                    if (weeklyPlantingReport.getCropStage().equals("Newly Planted")) {
-                        newlyPlanted += plotSize;
-                    } else if (weeklyPlantingReport.getCropStage().equals("Tillering")) {
-                        tillering += plotSize;
-                    } else if (weeklyPlantingReport.getCropStage().equals("Reproductive")) {
-                        reporoductive += plotSize;
+            for (int b = 0; b < barangayCropStage.size(); b++) {
+                if (barangays.get(a).getBarangayName().equals(barangayCropStage.get(b).getBarangayName())) {
+                    if (barangayCropStage.get(b).getCropStage().equals("Newly Planted")) {
+                        barangays.get(a).setNewlyPlantedArea(barangayCropStage.get(b).getArea());
+                    } else if (barangayCropStage.get(b).getCropStage().equals("Tillering")) {
+                        barangays.get(a).setTilleringArea(barangayCropStage.get(b).getArea());
+                    } else if (barangayCropStage.get(b).getCropStage().equals("Reproductive")) {
+                        barangays.get(a).setReproductiveArea(barangayCropStage.get(b).getArea());
                     } else {
-                        harvesting += plotSize;
+                        barangays.get(a).setHarvestingArea(barangayCropStage.get(b).getArea());
                     }
-                } catch (IndexOutOfBoundsException indexEx) {
-                    Logger.getLogger(MunicipalPerformance.class.getName()).log(Level.SEVERE, null, indexEx);
-                    System.out.println(plantingReports.get(b).getPlantingReportID() + " index out of bounds");
                 }
             }
-
-            barangays.get(a).setNewlyPlantedArea(newlyPlanted);
-            barangays.get(a).setTilleringArea(tillering);
-            barangays.get(a).setReproductiveArea(reporoductive);
-            barangays.get(a).setHarvestingArea(harvesting);
         }
 
         session.setAttribute("barangays", barangays);

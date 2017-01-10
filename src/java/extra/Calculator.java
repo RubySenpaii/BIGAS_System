@@ -146,7 +146,7 @@ public class Calculator {
                             if (incidents.get(d).getBarangayName().equals(barangays.get(b).getBarangayName()) && incidents.get(d).getProblemName().equals(problems.get(a).getProblemName()) && farms.get(c).getFarmName().equals(incidents.get(d).getFarmName())) {
                                 majorDamaged += incidents.get(d).getTotalAreaDamaged();
                                 minorDamaged += incidents.get(d).getTotalAreaAffected();
-                                
+
                                 incidents.remove(d);
 
                                 farms.get(c).setAreaDamaged(majorDamaged);
@@ -183,6 +183,45 @@ public class Calculator {
                         }
 
                     }
+                }
+            }
+        }
+        return notifications;
+    }
+
+    public ArrayList<Notification> getPestAndDiseaseNotification3(int municipalityID) {
+        ArrayList<Notification> notifications = new ArrayList<>();
+        ArrayList<Barangay> barangays = new BarangayDAO().getMunicipalNotification(municipalityID);
+        if (barangays.size() > 0) {
+            for (int a = 0; a < barangays.size(); a++) {
+                Problem problem = new ProblemDAO().getProblemWithName(barangays.get(a).getProblemName());
+                double plantableArea = barangays.get(a).getArea();
+                double majorDamaged = barangays.get(a).getMajorDamagedArea();
+                double minorDamaged = barangays.get(a).getMinorDamagedArea();
+                
+                if (problem.getType().equals("Calamity")) {
+                    if (majorDamaged / plantableArea >= 0.4) {
+                        Notification notification = new Notification();
+                        notification.setType("ALERT");
+                        notification.setMessage(problem.getProblemName() + " has damaged " + new Formatter().doubleToString(majorDamaged / plantableArea * 100) + ". Damaged area is " + majorDamaged + ".");
+                        notification.setEmployeeID(-1);
+                        notification.setBarangayID(barangays.get(a).getBarangayID());
+                        notifications.add(notification);
+                    }
+                } else if (minorDamaged / plantableArea >= 0.045) {
+                    Notification notification = new Notification();
+                    notification.setType("ALERT");
+                    notification.setMessage(problem.getProblemName() + " has affected " + new Formatter().doubleToString(minorDamaged / plantableArea * 100) + "%. Affected area is " + minorDamaged + ".");
+                    notification.setEmployeeID(-1);
+                    notification.setBarangayID(barangays.get(a).getBarangayID());
+                    notifications.add(notification);
+                } else if (majorDamaged / plantableArea >= 0.03) {
+                    Notification notification = new Notification();
+                    notification.setType("ALERT");
+                    notification.setMessage(problem.getProblemName() + " has damaged " + new Formatter().doubleToString(majorDamaged / plantableArea * 100) + ". Damaged area is " + majorDamaged + ".");
+                    notification.setEmployeeID(-1);
+                    notification.setBarangayID(barangays.get(a).getBarangayID());
+                    notifications.add(notification);
                 }
             }
         }

@@ -163,7 +163,7 @@ public class MunicipalProgram extends BaseServlet {
                 if (programTriggers.get(b).getTriggerName().equals("Farm Affected")) {
                     double farmPercentage = (double) importantProblem.getFarms().size() / importantProblem.getFarmCount() * 100;
                     System.out.println("farm percentage " + farmPercentage);
-                    if (programTriggers.get(b).getTriggerValue() >  farmPercentage) {
+                    if (programTriggers.get(b).getTriggerValue() > farmPercentage) {
                         remove.add(programPlans.get(a));
                         break;
                     } else {
@@ -172,7 +172,7 @@ public class MunicipalProgram extends BaseServlet {
                         if (triggerName.length() > 0) {
                             triggerName += "<br>";
                         }
-                        triggerName += "Affected Farm Count: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getFarms().size() 
+                        triggerName += "Affected Farm Count: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getFarms().size()
                                 + " farm(s) needed <b>(" + requirement + "farm(s))</b>";
                     }
                 } else if (programTriggers.get(b).getTriggerName().equals("Minor Damages")) {
@@ -187,11 +187,11 @@ public class MunicipalProgram extends BaseServlet {
                         if (triggerName.length() > 0) {
                             triggerName += "<br>";
                         }
-                        triggerName += "Minor Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea() 
+                        triggerName += "Minor Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea()
                                 + " ha needed <b>(" + requirement + " ha)</b>";
                     }
                 } else if (programTriggers.get(b).getTriggerName().equals("Major Damages")) {
-                    double majorPercentage = (double) importantProblem.getTotalMajor()/ importantProblem.getPlantableArea() * 100;
+                    double majorPercentage = (double) importantProblem.getTotalMajor() / importantProblem.getPlantableArea() * 100;
                     System.out.println("major percentage " + majorPercentage);
                     if (programTriggers.get(b).getTriggerValue() > majorPercentage) {
                         remove.add(programPlans.get(a));
@@ -202,7 +202,7 @@ public class MunicipalProgram extends BaseServlet {
                         if (triggerName.length() > 0) {
                             triggerName += "<br>";
                         }
-                        triggerName += "Major Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea() 
+                        triggerName += "Major Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea()
                                 + " ha needed <b>(" + requirement + " ha)</b>";
                     }
                 } else {
@@ -418,7 +418,7 @@ public class MunicipalProgram extends BaseServlet {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
-        ArrayList<ImportantProblem> importantProblems = getListOfPestDiseaseProblem2(request, response);
+        ArrayList<ImportantProblem> importantProblems = getListOfPestDiseaseProblem3(request, response);
 
         session.setAttribute("importantProblems", importantProblems);
     }
@@ -471,6 +471,54 @@ public class MunicipalProgram extends BaseServlet {
         System.out.println("program request submitted: " + success);
     }
 
+    private ArrayList<ImportantProblem> getListOfPestDiseaseProblem3(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Employee userLogged = (Employee) session.getAttribute("userLogged");
+
+        ArrayList<ImportantProblem> importantProblems = new ArrayList<>();
+        ArrayList<Barangay> barangays = new BarangayDAO().getMunicipalNotification(userLogged.getMunicipalityID());
+        for (int a = 0; a < barangays.size(); a++) {
+            Problem problem = new ProblemDAO().getProblemWithName(barangays.get(a).getProblemName());
+            double plantableArea = barangays.get(a).getArea();
+            double majorDamaged = barangays.get(a).getMajorDamagedArea();
+            double minorDamaged = barangays.get(a).getMinorDamagedArea();
+
+            if (problem.getType().equals("Calamity")) {
+                double calamityMajor = majorDamaged / plantableArea;
+                if (calamityMajor >= 0.4) {
+                    ImportantProblem importantProblem = new ImportantProblem();
+                    importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                    importantProblem.setProblem(problem);
+                    importantProblem.setTotalMajor(majorDamaged);
+                    importantProblem.setTotalMinor(minorDamaged);
+                    importantProblem.setPlantableArea(plantableArea);
+                    importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                    importantProblems.add(importantProblem);
+                }
+            } else if (majorDamaged / plantableArea >= 0.03) {
+                ImportantProblem importantProblem = new ImportantProblem();
+                importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                importantProblem.setProblem(problem);
+                importantProblem.setTotalMajor(majorDamaged);
+                importantProblem.setTotalMinor(minorDamaged);
+                importantProblem.setPlantableArea(plantableArea);
+                importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                importantProblems.add(importantProblem);
+            } else if (minorDamaged / plantableArea >= 0.045) {
+                ImportantProblem importantProblem = new ImportantProblem();
+                importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                importantProblem.setProblem(problem);
+                importantProblem.setTotalMajor(majorDamaged);
+                importantProblem.setTotalMinor(minorDamaged);
+                importantProblem.setPlantableArea(plantableArea);
+                importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                importantProblems.add(importantProblem);
+            }
+        }
+        System.out.println("problem size " + importantProblems.size());
+        return importantProblems;
+    }
+
     private ArrayList<ImportantProblem> getListOfPestDiseaseProblem2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
@@ -496,14 +544,14 @@ public class MunicipalProgram extends BaseServlet {
                         if (incidents.get(d).getBarangayName().equals(barangays.get(b).getBarangayName()) && incidents.get(d).getProblemName().equals(problems.get(a).getProblemName()) && farms.get(c).getFarmName().equals(incidents.get(d).getFarmName())) {
                             majorDamaged += incidents.get(d).getTotalAreaDamaged();
                             minorDamaged += incidents.get(d).getTotalAreaAffected();
-                            
+
                             farms.get(c).setAreaDamaged(majorDamaged);
                             farms.get(c).setAreaAffected(minorDamaged);
                             includedFarms.add(farms.get(c));
                         }
                     }
                 }
-                
+
                 if (!includedFarms.isEmpty()) {
                     if (problems.get(a).getType().equals("Calamity")) {
                         double calamityMajor = majorDamaged / plantableArea;
@@ -545,7 +593,7 @@ public class MunicipalProgram extends BaseServlet {
                 }
             }
         }
-        
+
         System.out.println("problem size " + importantProblems.size());
         return importantProblems;
     }

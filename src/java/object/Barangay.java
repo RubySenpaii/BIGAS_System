@@ -43,6 +43,9 @@ public class Barangay {
     private double areaDamaged;
     private String escalationLevel;
     
+    private String municipalityName;
+    private String cropStage;
+    
     public Barangay() {
         
     }
@@ -339,5 +342,33 @@ public class Barangay {
      */
     public void setMajorDamagedArea(double majorDamagedArea) {
         this.majorDamagedArea = majorDamagedArea;
+    }
+
+    /**
+     * @return the municipalityName
+     */
+    public String getMunicipalityName() {
+        return municipalityName;
+    }
+
+    /**
+     * @param municipalityName the municipalityName to set
+     */
+    public void setMunicipalityName(String municipalityName) {
+        this.municipalityName = municipalityName;
+    }
+
+    /**
+     * @return the cropStage
+     */
+    public String getCropStage() {
+        return cropStage;
+    }
+
+    /**
+     * @param cropStage the cropStage to set
+     */
+    public void setCropStage(String cropStage) {
+        this.cropStage = cropStage;
     }
 }

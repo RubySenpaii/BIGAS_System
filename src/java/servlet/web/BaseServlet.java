@@ -87,14 +87,14 @@ public abstract class BaseServlet extends HttpServlet {
             //notifications = new NotificationDAO().getListOfNotificationsForPAO();
             ArrayList<Municipality> municipalities = new MunicipalityDAO().getListOfMunicipalities();
             for (int a = 0; a < municipalities.size(); a++) {
-                ArrayList<Notification> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification2(municipalities.get(a).getMunicipalityID());
+                ArrayList<Notification> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification3(municipalities.get(a).getMunicipalityID());
                 notifications.addAll(pestDiseasesNotifications);
             }
         } else if (userLogged.getAuthority().equals("Technician")) {
             //notifications = new NotificationDAO().getListOfNotificationsForTechnician();
         } else {
             //notifications = new NotificationDAO().getListOfNotificationsForMAO();
-            ArrayList<Notification> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification2(userLogged.getMunicipalityID());
+            ArrayList<Notification> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification3(userLogged.getMunicipalityID());
             for (int a = 0; a < pestDiseasesNotifications.size(); a++) {
                 notifications.add(0, pestDiseasesNotifications.get(a));
             }
