@@ -8,6 +8,8 @@ package extra;
 import dao.BarangayDAO;
 import dao.DamageIncidentDAO;
 import dao.DamageReportDAO;
+import dao.DeployedEvaluationDAO;
+import dao.DeployedProgramDAO;
 import dao.FarmDAO;
 import dao.PlantingReportDAO;
 import dao.PlotDAO;
@@ -24,6 +26,7 @@ import object.PlantingReport;
 import object.Plot;
 import object.Problem;
 import object.DeployedEvaluation;
+import object.DeployedProgram;
 
 /**
  *
@@ -198,7 +201,7 @@ public class Calculator {
                 double plantableArea = barangays.get(a).getArea();
                 double majorDamaged = barangays.get(a).getMajorDamagedArea();
                 double minorDamaged = barangays.get(a).getMinorDamagedArea();
-                
+
                 if (problem.getType().equals("Calamity")) {
                     if (majorDamaged / plantableArea >= 0.4) {
                         Notification notification = new Notification();
@@ -328,5 +331,22 @@ public class Calculator {
         } else {
             return "No Rating Available";
         }
+    }
+
+    public double getProgramRating(int programPlanID) {
+        ArrayList<DeployedProgram> deployeds = new DeployedProgramDAO().getListOfDeployedProgramsForProgramPlan(programPlanID);
+        double deployedResult = 0;
+        for (int b = 0; b < deployeds.size(); b++) {
+            double evaluationResult = 0;
+            ArrayList<DeployedEvaluation> evaluations = new DeployedEvaluationDAO().getListOfProgramEvaluationsOnDeployedID(deployeds.get(b).getDeployedID());
+            for (int c = 0; c < evaluations.size(); c++) {
+                double farmerEvaluation = getRespondentResult(evaluations.get(c).getEvaluationValues());
+                evaluationResult += farmerEvaluation;
+            }
+            evaluationResult /= evaluations.size();
+            deployedResult += evaluationResult;
+        }
+        deployedResult /= deployeds.size();
+        return deployedResult;
     }
 }

@@ -13,6 +13,7 @@ import dao.FarmerDAO;
 import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
 import dao.PlotDAO;
+import dao.TargetProductionDAO;
 import dao.WeeklyPlantingReportDAO;
 import extra.Calculator;
 import extra.Formatter;
@@ -37,6 +38,7 @@ import object.Farmer;
 import object.Municipality;
 import object.PlantingReport;
 import object.Plot;
+import object.TargetProduction;
 import object.WeeklyPlantingReport;
 
 /**
@@ -94,7 +96,12 @@ public class MunicipalPerformance extends BaseServlet {
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
         String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
-        ArrayList<Barangay> currentWeekBarangay = getBarangayArea(userLogged.getMunicipalityID(), date);
+        ArrayList<Barangay> currentWeekBarangay = new BarangayDAO().getBarangayAreaMonitoring(userLogged.getMunicipalityID(), date);
+        for (int a = 0; a < currentWeekBarangay.size(); a++) {
+            currentWeekBarangay.get(a).setPlantableArea(currentWeekBarangay.get(a).getPlantedArea());
+            currentWeekBarangay.get(a).setUnplantedArea(currentWeekBarangay.get(a).getPlantableArea() - currentWeekBarangay.get(a).getPlantedArea());
+            currentWeekBarangay.get(a).setPlantedArea(currentWeekBarangay.get(a).getPlantedArea() - (currentWeekBarangay.get(a).getMajorDamagedArea() + currentWeekBarangay.get(a).getMinorDamagedArea()));
+        }
 
         session.setAttribute("currentBarangays", currentWeekBarangay);
     }
@@ -167,9 +174,13 @@ public class MunicipalPerformance extends BaseServlet {
 
         int year = new Calculator().getYear();
         ArrayList<Barangay> barangays = new BarangayDAO().getListOfBarangayProductionInMunicipality(userLogged.getMunicipalityID(), year);
+        TargetProduction targetProduction = new TargetProductionDAO().getTargetProductionForMunicipalOnYear(userLogged.getMunicipalityID(), year);
+        Municipality municipality = new MunicipalityDAO().getMunicipalityProductionForYear(userLogged.getMunicipalityID(), year);
 
         session.setAttribute("year", year);
         session.setAttribute("barangays", barangays);
+        session.setAttribute("municipality", municipality);
+        session.setAttribute("targetProduction", targetProduction);
     }
 
     private void viewFarmPerformance(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

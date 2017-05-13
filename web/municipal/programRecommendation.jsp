@@ -72,7 +72,7 @@
                                                         <div class="col-md-6">
                                                             <p style="font-size: medium">
                                                                 <strong>Total Farms Affected:</strong>
-                                                                <%=importantProblem.getFarms().size()%> farms (<%=importantProblem.getPlantableArea()%> ha)
+                                                                <%=importantProblem.getFarmAffected()%> farms (<%=importantProblem.getPlantableArea()%> ha)
                                                             </p>
                                                             <p style="font-size: medium">
                                                                 <strong>Total Minor Damaged (Major) :</strong>

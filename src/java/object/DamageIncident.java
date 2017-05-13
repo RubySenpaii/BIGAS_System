@@ -43,6 +43,7 @@ public class DamageIncident {
     private double totalAreaAffected;
     private String farmName;
     private String seedVarietyName;
+    private String fertilizerName;
     private double seedsPlanted;
     private String problemName;
     private String problemDescription;
@@ -389,5 +390,19 @@ public class DamageIncident {
      */
     public void setDeployedID(int deployedID) {
         this.deployedID = deployedID;
+    }
+
+    /**
+     * @return the fertilizerName
+     */
+    public String getFertilizerName() {
+        return fertilizerName;
+    }
+
+    /**
+     * @param fertilizerName the fertilizerName to set
+     */
+    public void setFertilizerName(String fertilizerName) {
+        this.fertilizerName = fertilizerName;
     }
 }

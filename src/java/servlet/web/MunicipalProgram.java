@@ -138,21 +138,8 @@ public class MunicipalProgram extends BaseServlet {
         ArrayList<ProgramPlan> remove = new ArrayList<>();
         ArrayList<ProgramPlan> programPlans = new ProgramPlanDAO().getListOfProgramPlansForProblem(importantProblem.getProblem().getProblemID());
         for (int a = 0; a < programPlans.size(); a++) {
-            ArrayList<DeployedProgram> deployeds = new DeployedProgramDAO().getListOfDeployedProgramsForProgramPlan(programPlans.get(a).getProgramPlanID());
-            double evaluationResult = 0;
-            int count = 0;
-            for (int b = 0; b < deployeds.size(); b++) {
-                ArrayList<DeployedEvaluation> evaluations = new DeployedEvaluationDAO().getListOfProgramEvaluationsOnDeployedID(deployeds.get(b).getDeployedID());
-                for (int c = 0; c < evaluations.size(); c++) {
-                    double farmerEvaluation = calculator.getRespondentResult(evaluations.get(c).getEvaluationValues());
-                    System.out.println(evaluations.get(c).getRespondentName() + " " + farmerEvaluation);
-                    evaluationResult += farmerEvaluation;
-                    count++;
-                }
-            }
-            double effectivityResult = evaluationResult / count;
-            String effectivity = calculator.getEffectivityResult(effectivityResult);
-            System.out.println(programPlans.get(a).getProgramName() + effectivity + effectivityResult);
+            double programResult = calculator.getProgramRating(programPlans.get(a).getProgramPlanID());
+            String effectivity = calculator.getEffectivityResult(programResult);
             programPlans.get(a).setEffectivityStatus(effectivity);
 
             ArrayList<ProgramTrigger> programTriggers = new ProgramTriggerDAO().getListOfProgramTriggersForProgramID(programPlans.get(a).getProgramPlanID());
@@ -161,18 +148,18 @@ public class MunicipalProgram extends BaseServlet {
             for (int b = 0; b < programTriggers.size(); b++) {
                 System.out.println("trigger val " + programTriggers.get(b).getTriggerValue());
                 if (programTriggers.get(b).getTriggerName().equals("Farm Affected")) {
-                    double farmPercentage = (double) importantProblem.getFarms().size() / importantProblem.getFarmCount() * 100;
+                    double farmPercentage = (double) importantProblem.getFarmAffected() / importantProblem.getFarmCount() * 100;
                     System.out.println("farm percentage " + farmPercentage);
                     if (programTriggers.get(b).getTriggerValue() > farmPercentage) {
                         remove.add(programPlans.get(a));
                         break;
                     } else {
-                        int requirement = (int) Math.ceil(programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getFarms().size());
+                        int requirement = (int) Math.ceil(programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getFarmCount());
                         programPlans.get(a).setProgramTriggerFarmCount(requirement);
                         if (triggerName.length() > 0) {
                             triggerName += "<br>";
                         }
-                        triggerName += "Affected Farm Count: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getFarms().size()
+                        triggerName += "Affected Farm Count: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getFarmCount()
                                 + " farm(s) needed <b>(" + requirement + "farm(s))</b>";
                     }
                 } else if (programTriggers.get(b).getTriggerName().equals("Minor Damages")) {
@@ -308,10 +295,13 @@ public class MunicipalProgram extends BaseServlet {
             }
         }
 
+        ArrayList<DeployedEvaluation> deployedEvaluations = new DeployedEvaluationDAO().getListOfProgramEvaluationsOnDeployedID(deployedID);
+
         session.setAttribute("deployedID", deployedID);
         session.setAttribute("deployedProgram", deployedProgram);
         session.setAttribute("deployedProgress", deployedProgress);
         session.setAttribute("beneficiaries", beneficiaries);
+        session.setAttribute("deployedEvaluations", deployedEvaluations);
     }
 
     private void viewProgramList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -320,17 +310,9 @@ public class MunicipalProgram extends BaseServlet {
 
         ArrayList<ProgramPlan> programPlans = new ProgramPlanDAO().getListOfProgramPlans();
         for (int a = 0; a < programPlans.size(); a++) {
-            ArrayList<DeployedProgram> deployeds = new DeployedProgramDAO().getListOfDeployedProgramsForProgramPlan(programPlans.get(a).getProgramPlanID());
-            double evaluationResult = 0;
-            for (int b = 0; b < deployeds.size(); b++) {
-                ArrayList<DeployedEvaluation> evaluations = new DeployedEvaluationDAO().getListOfProgramEvaluationsOnDeployedID(deployeds.get(b).getDeployedID());
-                for (int c = 0; c < evaluations.size(); c++) {
-                    double farmerEvaluation = calculator.getRespondentResult(evaluations.get(c).getEvaluationValues());
-                    evaluationResult += farmerEvaluation;
-                }
-            }
-            String effectivity = calculator.getEffectivityResult(evaluationResult);
-            System.out.println(effectivity + evaluationResult);
+            double deployedResult = calculator.getProgramRating(programPlans.get(a).getProgramPlanID());
+            String effectivity = calculator.getEffectivityResult(deployedResult);
+            System.out.println(programPlans.get(a).getProgramName() + "-" + effectivity + "-" + deployedResult);
             programPlans.get(a).setEffectivityStatus(effectivity);
         }
 
@@ -492,6 +474,7 @@ public class MunicipalProgram extends BaseServlet {
                     importantProblem.setTotalMajor(majorDamaged);
                     importantProblem.setTotalMinor(minorDamaged);
                     importantProblem.setPlantableArea(plantableArea);
+                    importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
                     importantProblem.setFarmCount(barangays.get(a).getFarmCount());
                     importantProblems.add(importantProblem);
                 }
@@ -502,6 +485,7 @@ public class MunicipalProgram extends BaseServlet {
                 importantProblem.setTotalMajor(majorDamaged);
                 importantProblem.setTotalMinor(minorDamaged);
                 importantProblem.setPlantableArea(plantableArea);
+                importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
                 importantProblem.setFarmCount(barangays.get(a).getFarmCount());
                 importantProblems.add(importantProblem);
             } else if (minorDamaged / plantableArea >= 0.045) {
@@ -511,6 +495,7 @@ public class MunicipalProgram extends BaseServlet {
                 importantProblem.setTotalMajor(majorDamaged);
                 importantProblem.setTotalMinor(minorDamaged);
                 importantProblem.setPlantableArea(plantableArea);
+                importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
                 importantProblem.setFarmCount(barangays.get(a).getFarmCount());
                 importantProblems.add(importantProblem);
             }

@@ -740,11 +740,12 @@ public class DamageIncidentDAO {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
             Connection conn = myFactory.getConnection();
 
-            PreparedStatement ps = conn.prepareStatement("SELECT DI.*, F.FarmName, SUM(DR2.AreaAffected) AS 'AreaAffected', SUM(DR2.AreaDamaged) AS 'AreaDamaged'\n"
+            PreparedStatement ps = conn.prepareStatement("SELECT DI.*, F.FarmName, SUM(DR2.AreaAffected) AS 'AreaAffected', SUM(DR2.AreaDamaged) AS 'AreaDamaged', PR.SeedVariety, PF.FertilizerName\n"
                     + "FROM DamageReport DR2 JOIN DamageIncident DI ON DI.DamageIncidentID = DR2.DamageIncidentID\n"
                     + "                      JOIN PlantingReport PR ON PR.PlantingReportID = DI.PlantingReportID\n"
                     + "                      JOIN Plot P ON PR.PlotID = P.PlotID\n"
                     + "                      JOIN Farm F ON F.FarmID = P.FarmID\n"
+                    + "                      JOIN PlotFertilizer PF ON P.PlotID = PF.PlotID\n"
                     + "                      JOIN Barangay B ON B.BarangayID = F.BarangayID\n"
                     + "                      JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
                     + "                            FROM DamageReport DR1\n"
@@ -773,6 +774,8 @@ public class DamageIncidentDAO {
                 damage.setTotalAreaDamaged(rs.getDouble("AreaDamaged"));
                 damage.setTotalAreaAffected(rs.getDouble("AreaAffected"));
                 damage.setFarmName(rs.getString("FarmName"));
+                damage.setSeedVarietyName(rs.getString("SeedVariety"));
+                damage.setFertilizerName(rs.getString("FertilizerName"));
                 damages.add(damage);
             }
 

@@ -175,7 +175,7 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
-                                                                
+
                                                         <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="additional-tab">
                                                             <table class="table table-bordered">
                                                                 <thead>
@@ -190,6 +190,13 @@
                                                                     <tr></tr>
                                                                 </tbody>
                                                             </table>
+
+
+                                                            <div class="text-center">
+                                                                <a href="" class="btn btn-success">
+                                                                    Add New Target
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

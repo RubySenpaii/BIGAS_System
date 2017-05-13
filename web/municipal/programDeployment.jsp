@@ -52,7 +52,7 @@
                         <div class="row">
 
                             <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" class="MunicipalProgram">
-                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                <div class="col-md-5 col-sm-5 col-xs-12">
                                     <div class="x_panel">
                                         <div class="x_title">
                                             <h2>Program Provisions and Start Date</h2>
@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-5 col-sm-5 col-xs-12">
+                                <div class="col-md-7 col-sm-7 col-xs-12">
                                     <div class="x_panel">
                                         <div class="x_title">
                                             <h2>Problem Details</h2>
@@ -155,9 +155,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 5%"></th>
-                                                        <th style="width: 45%">Farm Name</th>
-                                                        <th style="width: 25%">Minor Damaged</th>
-                                                        <th style="width: 25%">Major Damaged</th>
+                                                        <th style="width: 32%">Farm Name</th>
+                                                        <th style="width: 18%">Recent Seed Variety</th>
+                                                        <th style="width: 15%">Recent Fertilizer</th>
+                                                        <th style="width: 15%">Minor Damaged</th>
+                                                        <th style="width: 15%">Major Damaged</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -173,6 +175,8 @@
                                                     <tr>
                                                         <td><input type="checkbox" name="farmName" value="<%=farms.get(a).getFarmName()%>"></td>
                                                         <td><%=farms.get(a).getFarmName()%></td>
+                                                        <td><%=farms.get(a).getSeedVarietyName()%></td>
+                                                        <td><%=farms.get(a).getFertilizerName()%></td>
                                                         <td><%=new Formatter().doubleToString(farms.get(a).getTotalAreaAffected())%> ha (<%=new Formatter().doubleToString(farms.get(a).getTotalAreaAffected() / totalAffected * 100)%>%)</td>
                                                         <td><%=new Formatter().doubleToString(farms.get(a).getTotalAreaDamaged())%> ha (<%=new Formatter().doubleToString(farms.get(a).getTotalAreaDamaged() / totalDamaged * 100)%>%)</td>
                                                     </tr>
@@ -182,7 +186,7 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <th colspan="2">Total: </th>
+                                                        <th colspan="4">Total: </th>
                                                         <th><%=new Formatter().doubleToString(totalAffected)%> ha</th>
                                                         <th><%=new Formatter().doubleToString(totalDamaged)%> ha</th>
                                                     </tr>

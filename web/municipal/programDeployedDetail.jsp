@@ -4,6 +4,8 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="extra.Calculator"%>
+<%@page import="object.DeployedEvaluation"%>
 <%@page import="object.DeployedProgram"%>
 <%@page import="extra.Formatter"%>
 <%@page import="object.ProgramBeneficiary"%>
@@ -163,6 +165,8 @@
                                                     </li>
                                                     <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Participants</a>
                                                     </li>
+                                                    <li role="presentation" class=""><a href="#tab_content3" role="tab" id="evaluation-tab" data-toggle="tab" aria-expanded="false">Program Evaluation</a>
+                                                    </li>
                                                 </ul>
                                                 <div id="myTabContent" class="tab-content">
                                                     <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
@@ -238,6 +242,58 @@
                                                                     }
                                                                 %>
                                                             </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="evaluation-tab">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style='width: 15%'>Evaluator's Name</th>
+                                                                    <th style='width: 7%'>Question 1</th>
+                                                                    <th style='width: 7%'>Question 2</th>
+                                                                    <th style='width: 7%'>Question 3</th>
+                                                                    <th style='width: 7%'>Question 4</th>
+                                                                    <th style='width: 7%'>Question 5</th>
+                                                                    <th style='width: 7%'>Question 6</th>
+                                                                    <th style='width: 7%'>Question 7</th>
+                                                                    <th style='width: 7%'>Question 8</th>
+                                                                    <th style='width: 7%'>Question 9</th>
+                                                                    <th style='width: 7%'>Question 10</th>
+                                                                    <th style='width: 20%'>Rating</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <%
+                                                                    ArrayList<DeployedEvaluation> evaluations = (ArrayList<DeployedEvaluation>) session.getAttribute("deployedEvaluations");
+                                                                    for (int a = 0; a < evaluations.size(); a++) {
+                                                                        Calculator calc = new Calculator();
+                                                                        double result = calc.getRespondentResult(evaluations.get(a).getEvaluationValues());
+                                                                        String rating = calc.getEffectivityResult(result);
+                                                                %>
+                                                                <tr>
+                                                                    <td><%=evaluations.get(a).getRespondentName()%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(0)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(2)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(4)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(6)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(8)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(10)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(12)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(14)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(16)%></td>
+                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(18)%></td>
+                                                                    <td><%=rating%> (<%=formatter.doubleToString(result)%>)</td>
+                                                                </tr>
+                                                                <%
+                                                                    }
+                                                                %>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th colspan="11">Total</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </tfoot>
                                                         </table>
                                                     </div>
                                                 </div>

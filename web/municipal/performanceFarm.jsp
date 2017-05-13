@@ -57,11 +57,11 @@
                     var pied = {};
                     pied['name'] = values[0].farms[a].farmName;
                     pied['y'] = values[0].farms[a].harvest;
-                    pied['url'] = 'http://localhost:8084/BIGAS_System/MunicipalPerformance?action=viewFarmDetail&farmName=' + values[0].farms[a].farmName;
+                    pied['key'] = values[0].farms[a].farmName;
                     pieDetail.push(pied);
                 }
                 
-                Highcharts.chart('container', {
+                /*Highcharts.chart('container', {
                     chart: {
                         plotBackgroundColor: null,
                         plotBorderWidth: null,
@@ -104,66 +104,54 @@
                 yearData['name'] = values[0].farms[0].year;
                 yearData['data'] = farmValues;
                 var allData = [];
-                allData.push(yearData);
+                allData.push(yearData);*/
 
-                Highcharts.chart('container23', {
+                Highcharts.chart('container', {
                     chart: {
-                        type: 'bar'
+                        type: 'column'
                     },
                     title: {
-                        text: 'Historic World Population by Region'
-                    },
-                    subtitle: {
-                        text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+                        text: 'Production for San Rafael'
                     },
                     xAxis: {
-                        categories: categories,
-                        title: {
-                            text: null
-                        },
-                        labels: {
-                            formatter: function () {
-                                return '<a href="' + categoryLinks[this.value] + '">' +
-                                        this.value + '</a>';
-                            }
-                        }
+                        type: 'category',
+                        crosshair: true
                     },
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Population (millions)',
-                            align: 'high'
-                        },
-                        labels: {
-                            overflow: 'justify'
+                            text: 'Production (MT)'
                         }
                     },
                     tooltip: {
-                        valueSuffix: ' MT'
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f} MT</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
                     },
                     plotOptions: {
-                        bar: {
-                            dataLabels: {
-                                enabled: true
-                            }
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                              events: {
+                                  click: function() {
+                                      location.href = 'http://localhost:8084/BIGAS_System/MunicipalPerformance?action=viewFarmDetail&farmName=' + this.options.key;
+                                  }
+                              }
+                          }
+                        },
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
                         }
                     },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 80,
-                        floating: false,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: allData
-                });*/
+                    series: [{
+                            name: 'Production',
+                            data: pieDetail
+                        }]
+                });
             });
         </script>
     </head>
@@ -179,7 +167,7 @@
                     <div class="">
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Overall Production Monitoring</h3>
+                                <h3>Compare Farm Production</h3>
                             </div>
                         </div>
 

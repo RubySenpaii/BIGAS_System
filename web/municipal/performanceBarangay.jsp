@@ -4,6 +4,9 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.Municipality"%>
+<%@page import="object.TargetProduction"%>
+<%@page import="extra.Formatter"%>
 <%@page import="object.Barangay"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -59,7 +62,7 @@
                     var pied = {};
                     pied['name'] = values[0].barangays[a].brgyName;
                     pied['y'] = values[0].barangays[a].harvest;
-                    pied['url'] = 'http://localhost:8084/BIGAS_System/MunicipalPerformance?action=viewFarmPerformance&brgyName=' + values[0].barangays[a].brgyName;
+                    pied['key'] = values[0].barangays[a].brgyName;
                     pieDetail.push(pied);
                 }
                 var year = values[0].barangays[0].year;
@@ -115,20 +118,7 @@
                         text: 'Production for San Rafael'
                     },
                     xAxis: {
-                        categories: [
-                            'Barangay1',
-                            'Barangay2',
-                            'Barangay3',
-                            'Barangay4',
-                            'Barangay5',
-                            'Barangay6',
-                            'Barangay7',
-                            'Barangay8',
-                            'Barangay9',
-                            'Barangay10',
-                            'Barangay11',
-                            'Barangay12'
-                        ],
+                        type: 'category',
                         crosshair: true
                     },
                     yAxis: {
@@ -140,12 +130,22 @@
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                '<td style="padding:0"><b>{point.y:.1f} MT</b></td></tr>',
                         footerFormat: '</table>',
                         shared: true,
                         useHTML: true
                     },
                     plotOptions: {
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                              events: {
+                                  click: function() {
+                                      location.href = 'http://localhost:8084/BIGAS_System/MunicipalPerformance?action=viewFarmPerformance&brgyName=' + this.options.key;
+                                  }
+                              }
+                          }
+                        },
                         column: {
                             pointPadding: 0.2,
                             borderWidth: 0
@@ -153,12 +153,7 @@
                     },
                     series: [{
                             name: 'Production',
-                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-
-                        }, {
-                            name: 'Target',
-                            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-
+                            data: pieDetail
                         }]
                 });
             });
@@ -176,7 +171,7 @@
                     <div class="">
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Overall Production Monitoring</h3>
+                                <h3>Compare Barangay Production</h3>
                             </div>
                         </div>
 
@@ -186,28 +181,42 @@
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="x_panel">
                                     <div class="x_content">
+                                        <!-- target vs actual -->
                                         <div class="row">
+                                            <%
+                                                Formatter formatter = new Formatter();
+                                                Municipality municipality = (Municipality) session.getAttribute("municipality");
+                                                TargetProduction targetProduction = (TargetProduction) session.getAttribute("targetProduction");
+                                                double target = 100;
+                                                double actual = 100;
+                                                if (targetProduction.getTargetValue() > municipality.getHarvestedTotal()) {
+                                                    actual = municipality.getHarvestedTotal() / targetProduction.getTargetValue() * 100;
+                                                } else {
+                                                    target = targetProduction.getTargetValue() / municipality.getHarvestedTotal() * 100;
+                                                }
+                                            %>
                                             <div class="col-md-12">
                                                 <div style="position: relative">
                                                     Target Value:
                                                     <div class="progress">
-                                                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-transitiongoal="100%"></div>
+                                                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-transitiongoal="<%=target + "%"%>"></div>
                                                         <div style="height: 20px; position: absolute; top: 0; right: 50%; color: black">
-                                                            <b>1000 MT</b>
+                                                            <b><%=targetProduction.getTargetValue()%> MT</b>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div style="position: relative">
                                                     Actual Value:
                                                     <div class="progress">
-                                                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" data-transitiongoal="80%"></div>
+                                                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" data-transitiongoal="<%=actual + "%"%>"></div>
                                                         <div style="height: 20px; position: absolute; top: 0; right: 50%; color: black">
-                                                            <b>800 MT</b>
+                                                            <b><%=municipality.getHarvestedTotal()%> MT</b>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- /target vs actual -->
                                         <div id="container" style="width: 100%; height: 700px"></div>
                                     </div>
                                 </div>

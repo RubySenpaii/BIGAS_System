@@ -24,6 +24,7 @@ public class ImportantProblem {
     private ArrayList<Farm> farms;
     private ProgramPlan programPlan;
     private int farmCount;
+    private int farmAffected;
 
     public ImportantProblem() {
         
@@ -153,5 +154,19 @@ public class ImportantProblem {
      */
     public void setFarmCount(int farmCount) {
         this.farmCount = farmCount;
+    }
+
+    /**
+     * @return the farmAffected
+     */
+    public int getFarmAffected() {
+        return farmAffected;
+    }
+
+    /**
+     * @param farmAffected the farmAffected to set
+     */
+    public void setFarmAffected(int farmAffected) {
+        this.farmAffected = farmAffected;
     }
 }

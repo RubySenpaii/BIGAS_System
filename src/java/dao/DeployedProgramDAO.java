@@ -314,7 +314,7 @@ public class DeployedProgramDAO {
 
             PreparedStatement ps = conn.prepareStatement("SELECT MIN(STR_TO_DATE(CONCAT(DamagedMonth, '-', DamagedDay, '-', DamagedYear), '%m-%d-%Y')) AS 'DamagedDate'\n"
                     + "FROM DamageIncident DI JOIN DeployedProgram DP ON DI.DeployedID = DP.DeployedID\n"
-                    + "WHERE DS.DeployedID = ?");
+                    + "WHERE DI.DeployedID = ?");
             ps.setInt(1, deployedID);
 
             ResultSet rs = ps.executeQuery();

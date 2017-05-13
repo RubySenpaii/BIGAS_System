@@ -34,8 +34,10 @@ public class Barangay {
     private double reproductiveArea;
     private double harvestingArea;
     
+    private double targetProduction;
     private double harvest;
     private int farmCount;
+    private int farmAffected;
     
     private DamageIncident damageIncident;
     private String problemName;
@@ -370,5 +372,33 @@ public class Barangay {
      */
     public void setCropStage(String cropStage) {
         this.cropStage = cropStage;
+    }
+
+    /**
+     * @return the targetProduction
+     */
+    public double getTargetProduction() {
+        return targetProduction;
+    }
+
+    /**
+     * @param targetProduction the targetProduction to set
+     */
+    public void setTargetProduction(double targetProduction) {
+        this.targetProduction = targetProduction;
+    }
+
+    /**
+     * @return the farmAffected
+     */
+    public int getFarmAffected() {
+        return farmAffected;
+    }
+
+    /**
+     * @param farmAffected the farmAffected to set
+     */
+    public void setFarmAffected(int farmAffected) {
+        this.farmAffected = farmAffected;
     }
 }
