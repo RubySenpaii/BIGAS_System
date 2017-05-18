@@ -29,13 +29,15 @@ public class ProgramProgressDAO {
 
             PreparedStatement ps = conn.prepareStatement("INSERT INTO " + ProgramProgress.TABLE_NAME + " "
                     + "(" + ProgramProgress.COLUMN_DATECOMPLETED + ", " + ProgramProgress.COLUMN_DEPLOYEDID + ", "
-                    + ProgramProgress.COLUMN_IMAGE + ", " + ProgramProgress.COLUMN_PROCEDURENUMBER + ", " + ProgramProgress.COLUMN_UPDATEDBY + ") "
-                    + "VALUES(?, ?, ?, ?, ?)");
+                    + ProgramProgress.COLUMN_IMAGE + ", " + ProgramProgress.COLUMN_PROCEDURENUMBER + ", " + ProgramProgress.COLUMN_REMARKS + ", "
+                    + ProgramProgress.COLUMN_UPDATEDBY + ") "
+                    + "VALUES(?, ?, ?, ?, ?, ?)");
             ps.setString(1, programProgress.getDateCompleted());
             ps.setInt(2, programProgress.getDeployedID());
             ps.setString(3, programProgress.getImage());
             ps.setInt(4, programProgress.getProcedureNumber());
-            ps.setInt(5, programProgress.getUpdatedBy());
+            ps.setString(5, programProgress.getRemarks());
+            ps.setInt(6, programProgress.getUpdatedBy());
 
             ps.executeUpdate();
             ps.close();
@@ -46,31 +48,33 @@ public class ProgramProgressDAO {
         }
         return true;
     }
-    
+
     public boolean updateProgramProgress(ProgramProgress programProgres) {
         try {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
             Connection conn = myFactory.getConnection();
-            
-            PreparedStatement ps = conn.prepareStatement("UPDATE " + ProgramProgress.TABLE_NAME + 
-                    " SET " + ProgramProgress.COLUMN_DATECOMPLETED + " = ?, " + ProgramProgress.COLUMN_DEPLOYEDID + " = ?, " + ProgramProgress.COLUMN_IMAGE + " = ?, "
-                    + ProgramProgress.COLUMN_PROCEDURENUMBER + " = ?, " + ProgramProgress.COLUMN_UPDATEDBY + " = ? "
+
+            PreparedStatement ps = conn.prepareStatement("UPDATE " + ProgramProgress.TABLE_NAME
+                    + " SET " + ProgramProgress.COLUMN_DATECOMPLETED + " = ?, " + ProgramProgress.COLUMN_DEPLOYEDID + " = ?, " + ProgramProgress.COLUMN_IMAGE + " = ?, "
+                    + ProgramProgress.COLUMN_PROCEDURENUMBER + " = ?, " + ProgramProgress.COLUMN_REMARKS + " = ?, " + ProgramProgress.COLUMN_UPDATEDBY + " = ? "
                     + "WHERE " + ProgramProgress.COLUMN_DEPLOYEDID + " = ? AND " + ProgramProgress.COLUMN_PROCEDURENUMBER + " = ?");
             ps.setString(1, programProgres.getDateCompleted());
             ps.setInt(2, programProgres.getDeployedID());
             ps.setString(3, programProgres.getImage());
             ps.setInt(4, programProgres.getProcedureNumber());
-            ps.setInt(5, programProgres.getUpdatedBy());
-            ps.setInt(6, programProgres.getDeployedID());
-            ps.setInt(6, programProgres.getProcedureNumber());
-            
+            ps.setString(5, programProgres.getRemarks());
+            ps.setInt(6, programProgres.getUpdatedBy());
+            ps.setInt(7, programProgres.getDeployedID());
+            ps.setInt(8, programProgres.getProcedureNumber());
+
             ps.executeUpdate();
             ps.close();
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProgramProgressDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } return true;
+        }
+        return true;
     }
 
     public ArrayList<ProgramProgress> getListOfProgramProgresses() {
@@ -111,6 +115,7 @@ public class ProgramProgressDAO {
                 programProgress.setDeployedID(rs.getInt(ProgramProgress.COLUMN_DEPLOYEDID));
                 programProgress.setImage(rs.getString(ProgramProgress.COLUMN_IMAGE));
                 programProgress.setProcedureNumber(rs.getInt(ProgramProgress.COLUMN_PROCEDURENUMBER));
+                programProgress.setRemarks(rs.getString(ProgramProgress.COLUMN_REMARKS));
                 programProgress.setUpdatedBy(rs.getInt(ProgramProgress.COLUMN_UPDATEDBY));
                 programProgress.setUpdatedByName(rs.getString("LastName") + ", " + rs.getString("FirstName"));
                 programProgresses.add(programProgress);
@@ -133,6 +138,7 @@ public class ProgramProgressDAO {
             programProgress.setDeployedID(rs.getInt(ProgramProgress.COLUMN_DEPLOYEDID));
             programProgress.setImage(rs.getString(ProgramProgress.COLUMN_IMAGE));
             programProgress.setProcedureNumber(rs.getInt(ProgramProgress.COLUMN_PROCEDURENUMBER));
+            programProgress.setRemarks(rs.getString(ProgramProgress.COLUMN_REMARKS));
             programProgress.setUpdatedBy(rs.getInt(ProgramProgress.COLUMN_UPDATEDBY));
             programProgresses.add(programProgress);
         }

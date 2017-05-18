@@ -72,7 +72,7 @@ public class DeployedProgramDAO {
             ps.setString(6, deployedProgram.getFertilizerProvided());
             ps.setInt(7, deployedProgram.getProgramPlanID());
             ps.setString(8, deployedProgram.getStatus());
-            ps.setDouble(8, deployedProgram.getVarietyAmount());
+            ps.setDouble(9, deployedProgram.getVarietyAmount());
             ps.setString(10, deployedProgram.getVarietyProvided());
             ps.setInt(11, deployedProgram.getDeployedID());
             

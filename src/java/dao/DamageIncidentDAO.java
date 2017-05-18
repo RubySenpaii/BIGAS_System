@@ -31,8 +31,9 @@ public class DamageIncidentDAO {
                     + "(" + DamageIncident.COLUMN_APPROVEDBY + ", " + DamageIncident.COLUMN_CROPSTAGE + ", " + DamageIncident.COLUMN_DAMAGEDDAY + ", "
                     + DamageIncident.COLUMN_DAMAGEDMONTH + ", " + DamageIncident.COLUMN_DAMAGEDYEAR + ", " + DamageIncident.COLUMN_DAMAGEINCIDENTID + ", "
                     + DamageIncident.COLUMN_ESCALATIONLEVEL + ", " + DamageIncident.COLUMN_PLANTINGREPORTID + ", " + DamageIncident.COLUMN_PROBLEMREPORTED + ", "
-                    + DamageIncident.COLUMN_REPORTEDBY + ", " + DamageIncident.COLUMN_STATUS + ", " + DamageIncident.COLUMN_DEPLOYEDID + ") "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    + DamageIncident.COLUMN_REMARKS + ", " + DamageIncident.COLUMN_REPORTEDBY + ", " + DamageIncident.COLUMN_STATUS + ", " 
+                    + DamageIncident.COLUMN_DEPLOYEDID + ") "
+                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, damageIncident.getApprovedBy());
             ps.setString(2, damageIncident.getCropStage());
             ps.setInt(3, damageIncident.getDamagedDay());
@@ -42,9 +43,10 @@ public class DamageIncidentDAO {
             ps.setString(7, damageIncident.getEscalationLevel());
             ps.setInt(8, damageIncident.getPlantingReportID());
             ps.setInt(9, damageIncident.getProblemReported());
-            ps.setInt(10, damageIncident.getReportedBy());
-            ps.setString(11, damageIncident.getStatus());
-            ps.setInt(12, damageIncident.getDeployedID());
+            ps.setString(10, damageIncident.getRemarks());
+            ps.setInt(11, damageIncident.getReportedBy());
+            ps.setString(12, damageIncident.getStatus());
+            ps.setInt(13, damageIncident.getDeployedID());
 
             ps.executeUpdate();
             ps.close();
@@ -65,7 +67,8 @@ public class DamageIncidentDAO {
                     + " SET " + DamageIncident.COLUMN_APPROVEDBY + " = ?, " + DamageIncident.COLUMN_CROPSTAGE + " = ?, " + DamageIncident.COLUMN_DAMAGEDDAY + " = ?, "
                     + DamageIncident.COLUMN_DAMAGEDMONTH + " = ?, " + DamageIncident.COLUMN_DAMAGEDYEAR + " = ?, " + DamageIncident.COLUMN_DAMAGEINCIDENTID + " = ?, "
                     + DamageIncident.COLUMN_ESCALATIONLEVEL + " = ?, " + DamageIncident.COLUMN_PLANTINGREPORTID + " = ?, " + DamageIncident.COLUMN_PROBLEMREPORTED + " = ?, "
-                    + DamageIncident.COLUMN_REPORTEDBY + " = ?, " + DamageIncident.COLUMN_DEPLOYEDID + " = ?, " + DamageIncident.COLUMN_STATUS + " = ? "
+                    + DamageIncident.COLUMN_REMARKS + " = ?, " + DamageIncident.COLUMN_REPORTEDBY + " = ?, " + DamageIncident.COLUMN_DEPLOYEDID + " = ?, " 
+                    + DamageIncident.COLUMN_STATUS + " = ? "
                     + "WHERE " + DamageIncident.COLUMN_DAMAGEINCIDENTID + " = ?");
             ps.setInt(1, damageIncident.getApprovedBy());
             ps.setString(2, damageIncident.getCropStage());
@@ -76,10 +79,11 @@ public class DamageIncidentDAO {
             ps.setString(7, damageIncident.getEscalationLevel());
             ps.setInt(8, damageIncident.getPlantingReportID());
             ps.setInt(9, damageIncident.getProblemReported());
-            ps.setInt(10, damageIncident.getReportedBy());
-            ps.setInt(11, damageIncident.getDeployedID());
-            ps.setString(12, damageIncident.getStatus());
-            ps.setInt(13, damageIncident.getDamageIncidentID());
+            ps.setString(10, damageIncident.getRemarks());
+            ps.setInt(11, damageIncident.getReportedBy());
+            ps.setInt(12, damageIncident.getDeployedID());
+            ps.setString(13, damageIncident.getStatus());
+            ps.setInt(14, damageIncident.getDamageIncidentID());
 
             ps.executeUpdate();
             ps.close();
@@ -854,7 +858,7 @@ public class DamageIncidentDAO {
                     + "                      JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
                     + "                            FROM DamageReport DR1\n"
                     + "                            GROUP BY DR1.DamageIncidentID) T1 ON DR2.DamageIncidentID = T1.DamageIncidentID\n"
-                    + "WHERE STR_TO_DATE(DR2.DateReported, '%m-%d-%Y') = T1.RecentDate AND DI.IncidentStatus = 'Program' AND DI.DeployedID = ?");
+                    + "WHERE STR_TO_DATE(DR2.DateReported, '%m-%d-%Y') = T1.RecentDate AND (DI.IncidentStatus = 'Program' OR DI.IncidentStatus = 'Solved') AND DI.DeployedID = ?");
             ps.setInt(1, incidentID);
 
             ResultSet rs = ps.executeQuery();
@@ -1060,6 +1064,7 @@ public class DamageIncidentDAO {
             damage.setReportedBy(rs.getInt(DamageIncident.COLUMN_REPORTEDBY));
             damage.setDeployedID(rs.getInt(DamageIncident.COLUMN_DEPLOYEDID));
             damage.setStatus(rs.getString(DamageIncident.COLUMN_STATUS));
+            damage.setRemarks(rs.getString(DamageIncident.COLUMN_REMARKS));
             damages.add(damage);
         }
         return damages;

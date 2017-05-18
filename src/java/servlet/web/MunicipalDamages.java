@@ -187,6 +187,9 @@ public class MunicipalDamages extends BaseServlet {
         DamageIncidentDAO incidentDAO = new DamageIncidentDAO();
         DamageIncident incident = incidentDAO.getDamageIncidentWithIncidentID(incidentID);
         incident.setStatus(request.getParameter("status"));
+        if (request.getParameter("status").equals("Rejected")) {
+            incident.setRemarks(request.getParameter("remarks"));
+        }
         return incidentDAO.updateDamageIncident(incident);
     }
 }

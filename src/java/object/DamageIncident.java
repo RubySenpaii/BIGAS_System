@@ -23,6 +23,7 @@ public class DamageIncident {
     public static final String COLUMN_REPORTEDBY = "ReportedBy";
     public static final String COLUMN_APPROVEDBY = "ApprovedBy";
     public static final String COLUMN_DEPLOYEDID = "DeployedID";
+    public static final String COLUMN_REMARKS = "Remarks";
     
     private int damageIncidentID;
     private int plantingReportID;
@@ -36,6 +37,7 @@ public class DamageIncident {
     private int reportedBy;
     private int approvedBy;
     private int deployedID;
+    private String remarks;
     
     //additional attributes
     private int farmsAffected;
@@ -404,5 +406,19 @@ public class DamageIncident {
      */
     public void setFertilizerName(String fertilizerName) {
         this.fertilizerName = fertilizerName;
+    }
+
+    /**
+     * @return the remarks
+     */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * @param remarks the remarks to set
+     */
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

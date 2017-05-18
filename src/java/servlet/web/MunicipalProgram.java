@@ -106,6 +106,17 @@ public class MunicipalProgram extends BaseServlet {
             } else if (action.equals("updateProgress")) {
                 System.out.println("directing to programDeployedDetail.jsp");
                 int deployedID = updateProgress(request, response);
+                ArrayList<ProgramProgress> progress = new ProgramProgressDAO().getListOfProgramProgressForDeployedID(deployedID);
+                DeployedProgram deployedProgram = new DeployedProgramDAO().getDeployedProgramDetails(deployedID);
+                ArrayList<ProgramProcedure> procedures = new ProgramProcedureDAO().getListOfProgramProceduresForProgramID(deployedProgram.getProgramPlanID());
+                System.out.println("prog " + progress.size() + " proc " + procedures.size());
+                if (progress.size() == procedures.size()) {
+                    deployedProgram.setStatus("Completed");
+                    deployedProgram.setDateCompleted(new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime()));
+                    boolean success = new DeployedProgramDAO().updateDeployedProgram(deployedProgram);
+                    System.out.println(deployedID + " has been successfully changed to completed");
+                }
+                
                 path = "/MunicipalProgram?action=viewDeployedProgramDetails&deployedID=" + deployedID;
             } else if (action.equals("viewRequestList")) {
                 System.out.println("directing to programRequestList.jsp");
@@ -254,6 +265,7 @@ public class MunicipalProgram extends BaseServlet {
                 prog.setPhase(procedures.get(a).getPhase());
                 prog.setProcedureNumber(procedures.get(a).getProcedureNo());
                 prog.setUpdatedByName("N/A");
+                prog.setRemarks("N/A");
                 deployedProgress.add(prog);
             } else {
                 for (int b = 0; b < progress.size(); b++) {
@@ -266,6 +278,7 @@ public class MunicipalProgram extends BaseServlet {
                         prog.setPhase(procedures.get(a).getPhase());
                         prog.setProcedureNumber(procedures.get(a).getProcedureNo());
                         prog.setUpdatedByName(progress.get(b).getUpdatedByName());
+                        prog.setRemarks(progress.get(b).getRemarks());
                         deployedProgress.add(prog);
                         break;
                     } else if (b == progress.size() - 1) {
@@ -277,6 +290,7 @@ public class MunicipalProgram extends BaseServlet {
                         prog.setPhase(procedures.get(a).getPhase());
                         prog.setProcedureNumber(procedures.get(a).getProcedureNo());
                         prog.setUpdatedByName("N/A");
+                        prog.setRemarks("N/A");
                         deployedProgress.add(prog);
                     }
                 }
@@ -410,6 +424,7 @@ public class MunicipalProgram extends BaseServlet {
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
+        String remarks = request.getParameter("remarks");
         int procedureNo = Integer.parseInt(request.getParameter("procedureNo"));
         int deployedID = (int) session.getAttribute("deployedID");
         ProgramProgress progress = new ProgramProgress();
@@ -417,6 +432,7 @@ public class MunicipalProgram extends BaseServlet {
         progress.setUpdatedBy(userLogged.getEmployeeID());
         progress.setProcedureNumber(procedureNo);
         progress.setDateCompleted(dateNow);
+        progress.setRemarks(remarks);
         progress.setImage("nothing");
         boolean updateProgress = new ProgramProgressDAO().addProgramProgress(progress);
         System.out.println("update status: " + updateProgress);

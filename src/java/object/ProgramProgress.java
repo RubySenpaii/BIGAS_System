@@ -16,12 +16,14 @@ public class ProgramProgress {
     public static final String COLUMN_PROCEDURENUMBER = "ProcedureNumber";
     public static final String COLUMN_DATECOMPLETED = "DateCompleted";
     public static final String COLUMN_IMAGE = "Image";
+    public static final String COLUMN_REMARKS = "Remarks";
     
     private int deployedID;
     private int updatedBy;
     private int procedureNumber;
     private String dateCompleted;
     private String image;
+    private String remarks;
     
     //additional attributes
     private String phase;
@@ -142,5 +144,19 @@ public class ProgramProgress {
      */
     public void setUpdatedByName(String updatedByName) {
         this.updatedByName = updatedByName;
+    }
+
+    /**
+     * @return the remarks
+     */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * @param remarks the remarks to set
+     */
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

@@ -7,6 +7,7 @@ package extra;
 
 import dao.FarmDAO;
 import dao.PlantingReportDAO;
+import dao.ProgramProgressDAO;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JRException;
 import object.PlantingReport;
+import object.ProgramProgress;
 
 /**
  *
@@ -28,6 +30,9 @@ public class Test {
 //        System.out.println(val);
 //        System.out.println(calculator.getEffectivityResult(calculator.getRespondentResult(evalValues)));
 //        System.out.println(calculator.getYear());
-
+        ArrayList<ProgramProgress> progresses = new ProgramProgressDAO().getListOfProgramProgressForDeployedID(5);
+        for (int a = 0; a < progresses.size(); a++) {
+            System.out.println("progress " + progresses.get(a).getRemarks());
+        }
     }
 }

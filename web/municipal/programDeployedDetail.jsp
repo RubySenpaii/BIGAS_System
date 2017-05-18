@@ -178,6 +178,7 @@
                                                                     <th>Activity</th>
                                                                     <th style="width: 12%">Completed</th>
                                                                     <th style="width: 12%">Updated By</th>
+                                                                    <th style="width: 15%">Remarks</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -193,16 +194,39 @@
                                                                     <%
                                                                         if (progress.get(a).getDateCompleted().equals("N/A")) {
                                                                     %>
-                                                                    <td colspan="2">
-                                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateProgress&procedureNo=<%=a + 1%>" class="btn btn-success btn-small">
+                                                                    <td colspan="3">
+<!--                                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateProgress&procedureNo=<%=a + 1%>" class="btn btn-success btn-small">
                                                                             Complete
-                                                                        </a>
+                                                                        </a>-->
+                                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm<%=a%>">Reject</button>
+
+                                                                        <div class="modal fade bs-example-modal-sm<%=a%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-sm">
+                                                                                <div class="modal-content">
+                                                                                    <form id="demo-form" data-parsley-validate class="MunicipalProgram">
+                                                                                        <div class="modal-header">
+                                                                                            <h4 class="modal-title" id="myModalLabel2">Rejection Details</h4>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                            <label for="requestDetail">Reason For Rejection * :</label>
+                                                                                            <input type="text" id="requestDetail" class="form-control" name="remarks" required />
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                                            <input type="hidden" name="procedureNo" value="<%=a + 1%>">
+                                                                                            <button type="submit" class="btn btn-primary" name="action" value="updateProgress">Send Comments</button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </td>
                                                                     <%
                                                                     } else {
                                                                     %>
                                                                     <td><%=progress.get(a).getDateCompleted()%></td>
                                                                     <td><%=progress.get(a).getUpdatedByName()%></td>
+                                                                    <td><%=progress.get(a).getRemarks()%></td>
                                                                     <%
                                                                         }
                                                                     %>

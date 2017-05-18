@@ -110,11 +110,13 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <label for="requestDetail">Reason For Rejection * :</label>
-                                                                <input type="text" id="requestDetail" class="form-control" name="rejectDetail" required />
+                                                                <input type="text" id="requestDetail" class="form-control" name="remarks" required />
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                                <button type="submit" class="btn btn-primary" name="action" value="sendRequest">Send Comments</button>
+                                                                <input type="hidden" name="status" value="Rejected">
+                                                                <input type="hidden" name="incidentID" value="<%=incident.getDamageIncidentID()%>">
+                                                                <button type="submit" class="btn btn-primary" name="action" value="changeDamageStatus">Send Comments</button>
                                                             </div>
                                                         </form>
                                                     </div>
