@@ -11,6 +11,7 @@ import dao.PlantingReportDAO;
 import extra.Calculator;
 import extra.GenericObject;
 import extra.JasperJava;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,13 +49,35 @@ public class MunicipalReport extends BaseServlet {
         if (userLogged.getOfficeLevel().equals("MAO")) {
             if (action.equals("viewReports")) {
                 System.out.println("directing to reports.jsp");
+                goToReportPage(request, response);
+                path = "/municipal/report.jsp";
+            } else if (action.equals("createBarangayProduction")) {
+                path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().getPlantingReport();
+                    new JasperJava().createBarangayProductionReport();
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
                 }
-                generateReports(request, response);
-                path = "/municipal/report.jsp";
+            } else if (action.equals("createGrowthStage")) {
+                path = "/MunicipalReport?action=viewReports";
+                try {
+                    new JasperJava().createGrowthStageReport();
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
+            } else if (action.equals("createPestDisease")) {
+                path = "/MunicipalReport?action=viewReports";
+                try {
+                    new JasperJava().createPestDiseaseReport();
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
             }
         } else {
             //redirect to restricted access
@@ -62,6 +85,14 @@ public class MunicipalReport extends BaseServlet {
 
         RequestDispatcher rd = context.getRequestDispatcher(path);
         rd.forward(request, response);
+    }
+
+    private void goToReportPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs");
+        String fileNames[] = file.list();
+
+        session.setAttribute("fileList", fileNames);
     }
 
     private void generateReports(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

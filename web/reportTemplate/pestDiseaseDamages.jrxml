@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="72c062d2-31f6-42b1-83c8-72403fbed511">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="8"/>
+	<property name="ireport.y" value="18"/>
 	<subDataset name="Problem" uuid="8c56b1b7-d852-4198-84be-abb70e36b378">
-		<queryString language="SQL">
+		<queryString>
 			<![CDATA[SELECT PB.ProblemName, F.FarmName, B.BarangayName, M.MunicipalityName, SUM(PR.AmountHarvested), SUM(DR.AreaDamaged), SUM(P.PlotSize)
 FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID 
 						JOIN Farm F ON P.FarmID = F.FarmID
@@ -18,7 +18,7 @@ FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
                             GROUP BY DR1.DamageIncidentID) T1 ON STR_TO_DATE(DR.DateReported, '%m-%d-%Y') = T1.Datereported AND DR.DamageIncidentID = T1.DamageIncidentID
 WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('03-16-2016', '%m-%d-%Y') 
 		AND STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') < STR_TO_DATE('03-15-2017', '%m-%d-%Y') 
-GROUP BY PB.ProblemName, F.FarmName, B.BarangayName, M.MunicipalityName
+GROUP BY PB.ProblemName
 HAVING M.MunicipalityName = "San Rafael";]]>
 		</queryString>
 		<field name="ProblemName" class="java.lang.String">
@@ -73,7 +73,27 @@ HAVING M.MunicipalityName = "San Rafael";]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="71" splitType="Stretch"/>
+		<band height="71" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="38" uuid="4b68c051-baba-4579-a11d-4abb7c471192"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Major Damages Report]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="0" y="38" width="802" height="33" uuid="cba8cdf9-f4bd-4fa9-af9a-b3f82114f9e1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="802" height="38" uuid="b76656d2-76ae-48ce-a713-f4cf597e7613"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[As Of]]></text>
+			</staticText>
+		</band>
 	</title>
 	<summary>
 		<band height="444" splitType="Stretch">

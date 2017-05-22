@@ -35,13 +35,13 @@ import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
  */
 public class JasperJava {
 
-    public void getPlantingReport() throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\plantingReport.jasper";
+    public void createBarangayProductionReport() throws JRException, FileNotFoundException, SQLException {
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\barangayProductionStackedType.jasper";
         File file = new File(source);
-        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\pdf";
+        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs";
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         Map parameters = new HashMap();
-        parameters.put("title", "PlantingReportAsOf" + dateNow);
+        parameters.put("title", "BarangayProductionReportAsOf" + dateNow);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
 //        JasperReport jasperPlantingReport = JasperCompileManager.compileReport(source);
@@ -50,7 +50,7 @@ public class JasperJava {
             JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
             jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
         }
-        JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + "plantingReportAsOf" + dateNow + ".pdf");
+        JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + "barangayProductionReportAsOf" + dateNow + ".pdf");
 //        JRPdfExporter exporter = new JRPdfExporter();
 //        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 //        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(new FileOutputStream(new File(filepath + File.separator + "plantingReports.pdf"))));
@@ -59,5 +59,41 @@ public class JasperJava {
 //        config.setMetadataAuthor("RubySenpaii");
 //        exporter.setConfiguration(config);
 //        exporter.exportReport();
+    }
+    
+    public void createGrowthStageReport() throws JRException, FileNotFoundException, SQLException {
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\growthStage.jasper";
+        File file = new File(source);
+        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs";
+        String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
+        Map parameters = new HashMap();
+        parameters.put("title", "GrowthStageReportAsOf" + dateNow);
+        DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+        JasperPrint jasperPrint;
+//        JasperReport jasperPlantingReport = JasperCompileManager.compileReport(source);
+        try (Connection conn = myFactory.getConnection()) {
+//            JasperReport jasperPlantingReport = JasperCompileManager.compileReport(source);
+            JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
+            jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
+        }
+        JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + "growthStageReportAsOf" + dateNow + ".pdf");
+    }
+    
+    public void createPestDiseaseReport() throws JRException, FileNotFoundException, SQLException {
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\pestDiseaseDamages.jasper";
+        File file = new File(source);
+        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs";
+        String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
+        Map parameters = new HashMap();
+        parameters.put("title", "PestDiseaseReportAsOf" + dateNow);
+        DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+        JasperPrint jasperPrint;
+//        JasperReport jasperPlantingReport = JasperCompileManager.compileReport(source);
+        try (Connection conn = myFactory.getConnection()) {
+//            JasperReport jasperPlantingReport = JasperCompileManager.compileReport(source);
+            JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
+            jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
+        }
+        JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + "pestDiseaseReportAsOf" + dateNow + ".pdf");
     }
 }

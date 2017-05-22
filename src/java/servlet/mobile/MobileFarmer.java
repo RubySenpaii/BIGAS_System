@@ -96,6 +96,7 @@ public class MobileFarmer extends HttpServlet {
             count = adds.length + updates.length;
             System.out.println("added farmer rows: " + adds.length);
             System.out.println("updated farmer rows: " + updates.length);
+            conn.commit();
             addPS.close();
             updatePS.close();
             conn.close();

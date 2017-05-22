@@ -61,7 +61,12 @@ public class MobilePlot extends HttpServlet {
                     + Plot.COLUMN_PLOTPLANTED + ", " + Plot.COLUMN_PLOTSIZE + ") "
                     + "VALUES(?, ?, ?, ?, ?)");
             for (int a = 0; a < plots.size(); a++) {
-                if (a <= originalSize) {
+                if (plots.get(a).getFarmID() == 910) {
+                    System.out.println("farmid " + plots.get(a).getFarmID());
+                    System.out.println("plotplanted " + plots.get(a).getPlotPlanted());
+                    System.out.println("plotid " + plots.get(a).getPlotID());
+                }
+                if (a < originalSize) {
                     updatePS.setInt(1, plots.get(a).getFarmID());
                     updatePS.setInt(2, plots.get(a).getPlotID());
                     updatePS.setInt(3, plots.get(a).getPlotNumber());
@@ -70,6 +75,7 @@ public class MobilePlot extends HttpServlet {
                     updatePS.setInt(6, plots.get(a).getPlotID());
                     updatePS.addBatch();
                 } else {
+                    System.out.println("add plot: " + plots.get(a).getPlotID() + " " + plots.get(a).getFarmID());
                     addPS.setInt(1, plots.get(a).getFarmID());
                     addPS.setInt(2, plots.get(a).getPlotID());
                     addPS.setInt(3, plots.get(a).getPlotNumber());
@@ -84,6 +90,7 @@ public class MobilePlot extends HttpServlet {
             count = adds.length + updates.length;
             System.out.println("added plot rows: " + adds.length);
             System.out.println("updated plot rows: " + updates.length);
+            conn.commit();
             addPS.close();
             updatePS.close();
             conn.close();

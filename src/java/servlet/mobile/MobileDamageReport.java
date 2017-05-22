@@ -53,8 +53,8 @@ public class MobileDamageReport extends HttpServlet {
                 System.out.println(damageReports.get(a).getDamageIncidentID() + " on " + damageReports.get(a).getDateReported() + " not added/updated");
             }
         }
-        System.out.println("plot input count updated: " + updateCount);
-        System.out.println("plot input count added: " + addCount);
+        System.out.println("damagereport input count updated: " + updateCount);
+        System.out.println("damagereport input count added: " + addCount);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

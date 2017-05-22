@@ -198,17 +198,17 @@
 <!--                                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateProgress&procedureNo=<%=a + 1%>" class="btn btn-success btn-small">
                                                                             Complete
                                                                         </a>-->
-                                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm<%=a%>">Reject</button>
+                                                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-sm<%=a%>">Complete</button>
 
                                                                         <div class="modal fade bs-example-modal-sm<%=a%>" tabindex="-1" role="dialog" aria-hidden="true">
                                                                             <div class="modal-dialog modal-sm">
                                                                                 <div class="modal-content">
                                                                                     <form id="demo-form" data-parsley-validate class="MunicipalProgram">
                                                                                         <div class="modal-header">
-                                                                                            <h4 class="modal-title" id="myModalLabel2">Rejection Details</h4>
+                                                                                            <h4 class="modal-title" id="myModalLabel2">Completion Details</h4>
                                                                                         </div>
                                                                                         <div class="modal-body">
-                                                                                            <label for="requestDetail">Reason For Rejection * :</label>
+                                                                                            <label for="requestDetail">Remarks * :</label>
                                                                                             <input type="text" id="requestDetail" class="form-control" name="remarks" required />
                                                                                         </div>
                                                                                         <div class="modal-footer">

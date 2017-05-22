@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b5c7a590-b6e1-41d0-aea2-28565a10e06b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Reports" uuid="ba8badd6-62c6-4117-8868-51bee8ce9470">
+		<queryString language="SQL">
+			<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')) 
+      FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
+                             JOIN Farm F ON P.FarmID = F.FarmID
+                             JOIN Barangay B ON F.BarangayID = B.BarangayID
+                             JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
+      WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE("01-10-2017", '%m-%d-%Y')
+             AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE("01-10-2017", '%m-%d-%Y')
+      GROUP BY PR.PlotID) T1
+JOIN (SELECT WPR1.*
+      FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
+                                           FROM WeeklyPlantingReport WPR2 
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE("01-10-2017", '%m-%d-%Y')
+                                           GROUP BY WPR2.PlantingReportID) IT1 
+                                     ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
+ON T1.PlantingReportID = T2.PlantingReportID
+GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
+HAVING T1.MunicipalityName = "San Rafael"]]>
+		</queryString>
+		<field name="BarangayName" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="MunicipalityName" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="CropStage" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="PlantedArea" class="java.lang.Double"/>
+		<group name="BarangayName">
+			<groupExpression><![CDATA[$F{BarangayName}]]></groupExpression>
+		</group>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')) 
+      FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
+                             JOIN Farm F ON P.FarmID = F.FarmID
+                             JOIN Barangay B ON F.BarangayID = B.BarangayID
+                             JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
+      WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE("01-10-2017", '%m-%d-%Y')
+             AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE("01-10-2017", '%m-%d-%Y')
+      GROUP BY PR.PlotID) T1
+JOIN (SELECT WPR1.*
+      FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
+                                           FROM WeeklyPlantingReport WPR2 
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE("01-10-2017", '%m-%d-%Y')
+                                           GROUP BY WPR2.PlantingReportID) IT1 
+                                     ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
+ON T1.PlantingReportID = T2.PlantingReportID
+GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
+HAVING T1.MunicipalityName = "San Rafael"]]>
+	</queryString>
+	<field name="BarangayName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MunicipalityName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CropStage" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PlantedArea" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="968" height="32" uuid="25021792-8f59-4163-8a54-8ee0256a075a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Growth Stage Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="32" width="968" height="20" uuid="7111ef01-f952-40f7-a167-83696924b8eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[As Of]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="0" y="52" width="968" height="27" uuid="b95412bf-0914-4b11-8b77-d7d41b494301"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<summary>
+		<band height="374" splitType="Stretch">
+			<stackedBarChart>
+				<chart>
+					<reportElement x="0" y="0" width="968" height="374" uuid="a285a42e-9381-4840-9049-96007601baf3"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Reports" uuid="3256ccad-5c92-4f06-9f04-f0a752d71acc"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{CropStage}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{BarangayName}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PlantedArea}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot labelRotation="-50.0"/>
+					<itemLabel/>
+					<categoryAxisFormat labelRotation="-50.0">
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</stackedBarChart>
+		</band>
+	</summary>
+</jasperReport>

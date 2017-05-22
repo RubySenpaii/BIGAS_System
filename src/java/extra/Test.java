@@ -8,6 +8,7 @@ package extra;
 import dao.FarmDAO;
 import dao.PlantingReportDAO;
 import dao.ProgramProgressDAO;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import object.ProgramProgress;
  * @author RubySenpaii
  */
 public class Test {
+
     public static void main(String[] args) {
 //        String evalValues = "1,4,5,4,4,4,5,4,4,4";
 //        Calculator calculator = new Calculator();
@@ -30,9 +32,14 @@ public class Test {
 //        System.out.println(val);
 //        System.out.println(calculator.getEffectivityResult(calculator.getRespondentResult(evalValues)));
 //        System.out.println(calculator.getYear());
-        ArrayList<ProgramProgress> progresses = new ProgramProgressDAO().getListOfProgramProgressForDeployedID(5);
-        for (int a = 0; a < progresses.size(); a++) {
-            System.out.println("progress " + progresses.get(a).getRemarks());
+//        ArrayList<ProgramProgress> progresses = new ProgramProgressDAO().getListOfProgramProgressForDeployedID(5);
+//        for (int a = 0; a < progresses.size(); a++) {
+//            System.out.println("progress " + progresses.get(a).getRemarks());
+//        }
+        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\pdf");
+        String fileNames[] = file.list();
+        for (int a = 0; a < fileNames.length; a++) {
+            System.out.println("filenames[]: " + fileNames[a]);
         }
     }
 }
