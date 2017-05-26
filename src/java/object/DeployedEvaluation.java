@@ -14,10 +14,12 @@ public class DeployedEvaluation {
     public static final String COLUMN_DEPLOYEDID = "DeployedID";
     public static final String COLUMN_RESPONDENTNAME = "RespondentName";
     public static final String COLUMN_EVALUATIONVALUES = "EvaluationValues";
+    public static final String COLUMN_FEEDBACK = "Feedback";
     
     private int deployedID;
     private String respondentName;
     private String evaluationValues;
+    private String feedback;
     
     public DeployedEvaluation() {
         
@@ -63,5 +65,19 @@ public class DeployedEvaluation {
      */
     public void setEvaluationValues(String evaluationValues) {
         this.evaluationValues = evaluationValues;
+    }
+
+    /**
+     * @return the feedback
+     */
+    public String getFeedback() {
+        return feedback;
+    }
+
+    /**
+     * @param feedback the feedback to set
+     */
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 }

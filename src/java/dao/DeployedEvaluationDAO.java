@@ -27,11 +27,13 @@ public class DeployedEvaluationDAO {
             Connection conn = myFactory.getConnection();
 
             PreparedStatement ps = conn.prepareStatement("INSERT INTO " + DeployedEvaluation.TABLE_NAME + " "
-                    + "(" + DeployedEvaluation.COLUMN_DEPLOYEDID + ", " + DeployedEvaluation.COLUMN_EVALUATIONVALUES + ", " + DeployedEvaluation.COLUMN_RESPONDENTNAME + ") "
-                    + "VALUES(?, ?, ?)");
+                    + "(" + DeployedEvaluation.COLUMN_DEPLOYEDID + ", " + DeployedEvaluation.COLUMN_EVALUATIONVALUES + ", " 
+                    + DeployedEvaluation.COLUMN_FEEDBACK + ", " + DeployedEvaluation.COLUMN_RESPONDENTNAME + ") "
+                    + "VALUES(?, ?, ?, ?)");
             ps.setInt(1, evaluation.getDeployedID());
             ps.setString(2, evaluation.getEvaluationValues());
-            ps.setString(3, evaluation.getRespondentName());
+            ps.setString(3, evaluation.getFeedback());
+            ps.setString(4, evaluation.getRespondentName());
 
             ps.executeUpdate();
             ps.close();
@@ -90,6 +92,7 @@ public class DeployedEvaluationDAO {
             DeployedEvaluation evaluation = new DeployedEvaluation();
             evaluation.setDeployedID(rs.getInt(DeployedEvaluation.COLUMN_DEPLOYEDID));
             evaluation.setEvaluationValues(rs.getString(DeployedEvaluation.COLUMN_EVALUATIONVALUES));
+            evaluation.setFeedback(rs.getString(DeployedEvaluation.COLUMN_FEEDBACK));
             evaluation.setRespondentName(rs.getString(DeployedEvaluation.COLUMN_RESPONDENTNAME));
             evaluations.add(evaluation);
         }

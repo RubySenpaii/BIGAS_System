@@ -303,8 +303,8 @@
                                             </table>
                                             
                                             <div class="form-group">
-                                                <label class="form-label-left">Summary</label>
-                                                <textarea class="form-control"></textarea>
+                                                <label class="form-label-left">Feedback:</label>
+                                                <textarea class="form-control" name="feedback"></textarea>
                                             </div>
                                             <div class="ln_solid"></div>
                                             <div class="form-group">

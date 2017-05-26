@@ -71,13 +71,19 @@ public class MunicipalEvaluation extends BaseServlet {
             }
         }
         
+        String feedback = request.getParameter("feedback");
+        if (feedback.equals("") || feedback.isEmpty()) {
+            feedback = " ";
+        }
+        
         String respondent = request.getParameter("respondentName");
         DeployedEvaluation deployedEval = new DeployedEvaluation();
         deployedEval.setDeployedID(deployedID);
         deployedEval.setEvaluationValues(result);
         deployedEval.setRespondentName(respondent);
+        deployedEval.setFeedback(feedback);
         if (new DeployedEvaluationDAO().addDeployedEvaluation(deployedEval)) {
-            System.out.println("success");
+            System.out.println("evaluation submitted success");
         }
     }
 }
