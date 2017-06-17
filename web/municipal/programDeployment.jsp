@@ -75,6 +75,15 @@
                                                     <datalist id="variety">
                                                         <%
                                                             ImportantProblem importantProblem = (ImportantProblem) session.getAttribute("importantProblem");
+                                                            ArrayList<DamageIncident> farms = (ArrayList<DamageIncident>) session.getAttribute("farms");
+                                                            for (int a = 0; a < farms.size(); a++) {
+                                                        %>
+                                                        <option><%=farms.get(a).getSeedVarietyName()%></option>
+                                                        <%
+                                                            }
+                                                        %>
+
+                                                        <%
                                                             ArrayList<SeedVariety> varieties = (ArrayList<SeedVariety>) session.getAttribute("varieties");
                                                             for (int a = 0; a < varieties.size(); a++) {
                                                         %>
@@ -98,6 +107,13 @@
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <input list="fertilizer" class="form-control col-md-7 col-xs-12" type="text" name="fertilizer" required="required">
                                                     <datalist id="fertilizer">
+                                                        <%
+                                                            for (int a = 0; a < farms.size(); a++) {
+                                                        %>
+                                                        <option><%=farms.get(a).getFertilizerName()%></option>
+                                                        <%
+                                                            }
+                                                        %>
                                                         <%
                                                             ArrayList<Fertilizer> fertilizers = (ArrayList<Fertilizer>) session.getAttribute("fertilizers");
                                                             for (int a = 0; a < fertilizers.size(); a++) {
@@ -165,7 +181,6 @@
                                                 <tbody>
                                                     <%
                                                         double totalAffected = 0, totalDamaged = 0;
-                                                        ArrayList<DamageIncident> farms = (ArrayList<DamageIncident>) session.getAttribute("farms");
                                                         for (int a = 0; a < farms.size(); a++) {
                                                             totalAffected += farms.get(a).getTotalAreaAffected();
                                                             totalDamaged += farms.get(a).getTotalAreaDamaged();
