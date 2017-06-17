@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="1008" whenNoDataType="BlankPage" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FAEBD7">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFE4BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FFF8EF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="problem" uuid="ec4bef7a-dc57-4f83-a327-45ac8d3878fb">
+		<queryString>
+			<![CDATA[SELECT IT1.MunicipalityName, IT2.ProblemName, SUM(IT1.PlantedArea), SUM(IT2.MinorDamaged), SUM(IT2.MajorDamaged)
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'PlantedArea', MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
+	  FROM Municipality M JOIN Barangay B ON M.MunicipalityID = B.MunicipalityID
+						  JOIN Farm F ON B.BarangayID = F.BarangayID
+                          JOIN Plot P ON P.FarmID = F.FarmID
+                          JOIN PlantingReport PR ON PR.PlotID = P.PlotID
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+	  GROUP BY PR.PlantingReportID, P.PlotID) IT1 JOIN
+	 (SELECT DI.DamageIncidentID, DI.PlantingReportID, DR.AreaAffected AS 'MinorDamaged', DR.AreaDamaged AS  'MajorDamaged', PM.ProblemName
+      FROM DamageIncident DI JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID
+							   JOIN (SELECT DR1.DamageIncidentID, MAX(str_to_date(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'
+									FROM DamageReport DR1
+									GROUP BY DR1.DamageIncidentID) IIT1 ON DR.DamageIncidentID = IIT1.DamageIncidentID
+								JOIN Problem PM ON DI.ProblemReported = PM.ProblemID
+		WHERE DI.IncidentStatus != 'Rejected' AND DI.IncidentStatus != 'Reported'
+		GROUP BY DI.DamageIncidentID) IT2 ON IT1.PlantingReportID = IT2.PlantingReportID
+GROUP BY IT1.MunicipalityName, IT2.ProblemName]]>
+		</queryString>
+		<field name="MunicipalityName" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="ProblemName" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="SUM(IT1.PlantedArea)" class="java.lang.Double"/>
+		<field name="SUM(IT2.MinorDamaged)" class="java.lang.Double"/>
+		<field name="SUM(IT2.MajorDamaged)" class="java.lang.Double"/>
+		<group name="ProblemName">
+			<groupExpression><![CDATA[$F{ProblemName}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="report_date" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="preparedBy" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Cynthia Nunez"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="approvedBy" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT IT1.MunicipalityName, SUM(IT1.PlantedArea) AS 'PlantedArea', SUM(IT2.MinorDamaged) AS 'MinorDamaged', SUM(IT2.MajorDamaged) AS 'MajorDamaged'
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'PlantedArea', MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
+	  FROM Municipality M JOIN Barangay B ON M.MunicipalityID = B.MunicipalityID
+						  JOIN Farm F ON B.BarangayID = F.BarangayID
+                          JOIN Plot P ON P.FarmID = F.FarmID
+                          JOIN PlantingReport PR ON PR.PlotID = P.PlotID
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+	  GROUP BY PR.PlantingReportID, P.PlotID) IT1 LEFT JOIN
+	 (SELECT DI.DamageIncidentID, DI.PlantingReportID, DR.AreaAffected AS 'MinorDamaged', DR.AreaDamaged AS  'MajorDamaged', PM.ProblemName
+      FROM DamageIncident DI JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID
+							   JOIN (SELECT DR1.DamageIncidentID, MAX(str_to_date(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'
+									FROM DamageReport DR1
+									GROUP BY DR1.DamageIncidentID) IIT1 ON DR.DamageIncidentID = IIT1.DamageIncidentID
+								JOIN Problem PM ON DI.ProblemReported = PM.ProblemID
+		WHERE DI.IncidentStatus != 'Rejected' AND DI.IncidentStatus != 'Reported'
+		GROUP BY DI.DamageIncidentID) IT2 ON IT1.PlantingReportID = IT2.PlantingReportID
+GROUP BY IT1.MunicipalityName]]>
+	</queryString>
+	<field name="MunicipalityName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PlantedArea" class="java.lang.Double"/>
+	<field name="MinorDamaged" class="java.lang.Double"/>
+	<field name="MajorDamaged" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="108" splitType="Stretch">
+			<staticText>
+				<reportElement x="245" y="54" width="172" height="21" uuid="9efe5242-09f5-4b04-9f16-666118970b99"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[As Of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="33" width="172" height="21" uuid="61d60b77-2399-4423-b923-32477916dfb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[Weekly Damage Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="12" width="172" height="21" uuid="7108731f-31d7-458d-bb44-84979c188099"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[Provincial Agriculture Office]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="245" y="75" width="172" height="21" uuid="87b038fb-0f1b-4a3f-af82-f5b1912541c4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="156" y="12" width="152" height="84" uuid="8c06e34c-595b-4560-92e4-da656215574f"/>
+				<imageExpression><![CDATA["C:\\Users\\RubySenpaii\\Desktop\\NetBeansProjects\\BIGAS System\\web\\images\\rsc\\logo_dept_agri.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="135" height="32" uuid="8360c97c-ec32-4c62-90c3-0f3aeb3b7815"/>
+				<text><![CDATA[Municipal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="0" width="110" height="32" uuid="0f00d868-ee81-459f-b0b3-de27f9041d72"/>
+				<text><![CDATA[PlantedArea]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="0" width="117" height="32" uuid="c4725317-97ef-41e2-9431-af5d5dda8379"/>
+				<text><![CDATA[MinorDamaged]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="0" width="116" height="32" uuid="d10c8db6-1174-4ba2-97c4-b9fbe5ab8b98"/>
+				<text><![CDATA[MajorDamaged]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="0" width="94" height="32" uuid="724a4b62-b7ed-4e76-8630-425c9e324a2d"/>
+				<text><![CDATA[Undamaged Area]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField pattern="#,##0.00 ha">
+				<reportElement x="135" y="0" width="110" height="26" uuid="3ce412c0-8d26-4897-af5c-5ddf5b17294a"/>
+				<textElement>
+					<font isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PlantedArea}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="245" y="0" width="117" height="26" uuid="1662e493-d2c3-4d07-8b67-1f1f39259805"/>
+				<textFieldExpression><![CDATA[$F{MinorDamaged}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="362" y="0" width="116" height="26" uuid="4e613e54-cf78-4aff-a3b8-bf7b1831d5b0"/>
+				<textFieldExpression><![CDATA[$F{MajorDamaged}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="478" y="0" width="94" height="26" uuid="988d98c0-e2bb-406c-ba31-c06e5a9863b4"/>
+				<textFieldExpression><![CDATA[$F{PlantedArea} - $F{MinorDamaged} - $F{MajorDamaged}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="135" height="26" uuid="bc603ab6-e9ea-42fb-89dd-b8490248e13f"/>
+				<textFieldExpression><![CDATA[$F{MunicipalityName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="84" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="29" width="135" height="1" uuid="f65d4127-d3f2-4ccd-8591-bf6fd456480b"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4c7395e1-a9d9-4c21-b5ac-ee7a4ea55b6b"/>
+				<text><![CDATA[Prepared By:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="424" y="0" width="100" height="20" uuid="257a7686-14d8-47a3-b8df-5318532c68a3"/>
+				<text><![CDATA[Approved By:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="424" y="28" width="135" height="1" uuid="b57aada4-011b-4f62-94a4-a999d7e07de6"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="30" width="100" height="16" uuid="4785faac-756f-4f51-8970-c4165d38f5cf"/>
+				<textFieldExpression><![CDATA[$P{preparedBy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="424" y="30" width="100" height="16" uuid="b88aade0-538c-4964-bf2c-bddaab03e67a"/>
+				<textFieldExpression><![CDATA[$P{approvedBy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="64" width="80" height="20" uuid="2b0e4dbe-0e74-4f0a-b843-38c112ec7065"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="64" width="40" height="20" uuid="382bdf82-f26e-46c7-8864-cb356bf36d62"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss Z">
+				<reportElement x="1" y="64" width="171" height="20" uuid="17ebd527-364a-4b80-b850-afd9e8c7d6b7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="725" splitType="Stretch">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="572" height="355" uuid="c5a76c47-94aa-4727-a92f-4215019a1665"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Minor Damages for Bulacan"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="problem" uuid="d45bfff0-3845-42b4-826a-5b8366a2fe53"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{ProblemName}]]></keyExpression>
+					<valueExpression><![CDATA[$F{SUM(IT2.MinorDamaged)}]]></valueExpression>
+				</pieDataset>
+				<piePlot labelFormat="{0} ({2})">
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="368" width="572" height="355" uuid="29d59da3-a501-473b-a591-d0ace8caa26b"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Major Damages for Bulacan"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="problem" uuid="1da7e9c4-20ac-44f0-98cc-6851a2066e07"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{ProblemName}]]></keyExpression>
+					<valueExpression><![CDATA[$F{SUM(IT2.MajorDamaged)}]]></valueExpression>
+				</pieDataset>
+				<piePlot labelFormat="{0} ({2})">
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+	<noData>
+		<band height="50"/>
+	</noData>
+</jasperReport>

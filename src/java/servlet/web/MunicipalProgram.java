@@ -116,7 +116,7 @@ public class MunicipalProgram extends BaseServlet {
                     boolean success = new DeployedProgramDAO().updateDeployedProgram(deployedProgram);
                     System.out.println(deployedID + " has been successfully changed to completed");
                 }
-                
+
                 path = "/MunicipalProgram?action=viewDeployedProgramDetails&deployedID=" + deployedID;
             } else if (action.equals("viewRequestList")) {
                 System.out.println("directing to programRequestList.jsp");
@@ -156,59 +156,63 @@ public class MunicipalProgram extends BaseServlet {
             ArrayList<ProgramTrigger> programTriggers = new ProgramTriggerDAO().getListOfProgramTriggersForProgramID(programPlans.get(a).getProgramPlanID());
             String triggerName = "";
             System.out.println(programPlans.get(a).getProgramName());
-            for (int b = 0; b < programTriggers.size(); b++) {
-                System.out.println("trigger val " + programTriggers.get(b).getTriggerValue());
-                if (programTriggers.get(b).getTriggerName().equals("Farm Affected")) {
-                    double farmPercentage = (double) importantProblem.getFarmAffected() / importantProblem.getFarmCount() * 100;
-                    System.out.println("farm percentage " + farmPercentage);
-                    if (programTriggers.get(b).getTriggerValue() > farmPercentage) {
-                        remove.add(programPlans.get(a));
-                        break;
-                    } else {
-                        int requirement = (int) Math.ceil(programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getFarmCount());
-                        programPlans.get(a).setProgramTriggerFarmCount(requirement);
-                        if (triggerName.length() > 0) {
-                            triggerName += "<br>";
+            if (programTriggers.isEmpty()) {
+                remove.add(programPlans.get(a));
+            } else {
+                for (int b = 0; b < programTriggers.size(); b++) {
+                    System.out.println("trigger val " + programTriggers.get(b).getTriggerValue());
+                    if (programTriggers.get(b).getTriggerName().equals("Farm Affected")) {
+                        double farmPercentage = (double) importantProblem.getFarmAffected() / importantProblem.getFarmCount() * 100;
+                        System.out.println("farm percentage " + farmPercentage);
+                        if (programTriggers.get(b).getTriggerValue() > farmPercentage) {
+                            remove.add(programPlans.get(a));
+                            break;
+                        } else {
+                            int requirement = (int) Math.ceil(programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getFarmCount());
+                            programPlans.get(a).setProgramTriggerFarmCount(requirement);
+                            if (triggerName.length() > 0) {
+                                triggerName += "<br>";
+                            }
+                            triggerName += "Affected Farm Count: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getFarmCount()
+                                    + " farm(s) needed <b>(" + requirement + "farm(s))</b>";
                         }
-                        triggerName += "Affected Farm Count: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getFarmCount()
-                                + " farm(s) needed <b>(" + requirement + "farm(s))</b>";
-                    }
-                } else if (programTriggers.get(b).getTriggerName().equals("Minor Damages")) {
-                    double minorPercentage = (double) importantProblem.getTotalMinor() / importantProblem.getPlantableArea() * 100;
-                    System.out.println("minor percentage " + minorPercentage);
-                    if (programTriggers.get(b).getTriggerValue() > minorPercentage) {
-                        remove.add(programPlans.get(a));
-                        break;
-                    } else {
-                        double requirement = programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getPlantableArea();
-                        programPlans.get(a).setProgramTriggerFarmArea(requirement);
-                        if (triggerName.length() > 0) {
-                            triggerName += "<br>";
+                    } else if (programTriggers.get(b).getTriggerName().equals("Minor Damages")) {
+                        double minorPercentage = (double) importantProblem.getTotalMinor() / importantProblem.getPlantableArea() * 100;
+                        System.out.println("minor percentage " + minorPercentage);
+                        if (programTriggers.get(b).getTriggerValue() > minorPercentage) {
+                            remove.add(programPlans.get(a));
+                            break;
+                        } else {
+                            double requirement = programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getPlantableArea();
+                            programPlans.get(a).setProgramTriggerFarmArea(requirement);
+                            if (triggerName.length() > 0) {
+                                triggerName += "<br>";
+                            }
+                            triggerName += "Minor Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea()
+                                    + " ha needed <b>(" + requirement + " ha)</b>";
                         }
-                        triggerName += "Minor Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea()
-                                + " ha needed <b>(" + requirement + " ha)</b>";
-                    }
-                } else if (programTriggers.get(b).getTriggerName().equals("Major Damages")) {
-                    double majorPercentage = (double) importantProblem.getTotalMajor() / importantProblem.getPlantableArea() * 100;
-                    System.out.println("major percentage " + majorPercentage);
-                    if (programTriggers.get(b).getTriggerValue() > majorPercentage) {
-                        remove.add(programPlans.get(a));
-                        break;
-                    } else {
-                        double requirement = programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getPlantableArea();
-                        programPlans.get(a).setProgramTriggerFarmArea(requirement);
-                        if (triggerName.length() > 0) {
-                            triggerName += "<br>";
+                    } else if (programTriggers.get(b).getTriggerName().equals("Major Damages")) {
+                        double majorPercentage = (double) importantProblem.getTotalMajor() / importantProblem.getPlantableArea() * 100;
+                        System.out.println("major percentage " + majorPercentage);
+                        if (programTriggers.get(b).getTriggerValue() > majorPercentage) {
+                            remove.add(programPlans.get(a));
+                            break;
+                        } else {
+                            double requirement = programTriggers.get(b).getTriggerValue() / 100 * importantProblem.getPlantableArea();
+                            programPlans.get(a).setProgramTriggerFarmArea(requirement);
+                            if (triggerName.length() > 0) {
+                                triggerName += "<br>";
+                            }
+                            triggerName += "Major Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea()
+                                    + " ha needed <b>(" + requirement + " ha)</b>";
                         }
-                        triggerName += "Major Damaged Area: " + formatter.doubleToString(programTriggers.get(b).getTriggerValue()) + "% of " + importantProblem.getPlantableArea()
-                                + " ha needed <b>(" + requirement + " ha)</b>";
+                    } else {
+                        System.out.println("Unknown Trigger Name: " + programTriggers.get(b).getTriggerName());
                     }
-                } else {
-                    System.out.println("Unknown Trigger Name: " + programTriggers.get(b).getTriggerName());
                 }
-            }
 
-            programPlans.get(a).setProgramTrigger(triggerName);
+                programPlans.get(a).setProgramTrigger(triggerName);
+            }
         }
         for (int a = 0; a < remove.size(); a++) {
             programPlans.remove(remove.get(a));
@@ -492,6 +496,7 @@ public class MunicipalProgram extends BaseServlet {
                     importantProblem.setPlantableArea(plantableArea);
                     importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
                     importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                    importantProblem.setDamageType("Major Damages");
                     importantProblems.add(importantProblem);
                 }
             } else if (majorDamaged / plantableArea >= 0.03) {
@@ -503,6 +508,7 @@ public class MunicipalProgram extends BaseServlet {
                 importantProblem.setPlantableArea(plantableArea);
                 importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
                 importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                importantProblem.setDamageType("Major Damages");
                 importantProblems.add(importantProblem);
             } else if (minorDamaged / plantableArea >= 0.045) {
                 ImportantProblem importantProblem = new ImportantProblem();
@@ -513,6 +519,7 @@ public class MunicipalProgram extends BaseServlet {
                 importantProblem.setPlantableArea(plantableArea);
                 importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
                 importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                importantProblem.setDamageType("Minor Damages");
                 importantProblems.add(importantProblem);
             }
         }

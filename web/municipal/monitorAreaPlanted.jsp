@@ -196,7 +196,7 @@
                                                         %>
                                                         <tr>
                                                             <td><%=currentBarangays.get(a).getBarangayName()%></td>
-                                                            <td><%=new Formatter().doubleToString(currentBarangays.get(a).getPlantableArea()) + " ha"%></td>
+                                                            <td><%=new Formatter().doubleToString(currentBarangays.get(a).getArea()) + " ha"%></td>
                                                             <td><%=new Formatter().doubleToString(currentBarangays.get(a).getPlantedArea()) + " ha"%></td>
                                                             <td><%=new Formatter().doubleToString(currentBarangays.get(a).getUnplantedArea()) + " ha"%></td>
                                                             <td><%=new Formatter().doubleToString(currentBarangays.get(a).getMinorDamagedArea()) + " ha"%></td>

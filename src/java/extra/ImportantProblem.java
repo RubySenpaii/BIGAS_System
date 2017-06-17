@@ -25,6 +25,8 @@ public class ImportantProblem {
     private ProgramPlan programPlan;
     private int farmCount;
     private int farmAffected;
+    
+    private String damageType;
 
     public ImportantProblem() {
         
@@ -168,5 +170,19 @@ public class ImportantProblem {
      */
     public void setFarmAffected(int farmAffected) {
         this.farmAffected = farmAffected;
+    }
+
+    /**
+     * @return the damageType
+     */
+    public String getDamageType() {
+        return damageType;
+    }
+
+    /**
+     * @param damageType the damageType to set
+     */
+    public void setDamageType(String damageType) {
+        this.damageType = damageType;
     }
 }

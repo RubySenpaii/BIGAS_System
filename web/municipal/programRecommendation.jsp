@@ -121,7 +121,52 @@
                                                 </table>
 
                                                 <div class="col-md-8 col-md-offset-4">
-                                                    <a href="" class="btn btn-success">Request Program</a>
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-lg">Request Program</button>
+
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <form id="demo-form" data-parsley-validate class="MunicipalProgram">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="myModalLabel2">Program Request</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <label for="requestDetail">Request Name * :</label>
+                                                                <input type="text" id="requestDetail" class="form-control" name="requestDetail" value="Request program for <%=importantProblem.getProblem().getProblemName()%>" required />
+                                                                <label for="barangayName">Barangay Name * :</label>
+                                                                <select id="barangayName" class="form-control" name="requestDetail" required disabled>
+                                                                    <option>Barangay San Rafael</option>
+                                                                </select>
+                                                                <label for="problemName">Problem Name * :</label>
+                                                                <input type="text" id="problemName" class="form-control" name="problemName" value="<%=importantProblem.getProblem().getProblemName()%>" required />
+                                                                <label for="farmsAffected">Farms Affected * :</label>
+                                                                <input type="text" id="farmsAffected" class="form-control" name="farmsAffected" value="<%=formatter.doubleToString(importantProblem.getFarmCount()/ importantProblem.getFarmCount()* 100)%>" required />
+                                                                <label for="requestDetail">Damages * :</label>
+                                                                <div class="form-control">
+                                                                    <select class="col-md-4" disabled>
+                                                                        <option><%=importantProblem.getDamageType()%></option>
+                                                                    </select>
+                                                                    <%
+                                                                        String value = "";
+                                                                        if (importantProblem.getDamageType().contains("Minor")) {
+                                                                            value = formatter.doubleToString(importantProblem.getTotalMinor() / importantProblem.getPlantableArea() * 100);
+                                                                        } else {
+                                                                            value = formatter.doubleToString(importantProblem.getTotalMajor()/ importantProblem.getPlantableArea() * 100);
+                                                                        }
+                                                                    %>
+                                                                    <input type="text" class="col-md-8" name="damageValue" value="<%=value%>">
+                                                                </div>
+                                                                <label for="requestDetail">Description * :</label>
+                                                                <textarea id="requestDetail" class="form-control" name="requestDetail" required rows="7"></textarea>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary" name="action" value="sendRequest">Send Request</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                                 </div>
                                             </div>
                                         </div>

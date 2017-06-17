@@ -80,7 +80,7 @@ public class MAOMonitorCropArea extends HttpServlet {
             major += barangays.get(a).getMajorDamagedArea();
             minor += barangays.get(a).getMinorDamagedArea();
             
-            planted = barangays.get(a).getPlantedArea() - (barangays.get(a).getMajorDamagedArea() + barangays.get(a).getMinorDamagedArea());
+            planted += barangays.get(a).getPlantedArea() - (barangays.get(a).getMajorDamagedArea() + barangays.get(a).getMinorDamagedArea());
             unplanted += barangays.get(a).getArea() - barangays.get(a).getPlantedArea();
         }
         try {

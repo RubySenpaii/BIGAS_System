@@ -97,11 +97,6 @@ public class MunicipalPerformance extends BaseServlet {
 
         String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         ArrayList<Barangay> currentWeekBarangay = new BarangayDAO().getBarangayAreaMonitoring(userLogged.getMunicipalityID(), date);
-        for (int a = 0; a < currentWeekBarangay.size(); a++) {
-            currentWeekBarangay.get(a).setPlantableArea(currentWeekBarangay.get(a).getPlantedArea());
-            currentWeekBarangay.get(a).setUnplantedArea(currentWeekBarangay.get(a).getPlantableArea() - currentWeekBarangay.get(a).getPlantedArea());
-            currentWeekBarangay.get(a).setPlantedArea(currentWeekBarangay.get(a).getPlantedArea() - (currentWeekBarangay.get(a).getMajorDamagedArea() + currentWeekBarangay.get(a).getMinorDamagedArea()));
-        }
 
         session.setAttribute("currentBarangays", currentWeekBarangay);
     }
