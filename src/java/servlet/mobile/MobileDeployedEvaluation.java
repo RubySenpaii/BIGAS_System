@@ -8,15 +8,23 @@ package servlet.mobile;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dao.DeployedEvaluationDAO;
+import dao.FarmerDAO;
+import db.DBConnectionFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import object.DeployedEvaluation;
+import object.Farmer;
 
 /**
  *
@@ -41,17 +49,46 @@ public class MobileDeployedEvaluation extends HttpServlet {
         System.out.println("deployedEvaluation input form mobile upload");
         ArrayList<DeployedEvaluation> deployedEvaluations = new Gson().fromJson(request.getParameter("deployedEvaluations"), new TypeToken<List<DeployedEvaluation>>() {
         }.getType());
-        for (int a = 0; a < deployedEvaluations.size(); a++) {
-            if (a < new DeployedEvaluationDAO().getListOfProgramEvaluations().size()) {
-                //do nothing
-            } else if (new DeployedEvaluationDAO().addDeployedEvaluation(deployedEvaluations.get(a))) {
-                addCount++;
-            } else {
-                System.out.println(deployedEvaluations.get(a).getDeployedID()+ " not added/updated");
+
+        int originalSize = new DeployedEvaluationDAO().getListOfProgramEvaluations().size();
+        int count = 0;
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+            conn.setAutoCommit(false);
+
+            PreparedStatement addPS = conn.prepareStatement("INSERT INTO " + DeployedEvaluation.TABLE_NAME + " "
+                    + "(" + DeployedEvaluation.COLUMN_DEPLOYEDID + ", " + DeployedEvaluation.COLUMN_EVALUATIONVALUES + ", "
+                    + DeployedEvaluation.COLUMN_FEEDBACK + ", " + DeployedEvaluation.COLUMN_RESPONDENTNAME + ") "
+                    + "VALUES(?, ?, ?, ?)");
+            PreparedStatement updatePS = conn.prepareStatement("");
+            for (int a = 0; a < deployedEvaluations.size(); a++) {
+                if (a <= originalSize) {
+                    //cannot update
+                } else {
+                    addPS.setInt(1, deployedEvaluations.get(a).getDeployedID());
+                    addPS.setString(2, deployedEvaluations.get(a).getEvaluationValues());
+                    addPS.setString(3, deployedEvaluations.get(a).getFeedback());
+                    addPS.setString(4, deployedEvaluations.get(a).getRespondentName());
+                    addPS.addBatch();
+                }
             }
+
+            int[] adds = addPS.executeBatch();
+            int[] updates = updatePS.executeBatch();
+            count = adds.length + updates.length;
+            System.out.println("added evaluation rows: " + adds.length);
+            System.out.println("updated evaluation rows: " + updates.length);
+            conn.commit();
+            addPS.close();
+            updatePS.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(MobileFarmer.class.getName()).log(Level.SEVERE, null, x);
         }
-        System.out.println("deployedPrograms input count updated: " + updateCount);
-        System.out.println("deployedPrograms input count added: " + addCount);
+        System.out.println("eval rows affected: " + count);
+
+        response.getWriter().write(new Gson().toJson("done download"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -7,15 +7,23 @@ package servlet.mobile;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import dao.DamageIncidentDAO;
 import dao.DamageReportDAO;
+import db.DBConnectionFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import object.DamageIncident;
 import object.DamageReport;
 
 /**
@@ -41,20 +49,47 @@ public class MobileDamageReport extends HttpServlet {
         System.out.println("damageReport input form mobile upload");
         ArrayList<DamageReport> damageReports = new Gson().fromJson(request.getParameter("damageReports"), new TypeToken<List<DamageReport>>() {
         }.getType());
-        System.out.println(damageReports.size());
-        for (int a = 0; a < damageReports.size(); a++) {
-            if (a < new DamageReportDAO().getListOfDamageReports().size()) {
-                if (new DamageReportDAO().updateDamageReport(damageReports.get(a))) {
-                    updateCount++;
+
+        int originalSize = new DamageReportDAO().getListOfDamageReports().size();
+        int count = 0;
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+            conn.setAutoCommit(false);
+
+            PreparedStatement addPS = conn.prepareStatement("INSERT INTO " + DamageReport.TABLE_NAME + " "
+                    + "(" + DamageReport.COLUMN_AREAAFFECTED + ", " + DamageReport.COLUMN_AREADAMAGED + ", " + DamageReport.COLUMN_DAMAGEINCIDENTID + ", "
+                    + DamageReport.COLUMN_DATEREPORTED + ", " + DamageReport.COLUMN_IMAGE + ") "
+                    + "VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement updatePS = conn.prepareStatement("");
+            for (int a = 0; a < damageReports.size(); a++) {
+                if (a <= originalSize) {
+                    //cannot update
+                } else {
+                    addPS.setDouble(1, damageReports.get(a).getAreaAffected());
+                    addPS.setDouble(2, damageReports.get(a).getAreaDamaged());
+                    addPS.setInt(3, damageReports.get(a).getDamageIncidentID());
+                    addPS.setString(4, damageReports.get(a).getDateReported());
+                    addPS.setString(5, damageReports.get(a).getImage());
+                    addPS.addBatch();
                 }
-            } else if (new DamageReportDAO().reportDamageReport(damageReports.get(a))) {
-                addCount++;
-            } else {
-                System.out.println(damageReports.get(a).getDamageIncidentID() + " on " + damageReports.get(a).getDateReported() + " not added/updated");
             }
+
+            int[] adds = addPS.executeBatch();
+            int[] updates = updatePS.executeBatch();
+            count = adds.length + updates.length;
+            System.out.println("added damage report rows: " + adds.length);
+            System.out.println("updated damage report rows: " + updates.length);
+            conn.commit();
+            addPS.close();
+            updatePS.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(MobileFarmer.class.getName()).log(Level.SEVERE, null, x);
         }
-        System.out.println("damagereport input count updated: " + updateCount);
-        System.out.println("damagereport input count added: " + addCount);
+        System.out.println("damage report rows affected: " + count);
+
+        response.getWriter().write(new Gson().toJson("done download"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="1008" whenNoDataType="BlankPage" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="1008" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="32"/>
@@ -28,6 +28,12 @@
 		</conditionalStyle>
 	</style>
 	<subDataset name="problem" uuid="ec4bef7a-dc57-4f83-a327-45ac8d3878fb">
+		<parameter name="municipality_name" class="java.lang.String">
+			<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="date" class="java.lang.String">
+			<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+		</parameter>
 		<queryString>
 			<![CDATA[SELECT IT1.BarangayName, IT1.MunicipalityName, IT2.ProblemName, SUM(IT1.PlantedArea), SUM(IT2.MinorDamaged), SUM(IT2.MajorDamaged)
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'PlantedArea', MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
@@ -35,8 +41,8 @@ FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'Plant
 						  JOIN Farm F ON B.BarangayID = F.BarangayID
                           JOIN Plot P ON P.FarmID = F.FarmID
                           JOIN PlantingReport PR ON PR.PlotID = P.PlotID
-	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('01-10-2017', '%m-%d-%Y')
-				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{date}, '%m-%d-%Y')
+				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{date}, '%m-%d-%Y')
 	  GROUP BY PR.PlantingReportID, P.PlotID) IT1 JOIN
 	 (SELECT DI.DamageIncidentID, DI.PlantingReportID, DR.AreaAffected AS 'MinorDamaged', DR.AreaDamaged AS  'MajorDamaged', PM.ProblemName
       FROM DamageIncident DI JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID
@@ -46,8 +52,8 @@ FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'Plant
 								JOIN Problem PM ON DI.ProblemReported = PM.ProblemID
 		WHERE DI.IncidentStatus != 'Rejected' AND DI.IncidentStatus != 'Reported'
 		GROUP BY DI.DamageIncidentID) IT2 ON IT1.PlantingReportID = IT2.PlantingReportID
-WHERE IT1.MunicipalityName = 'San Rafael'
-GROUP BY IT1.BarangayName, IT1.MunicipalityName, IT2.ProblemName]]>
+WHERE IT1.MunicipalityName = $P{municipality_name}
+GROUP BY IT2.ProblemName]]>
 		</queryString>
 		<field name="BarangayName" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
@@ -74,6 +80,9 @@ GROUP BY IT1.BarangayName, IT1.MunicipalityName, IT2.ProblemName]]>
 	<parameter name="approvedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="municipalityName" class="java.lang.String">
+		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT IT1.BarangayName, IT1.MunicipalityName, SUM(IT1.PlantedArea) AS 'PlantedArea', SUM(IT2.MinorDamaged) AS 'MinorDamaged', SUM(IT2.MajorDamaged) AS 'MajorDamaged'
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'PlantedArea', MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
@@ -81,8 +90,8 @@ FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'Plant
 						  JOIN Farm F ON B.BarangayID = F.BarangayID
                           JOIN Plot P ON P.FarmID = F.FarmID
                           JOIN PlantingReport PR ON PR.PlotID = P.PlotID
-	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('01-10-2017', '%m-%d-%Y')
-				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{report_date}, '%m-%d-%Y')
 	  GROUP BY PR.PlantingReportID, P.PlotID) IT1 LEFT JOIN
 	 (SELECT DI.DamageIncidentID, DI.PlantingReportID, DR.AreaAffected AS 'MinorDamaged', DR.AreaDamaged AS  'MajorDamaged', PM.ProblemName
       FROM DamageIncident DI JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID
@@ -92,7 +101,7 @@ FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'Plant
 								JOIN Problem PM ON DI.ProblemReported = PM.ProblemID
 		WHERE DI.IncidentStatus != 'Rejected' AND DI.IncidentStatus != 'Reported'
 		GROUP BY DI.DamageIncidentID) IT2 ON IT1.PlantingReportID = IT2.PlantingReportID
-WHERE IT1.MunicipalityName = 'San Rafael'
+WHERE IT1.MunicipalityName = $P{municipalityName}
 GROUP BY IT1.BarangayName, IT1.MunicipalityName]]>
 	</queryString>
 	<field name="BarangayName" class="java.lang.String">
@@ -244,9 +253,16 @@ GROUP BY IT1.BarangayName, IT1.MunicipalityName]]>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
-				<pieDataset>
+				<pieDataset minPercentage="1.0">
 					<dataset>
-						<datasetRun subDataset="problem" uuid="d45bfff0-3845-42b4-826a-5b8366a2fe53"/>
+						<datasetRun subDataset="problem" uuid="d45bfff0-3845-42b4-826a-5b8366a2fe53">
+							<datasetParameter name="municipality_name">
+								<datasetParameterExpression><![CDATA[$P{municipalityName}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="date">
+								<datasetParameterExpression><![CDATA[$P{report_date}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
 					</dataset>
 					<keyExpression><![CDATA[$F{ProblemName}]]></keyExpression>
 					<valueExpression><![CDATA[$F{SUM(IT2.MinorDamaged)}]]></valueExpression>
@@ -267,7 +283,14 @@ GROUP BY IT1.BarangayName, IT1.MunicipalityName]]>
 				</chart>
 				<pieDataset>
 					<dataset>
-						<datasetRun subDataset="problem" uuid="1da7e9c4-20ac-44f0-98cc-6851a2066e07"/>
+						<datasetRun subDataset="problem" uuid="1da7e9c4-20ac-44f0-98cc-6851a2066e07">
+							<datasetParameter name="municipality_name">
+								<datasetParameterExpression><![CDATA[$P{municipalityName}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="date">
+								<datasetParameterExpression><![CDATA[$P{report_date}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
 					</dataset>
 					<keyExpression><![CDATA[$F{ProblemName}]]></keyExpression>
 					<valueExpression><![CDATA[$F{SUM(IT2.MajorDamaged)}]]></valueExpression>

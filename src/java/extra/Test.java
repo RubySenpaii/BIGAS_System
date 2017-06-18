@@ -10,6 +10,7 @@ import dao.PlantingReportDAO;
 import dao.ProgramProgressDAO;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +27,8 @@ import object.ProgramProgress;
 public class Test {
 
     public static void main(String[] args) {
-//        String evalValues = "1,4,5,4,4,4,5,4,4,4";
+        try {
+            //        String evalValues = "1,4,5,4,4,4,5,4,4,4";
 //        Calculator calculator = new Calculator();
 //        double val = (double) 5 / 2;
 //        System.out.println(val);
@@ -36,10 +38,19 @@ public class Test {
 //        for (int a = 0; a < progresses.size(); a++) {
 //            System.out.println("progress " + progresses.get(a).getRemarks());
 //        }
-        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\pdf");
-        String fileNames[] = file.list();
-        for (int a = 0; a < fileNames.length; a++) {
-            System.out.println("filenames[]: " + fileNames[a]);
+//        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\pdf");
+//        String fileNames[] = file.list();
+//        for (int a = 0; a < fileNames.length; a++) {
+//            System.out.println("filenames[]: " + fileNames[a]);
+//        }
+
+            new JasperJava().createMunicipalWeeklyDamagesReport("Jan", "Jemi", "Paombong");
+        } catch (JRException ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
