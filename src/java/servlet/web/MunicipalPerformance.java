@@ -108,7 +108,7 @@ public class MunicipalPerformance extends BaseServlet {
         String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         ArrayList<Barangay> barangays = new BarangayDAO().getListOfBarangaysInMunicipality(userLogged.getMunicipalityID());
         Municipality municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID());
-        ArrayList<Barangay> barangayCropStage  = new BarangayDAO().getBarangayCropGrowthMonitoring(municipal.getMunicipalityName(), date);
+        ArrayList<Barangay> barangayCropStage = new BarangayDAO().getBarangayCropGrowthMonitoring(municipal.getMunicipalityName(), date);
         for (int a = 0; a < barangays.size(); a++) {
             for (int b = 0; b < barangayCropStage.size(); b++) {
                 if (barangays.get(a).getBarangayName().equals(barangayCropStage.get(b).getBarangayName())) {
@@ -201,11 +201,17 @@ public class MunicipalPerformance extends BaseServlet {
         ArrayList<PlantingReport> plantingReports = new PlantingReportDAO().getListOfPlantingReportsInFarm(farm.getFarmID());
         for (int a = 0; a < plantingReports.size(); a++) {
             String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
-            WeeklyPlantingReport weeklyPlantingReport = new WeeklyPlantingReportDAO().getLatestWeeklyPlantingReportForPlantingReportID(plantingReports.get(a).getPlantingReportID());
-            if (plantingReports.get(a).getAmountHarvested() > 0) {
-                plantingReports.get(a).setStage("Harvested");
-            } else {
-                plantingReports.get(a).setStage(weeklyPlantingReport.getCropStage());
+            try {
+                WeeklyPlantingReport weeklyPlantingReport = new WeeklyPlantingReportDAO().getLatestWeeklyPlantingReportForPlantingReportID(plantingReports.get(a).getPlantingReportID());
+                if (plantingReports.get(a).getAmountHarvested() > 0) {
+                    plantingReports.get(a).setStage("Harvested");
+                } else {
+                    plantingReports.get(a).setStage(weeklyPlantingReport.getCropStage());
+                }
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println("Index out of bounds at line 205 " + ex);
+                System.out.println("no weekly planting reports at plantingreportid " + plantingReports.get(a).getPlantingReportID());
+                plantingReports.get(a).setStage("Unknown");
             }
 
             double damagedArea = 0;
