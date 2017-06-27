@@ -25,9 +25,9 @@
         <link href="build/css/custom.min.css" rel="stylesheet">
     </head>
 
-    <body class="login" style="background-image: url('images/rsc/plantBackground.png'); background-size: 480px">
+    <body class="login" style="background-image: url('images/rsc/logo_dept_agri.jpg'); background-repeat: no-repeat; background-position-x: 50%; background-position-y: -10%; background-size: 40%">
         <div>
-            <a class="hiddenanchor" id="signup"></a>
+            <a class="hidenanchor" id="signup"></a>
             <a class="hiddenanchor" id="signin"></a>
 
             <div class="login_wrapper">
