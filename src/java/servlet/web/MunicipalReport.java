@@ -46,15 +46,18 @@ public class MunicipalReport extends BaseServlet {
         String action = request.getParameter("action");
         String path = "/homepage.jsp";
         Employee userLogged = (Employee) session.getAttribute("userLogged");
+        String preparedBy = userLogged.getFirstName() + " " + userLogged.getMiddleName().charAt(0) + ". " + userLogged.getLastName();
+        String approvedBy = "Cynthia N. Nunez";
+        String municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID()).getMunicipalityName();
         if (userLogged.getOfficeLevel().equals("MAO")) {
             if (action.equals("viewReports")) {
                 System.out.println("directing to reports.jsp");
                 goToReportPage(request, response);
                 path = "/municipal/report.jsp";
-            } else if (action.equals("createBarangayProduction")) {
+            } else if (action.equals("createPlanting")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createBarangayProductionReport();
+                    new JasperJava().createMunicipalWeeklyPlantingReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -63,16 +66,25 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createGrowthStage")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createGrowthStageReport();
+                    new JasperJava().createMunicipalWeeklyCropGrowthReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
                     rd.forward(request, response);
                 }
-            } else if (action.equals("createPestDisease")) {
+            } else if (action.equals("createDamages")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createPestDiseaseReport();
+                    new JasperJava().createMunicipalWeeklyDamagesReport(preparedBy, approvedBy, municipal);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
+            } else if (action.equals("createHarvest")) {
+                path = "/MunicipalReport?action=viewReports";
+                try {
+                    new JasperJava().createMunicipalWeeklyHarvestReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);

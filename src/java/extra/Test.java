@@ -11,6 +11,7 @@ import dao.ProgramProgressDAO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +28,7 @@ import object.ProgramProgress;
 public class Test {
 
     public static void main(String[] args) {
-        try {
+//        try {
             //        String evalValues = "1,4,5,4,4,4,5,4,4,4";
 //        Calculator calculator = new Calculator();
 //        double val = (double) 5 / 2;
@@ -44,13 +45,15 @@ public class Test {
 //            System.out.println("filenames[]: " + fileNames[a]);
 //        }
 
-            new JasperJava().createMunicipalWeeklyDamagesReport("Jan", "Jemi", "Paombong");
-        } catch (JRException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            DecimalFormat df = new DecimalFormat("#,###.##");
+            System.out.println(df.format(2238472834.52525));
+//            new JasperJava().createMunicipalWeeklyDamagesReport("Jan", "Jemi", "Paombong");
+//        } catch (JRException ex) {
+//            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 }

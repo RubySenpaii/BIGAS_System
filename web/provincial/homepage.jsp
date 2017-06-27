@@ -305,7 +305,7 @@
                                                 TargetProduction targetProduction = (TargetProduction) session.getAttribute("targetProduction");
                                                 double target = 100;
                                                 double actual = 100;
-                                                double totalProduction = (double) session.getAttribute("totalProduction");
+                                                double totalProduction = (Double) (session.getAttribute("totalProduction"));
                                                 if (targetProduction.getTargetValue() > totalProduction) {
                                                     actual = totalProduction / targetProduction.getTargetValue() * 100;
                                                 } else {

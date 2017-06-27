@@ -58,7 +58,7 @@
                     var pied = {};
                     pied['name'] = values[0].municipals[a].municipalName;
                     pied['y'] = values[0].municipals[a].harvest;
-                    pied['url'] = 'http://localhost:8084/BIGAS_System/ProvincialPerformance?action=viewBarangayPerformance&municipalID=' + values[0].municipals[a].municipalID;
+                    pied['url'] = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewBarangayPerformance&municipalID=' + values[0].municipals[a].municipalID;
                     pieDetail.push(pied);
                 }
                 var year = values[0].municipals[0].year;

@@ -47,17 +47,17 @@
                             <div class="col-md-12 col-lg-12 col-sm-12">
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <!-- generate report buttons >
+                                        <!-- generate report buttons -->
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12">
                                                 <form class="MunicipalReport" method="">
-                                                    <button type="submit" name="action" value="createBarangayProduction" class="btn btn-primary">Generate Barangay Production</button>
+                                                    <button type="submit" name="action" value="createPlanting" class="btn btn-primary">Generate Planting</button>
 
                                                     <button type="submit" name="action" value="createGrowthStage" class="btn btn-success">Generate Growth Stage</button>
 
-                                                    <button type="submit" name="action" value="createPestDisease"class="btn btn-info">Generate Pest and Disease</button>
+                                                    <button type="submit" name="action" value="createDamages"class="btn btn-info">Generate Damage</button>
 
-                                                    <button type="submit" class="btn btn-warning">Generate Report4</button>
+                                                    <button type="submit" name="action" value="createHarvest"class="btn btn-info">Generate Harvest</button>
                                                 </form>
                                             </div>
                                         </div>

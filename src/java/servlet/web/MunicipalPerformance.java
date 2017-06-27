@@ -201,7 +201,7 @@ public class MunicipalPerformance extends BaseServlet {
         ArrayList<PlantingReport> plantingReports = new PlantingReportDAO().getListOfPlantingReportsInFarm(farm.getFarmID());
         for (int a = 0; a < plantingReports.size(); a++) {
             String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
-            WeeklyPlantingReport weeklyPlantingReport = new WeeklyPlantingReportDAO().getLatestWeeklyPlantingReportForPlantingReportIDBefore(plantingReports.get(a).getPlantingReportID(), date);
+            WeeklyPlantingReport weeklyPlantingReport = new WeeklyPlantingReportDAO().getLatestWeeklyPlantingReportForPlantingReportID(plantingReports.get(a).getPlantingReportID());
             if (plantingReports.get(a).getAmountHarvested() > 0) {
                 plantingReports.get(a).setStage("Harvested");
             } else {

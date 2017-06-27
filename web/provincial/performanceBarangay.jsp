@@ -59,7 +59,7 @@
                     var pied = {};
                     pied['name'] = values[0].barangays[a].brgyName;
                     pied['y'] = values[0].barangays[a].harvest;
-                    pied['url'] = 'http://localhost:8084/BIGAS_System/ProvincialPerformance?action=viewFarmPerformance&brgyName=' + values[0].barangays[a].brgyName;
+                    pied['url'] = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewFarmPerformance&brgyName=' + values[0].barangays[a].brgyName;
                     pieDetail.push(pied);
                 }
 //                var yearData = {};

@@ -132,7 +132,7 @@ public class JasperJava {
     }
     
     public void createMunicipalWeeklyHarvestReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyHarvestReport.jasper";
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyHarvestingReport.jasper";
         File file = new File(source);
         String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs";
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -140,14 +140,35 @@ public class JasperJava {
         parameters.put("report_date", dateNow);
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
-        parameters.put("municipal_name", municipal);
+        parameters.put("municipality_name", municipal);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
         try (Connection conn = myFactory.getConnection()) {
             JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
             jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
         }
-        String filename = municipal + "WeeklyDamageReport" + dateNow;
+        String filename = municipal + "WeeklyHarvestReport" + dateNow;
+        filename = filename.replaceAll(" ", "");
+        JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
+    }
+    
+    public void createMunicipalWeeklyCropGrowthReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyGrowthStageReport.jasper";
+        File file = new File(source);
+        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs";
+        String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
+        Map parameters = new HashMap();
+        parameters.put("report_date", dateNow);
+        parameters.put("preparedBy", preparedBy);
+        parameters.put("approvedBy", approvedBy);
+        parameters.put("municipal", municipal);
+        DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+        JasperPrint jasperPrint;
+        try (Connection conn = myFactory.getConnection()) {
+            JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
+            jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
+        }
+        String filename = municipal + "WeeklyCropGrowthReport" + dateNow;
         filename = filename.replaceAll(" ", "");
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }

@@ -141,7 +141,7 @@
                           point: {
                               events: {
                                   click: function() {
-                                      location.href = 'http://localhost:8084/BIGAS_System/MunicipalPerformance?action=viewFarmPerformance&brgyName=' + this.options.key;
+                                      location.href = 'http://localhost:8080/BIGAS_System/MunicipalPerformance?action=viewFarmPerformance&brgyName=' + this.options.key;
                                   }
                               }
                           }

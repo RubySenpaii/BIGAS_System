@@ -190,11 +190,11 @@ public class ProvincialDamages extends BaseServlet {
 
         int incidentID = Integer.parseInt(request.getParameter("incidentID"));
         DamageIncident damageIncident = new DamageIncidentDAO().getIncidentDetailForFullInfoViewing(incidentID);
-        ArrayList<DeployedProgram> deployedPrograms = new DeployedProgramDAO().getListOfDeployedProgramsForIncident(incidentID);
+        //ArrayList<DeployedProgram> deployedPrograms = new DeployedProgramDAO().getListOfDeployedProgramsForIncident(incidentID);
         ArrayList<DamageReport> damageReports = new DamageReportDAO().getListOfDamageReportWithIncidentID(incidentID);
 
         session.setAttribute("damageIncident", damageIncident);
-        session.setAttribute("deployedPrograms", deployedPrograms);
+        //session.setAttribute("deployedPrograms", deployedPrograms);
         session.setAttribute("damageReports", damageReports);
     }
 

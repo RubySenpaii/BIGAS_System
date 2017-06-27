@@ -58,7 +58,7 @@
                     var pied = {};
                     pied['name'] = values[0].farms[a].farmName;
                     pied['y'] = values[0].farms[a].harvest;
-                    pied['url'] = 'http://localhost:8084/BIGAS_System/ProvincialPerformance?action=viewFarmDetail&farmName=' + values[0].farms[a].farmName;
+                    pied['url'] = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewFarmDetail&farmName=' + values[0].farms[a].farmName;
                     pieDetail.push(pied);
                 }
 //                var yearData = {};

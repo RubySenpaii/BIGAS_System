@@ -99,6 +99,7 @@ public abstract class BaseServlet extends HttpServlet {
                 notifications.add(0, pestDiseasesNotifications.get(a));
             }
         }
+        System.out.println("notifications size: " + notifications.size());
         session.setAttribute("notifications", notifications);
     }
 

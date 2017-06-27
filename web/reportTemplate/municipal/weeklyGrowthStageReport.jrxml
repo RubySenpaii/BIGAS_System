@@ -49,6 +49,12 @@
 	</style>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<subDataset name="dataset1" uuid="ee8416b4-b09c-4c3f-9779-85ca3f8912a6">
+		<parameter name="municipal" class="java.lang.String">
+			<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="date" class="java.lang.String">
+			<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+		</parameter>
 		<queryString>
 			<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
@@ -56,18 +62,18 @@ FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DA
 							 JOIN Farm F ON P.FarmID = F.FarmID 
                              JOIN Barangay B ON F.BarangayID = B.BarangayID
                              JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
-	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('01-10-2017', '%m-%d-%Y')
-			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{date}, '%m-%d-%Y')
+			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{date}, '%m-%d-%Y')
 	  GROUP BY PR.PlotID) T1
 JOIN (SELECT WPR1.*
 	  FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
 										   FROM WeeklyPlantingReport WPR2
-                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{date}, '%m-%d-%Y')
                                            GROUP BY WPR2.PlantingReportID) IT1 
 	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2 
 ON T1.PlantingReportID = T2.PlantingReportID
 GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
-HAVING T1.MunicipalityName = 'San Rafael']]>
+HAVING T1.MunicipalityName = $P{municipal}]]>
 		</queryString>
 		<field name="BarangayName" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
@@ -89,6 +95,9 @@ HAVING T1.MunicipalityName = 'San Rafael']]>
 	<parameter name="approvedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="municipal" class="java.lang.String">
+		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
@@ -96,18 +105,18 @@ FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DA
 							 JOIN Farm F ON P.FarmID = F.FarmID 
                              JOIN Barangay B ON F.BarangayID = B.BarangayID
                              JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
-	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE('01-10-2017', '%m-%d-%Y')
-			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{report_date}, '%m-%d-%Y')
 	  GROUP BY PR.PlotID) T1
 JOIN (SELECT WPR1.*
 	  FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
 										   FROM WeeklyPlantingReport WPR2
-                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE('01-10-2017', '%m-%d-%Y')
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{report_date}, '%m-%d-%Y')
                                            GROUP BY WPR2.PlantingReportID) IT1 
 	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2 
 ON T1.PlantingReportID = T2.PlantingReportID
 GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
-HAVING T1.MunicipalityName = 'San Rafael']]>
+HAVING T1.MunicipalityName = $P{municipal}]]>
 	</queryString>
 	<field name="BarangayName" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -207,6 +216,16 @@ HAVING T1.MunicipalityName = 'San Rafael']]>
 					<chartLegend/>
 				</chart>
 				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="dataset1" uuid="b489c9ef-ed35-4119-aa85-80ed45082e7b">
+							<datasetParameter name="municipal">
+								<datasetParameterExpression><![CDATA[$P{municipal}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="date">
+								<datasetParameterExpression><![CDATA[$P{report_date}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
 					<categorySeries>
 						<seriesExpression><![CDATA[$F{CropStage}]]></seriesExpression>
 						<categoryExpression><![CDATA[$F{BarangayName}]]></categoryExpression>

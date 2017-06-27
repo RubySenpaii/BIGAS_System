@@ -76,7 +76,7 @@ public class ProvincialTargetProduction extends BaseServlet {
             object.setAttribute1(municipalities.get(a).getMunicipalityName());
 
             ArrayList<Farm> farmsInMunicipality = new FarmDAO().getListOfFarmsInMunicipality(municipalities.get(a).getMunicipalityName());
-            object.setAttribute2(farmsInMunicipality.size() + "");
+            object.setAttribute2(farmsInMunicipality.size() + " farm(s)");
 
             double municipalHarvested = 0, municipalPlanted = 0, municipalDamaged = 0;
             for (int b = 0; b < farmsInMunicipality.size(); b++) {
@@ -89,20 +89,21 @@ public class ProvincialTargetProduction extends BaseServlet {
             }
             totalProduction += municipalHarvested;
 
-            object.setAttribute3(format.doubleToString(municipalPlanted) + " (" + format.doubleToString(municipalDamaged) + ")");
-            object.setAttribute4(format.doubleToString(municipalHarvested));
+            object.setAttribute3(format.doubleToString(municipalPlanted) + " ha (" + format.doubleToString(municipalDamaged) + " ha)");
+            object.setAttribute4(format.doubleToString(municipalHarvested) + " MT");
             object.setAttribute5(""); //compute later
             double averageYield = municipalHarvested / (municipalPlanted - municipalDamaged);
             if (municipalPlanted - municipalDamaged == 0) {
-                object.setAttribute6("0.00");
+                object.setAttribute6("0.00 MT/ha");
             } else {
-                object.setAttribute6(format.doubleToString(averageYield));
+                object.setAttribute6(format.doubleToString(averageYield) + " MT/ha");
             }
             objects.add(object);
         }
 
         for (int a = 0; a < objects.size(); a++) {
-            double municipalProduction = Double.parseDouble(objects.get(a).getAttribute4());
+            String production = objects.get(a).getAttribute4().replace(",", "");
+            double municipalProduction = Double.parseDouble(production);
             double contributionShare = municipalProduction / totalProduction;
             contributionShare *= 100;
             if (municipalProduction == 0) {
