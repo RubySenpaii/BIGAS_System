@@ -59,8 +59,8 @@ public class PAOMonitorCropArea extends HttpServlet {
 
         JSONObject jsonObjects = new JSONObject();
         try {
-            jsonObjects.put("lastWeek", getLastWeek(lastDate));
-            jsonObjects.put("thisWeek", getThisWeek(currentDate));
+            jsonObjects.put("lastWeek", getAreaInfo(lastDate));
+            jsonObjects.put("thisWeek", getAreaInfo(currentDate));
 
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
@@ -69,6 +69,31 @@ public class PAOMonitorCropArea extends HttpServlet {
         } catch (JSONException ex) {
             Logger.getLogger(PAOMonitorCropArea.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private JSONArray getAreaInfo(String date) {
+        JSONArray jarrayArea = new JSONArray();
+        
+        double planted = 0, unplanted = 0, major = 0, minor = 0;
+        ArrayList<Municipality> municipalities = new MunicipalityDAO().getMunicipalAreaMonitoring(date);
+        for (int a = 0; a < municipalities.size(); a++) {
+            major += municipalities.get(a).getMajorDamagedArea();
+            minor += municipalities.get(a).getMinorDamagedArea();
+            
+            planted += municipalities.get(a).getPlantedArea() - (municipalities.get(a).getMajorDamagedArea() + municipalities.get(a).getMinorDamagedArea());
+            unplanted += municipalities.get(a).getArea() - municipalities.get(a).getPlantedArea();
+        }
+        try {
+            JSONObject production = new JSONObject();
+            production.put("planted", planted);
+            production.put("unplanted", unplanted);
+            production.put("minor", minor);
+            production.put("major", major);
+            jarrayArea.put(production);
+        } catch (JSONException ex) {
+            System.err.println(ex);
+        }
+        return jarrayArea;
     }
 
     private JSONArray getLastWeek(String date) {

@@ -41,12 +41,16 @@ public class Municipality {
     private double harvestingArea;
     
     private int farmCount;
+    private int farmAffected;
     
     private DamageIncident damageIncident;
     private String problemName;
     private double areaAffected;
     private double areaDamaged;
     private String escalationLevel;
+    
+    private String cropStage;
+    private String barangayName;
     
     public Municipality() {
         
@@ -372,5 +376,47 @@ public class Municipality {
      */
     public void setEscalationLevel(String escalationLevel) {
         this.escalationLevel = escalationLevel;
+    }
+
+    /**
+     * @return the cropStage
+     */
+    public String getCropStage() {
+        return cropStage;
+    }
+
+    /**
+     * @param cropStage the cropStage to set
+     */
+    public void setCropStage(String cropStage) {
+        this.cropStage = cropStage;
+    }
+
+    /**
+     * @return the farmAffected
+     */
+    public int getFarmAffected() {
+        return farmAffected;
+    }
+
+    /**
+     * @param farmAffected the farmAffected to set
+     */
+    public void setFarmAffected(int farmAffected) {
+        this.farmAffected = farmAffected;
+    }
+
+    /**
+     * @return the barangayName
+     */
+    public String getBarangayName() {
+        return barangayName;
+    }
+
+    /**
+     * @param barangayName the barangayName to set
+     */
+    public void setBarangayName(String barangayName) {
+        this.barangayName = barangayName;
     }
 }

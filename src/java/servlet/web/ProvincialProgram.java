@@ -177,7 +177,7 @@ public class ProvincialProgram extends BaseServlet {
             String effectivity = calculator.getEffectivityResult(evaluationResult);
             System.out.println(effectivity + evaluationResult);
             programPlans.get(a).setEffectivityStatus(effectivity);
-            
+
             ArrayList<ProgramTrigger> programTriggers = new ProgramTriggerDAO().getListOfProgramTriggersForProgramID(programPlans.get(a).getProgramPlanID());
             String triggerName = "";
 
@@ -429,7 +429,7 @@ public class ProvincialProgram extends BaseServlet {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
-        ArrayList<ImportantProblem> importantProblems = getListOfPestDiseaseProblem(request, response);
+        ArrayList<ImportantProblem> importantProblems = getListOfPestDiseaseProblem2(request, response);
 
         session.setAttribute("importantProblems", importantProblems);
     }
@@ -645,6 +645,63 @@ public class ProvincialProgram extends BaseServlet {
                 System.out.println("procedure " + a + " added: " + addProcedure);
             }
         }
+    }
+
+    private ArrayList<ImportantProblem> getListOfPestDiseaseProblem2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Employee userLogged = (Employee) session.getAttribute("userLogged");
+
+        ArrayList<ImportantProblem> importantProblems = new ArrayList<>();
+        ArrayList<Municipality> municipals = new MunicipalityDAO().getMunicipalNotification();
+        for (int a = 0; a < municipals.size(); a++) {
+            Problem problem = new ProblemDAO().getProblemWithName(municipals.get(a).getProblemName());
+            double plantableArea = municipals.get(a).getArea();
+            double majorDamaged = municipals.get(a).getMajorDamagedArea();
+            double minorDamaged = municipals.get(a).getMinorDamagedArea();
+
+            if (problem.getType().equals("Calamity")) {
+                double calamityMajor = majorDamaged / plantableArea;
+                if (calamityMajor >= 0.4) {
+                    ImportantProblem importantProblem = new ImportantProblem();
+                    importantProblem.setMunicipalityName(municipals.get(a).getMunicipalityName());
+                    importantProblem.setBarangayName(municipals.get(a).getBarangayName());
+                    importantProblem.setProblem(problem);
+                    importantProblem.setTotalMajor(majorDamaged);
+                    importantProblem.setTotalMinor(minorDamaged);
+                    importantProblem.setPlantableArea(plantableArea);
+                    importantProblem.setFarmAffected(municipals.get(a).getFarmAffected());
+                    importantProblem.setFarmCount(municipals.get(a).getFarmCount());
+                    importantProblem.setDamageType("Major Damages");
+                    importantProblems.add(importantProblem);
+                }
+            } else if (majorDamaged / plantableArea >= 0.03) {
+                ImportantProblem importantProblem = new ImportantProblem();
+                importantProblem.setMunicipalityName(municipals.get(a).getMunicipalityName());
+                importantProblem.setBarangayName(municipals.get(a).getBarangayName());
+                importantProblem.setProblem(problem);
+                importantProblem.setTotalMajor(majorDamaged);
+                importantProblem.setTotalMinor(minorDamaged);
+                importantProblem.setPlantableArea(plantableArea);
+                importantProblem.setFarmAffected(municipals.get(a).getFarmAffected());
+                importantProblem.setFarmCount(municipals.get(a).getFarmCount());
+                importantProblem.setDamageType("Major Damages");
+                importantProblems.add(importantProblem);
+            } else if (minorDamaged / plantableArea >= 0.045) {
+                ImportantProblem importantProblem = new ImportantProblem();
+                importantProblem.setMunicipalityName(municipals.get(a).getMunicipalityName());
+                importantProblem.setBarangayName(municipals.get(a).getBarangayName());
+                importantProblem.setProblem(problem);
+                importantProblem.setTotalMajor(majorDamaged);
+                importantProblem.setTotalMinor(minorDamaged);
+                importantProblem.setPlantableArea(plantableArea);
+                importantProblem.setFarmAffected(municipals.get(a).getFarmAffected());
+                importantProblem.setFarmCount(municipals.get(a).getFarmCount());
+                importantProblem.setDamageType("Minor Damages");
+                importantProblems.add(importantProblem);
+            }
+        }
+        System.out.println("problem size " + importantProblems.size());
+        return importantProblems;
     }
 
     private ArrayList<ImportantProblem> getListOfPestDiseaseProblem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

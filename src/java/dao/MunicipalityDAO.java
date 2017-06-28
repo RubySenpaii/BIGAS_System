@@ -207,6 +207,154 @@ public class MunicipalityDAO {
         }
         return municipalities.get(0);
     }
+    
+    public ArrayList<Municipality> getMunicipalAreaMonitoring(String date) {
+        ArrayList<Municipality> municipalities =  new ArrayList<>();
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT T1.MunicipalityName, T1.TotalArea, T2.PlantedArea, T2.MinorDamaged, T2.MajorDamaged\n"
+                    + "FROM (SELECT M.MunicipalityName, B.BarangayName, SUM(P.PlotSize) AS 'TotalArea'\n"
+                    + "	     FROM Municipality M JOIN Barangay B ON M.MunicipalityID = B.MunicipalityID\n"
+                    + "		      	         JOIN Farm F ON F.BarangayID = B.BarangayID\n"
+                    + "                          JOIN Plot P ON P.FarmID = F.FarmID\n"
+                    + "      GROUP BY M.MunicipalityName) T1\n"
+                    + "LEFT JOIN (SELECT IT1.MunicipalityName, SUM(IT1.PlotSize) AS 'PlantedArea', IT1.MinorDamaged, IT1.MajorDamaged\n"
+                    + "		  FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')), SUM(DR.AreaAffected) AS 'MinorDamaged', SUM(DR.AreaDamaged) AS 'MajorDamaged'\n"
+                    + "			FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID\n"
+                    + "                                        JOIN Farm F ON P.FarmID = F.FarmID\n"
+                    + "                                        JOIN Barangay B ON F.BarangayID = B.BarangayID\n"
+                    + "                                        JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID\n"
+                    + "                                        LEFT JOIN DamageIncident DI ON PR.PlantingReportID = DI.PlantingReportID\n"
+                    + "                                        JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID\n"
+                    + "                                        JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
+                    + "                                              FROM DamageReport DR1\n"
+                    + "                                              GROUP BY DR1.DamageIncidentID) IDR ON IDR.DamageIncidentID = DR.DamageIncidentID AND IDR.RecentDate = STR_TO_DATE(DR.DateReported,'%m-%d-%Y')\n"
+                    + "                 WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE(?, '%m-%d-%Y')\n"
+                    + "				AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE(?, '%m-%d-%Y')\n"
+                    + "			GROUP BY PR.PlotID) IT1\n"
+                    + "           GROUP BY IT1.MunicipalityName) T2 ON T1.MunicipalityName = T2.MunicipalityName\n"
+                    + "GROUP BY T1.MunicipalityName;");
+            ps.setString(1, date);
+            ps.setString(2, date);
+
+            ResultSet rs = ps.executeQuery();
+            System.out.println(rs.getFetchSize());
+            while (rs.next()) {
+                Municipality municipality = new Municipality();
+                municipality.setMunicipalityName(rs.getString("MunicipalityName"));
+                municipality.setArea(rs.getDouble("TotalArea"));
+                municipality.setPlantedArea(rs.getDouble("PlantedArea"));
+                municipality.setMinorDamagedArea(rs.getDouble("MinorDamaged"));
+                municipality.setMajorDamagedArea(rs.getDouble("MajorDamaged"));
+                municipality.setUnplantedArea(rs.getDouble("TotalArea") - rs.getDouble("PlantedArea"));
+                municipalities .add(municipality);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(MunicipalityDAO.class.getName()).log(Level.SEVERE, null, x);
+        }
+        return municipalities ;
+    }
+    
+    public ArrayList<Municipality> getMunicipalCropGrowthMonitoring(String date) {
+        ArrayList<Municipality> municipalities = new ArrayList<>();
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea' "
+                    + "FROM (SELECT PR.*, B.BarangayName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')) "
+                    + "      FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID "
+                    + "                             JOIN Farm F ON P.FarmID = F.FarmID "
+                    + "                             JOIN Barangay B ON F.BarangayID = B.BarangayID "
+                    + "                             JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID "
+                    + "      WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE(?, '%m-%d-%Y')"
+                    + "             AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE(?, '%m-%d-%Y') "
+                    + "      GROUP BY PR.PlotID) T1 "
+                    + "JOIN (SELECT WPR1.* "
+                    + "      FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID "
+                    + "                                           FROM WeeklyPlantingReport WPR2 "
+                    + "                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE(?, '%m-%d-%Y')"
+                    + "                                           GROUP BY WPR2.PlantingReportID) IT1 "
+                    + "                                     ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2 "
+                    + "ON T1.PlantingReportID = T2.PlantingReportID "
+                    + "GROUP BY T1.MunicipalityName, T2.CropStage");
+            ps.setString(1, date);
+            ps.setString(2, date);
+            ps.setString(3, date);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Municipality municipal = new Municipality();
+                municipal.setMunicipalityName(rs.getString("MunicipalityName"));
+                municipal.setCropStage(rs.getString("CropStage"));
+                municipal.setArea(rs.getDouble("PlantedArea"));
+                municipalities.add(municipal);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(MunicipalityDAO.class.getName()).log(Level.SEVERE, null, x);
+        }
+        return municipalities;
+    }
+    
+    public ArrayList<Municipality> getMunicipalNotification() {
+        ArrayList<Municipality> barangays = new ArrayList<>();
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT T1.MunicipalityName, T1.BarangayName, T2.BarangayID, T1.ProblemName, COUNT(T1.FarmName) AS 'FarmsAffected', T2.TotalFarmCount, T2.TotalArea, T1.AreaAffected, T1.AreaDamaged\n"
+                    + "FROM (SELECT DI.*, PM.ProblemName, M.MunicipalityName, B.BarangayName, F.FarmName, DR2.AreaAffected, DR2.AreaDamaged\n"
+                    + "      FROM DamageReport DR2 JOIN DamageIncident DI ON DI.DamageIncidentID = DR2.DamageIncidentID\n"
+                    + "                            JOIN PlantingReport PR ON PR.PlantingReportID = DI.PlantingReportID\n"
+                    + "                            JOIN Plot P ON PR.PlotID = P.PlotID\n"
+                    + "                            JOIN Farm F ON F.FarmID = P.FarmID\n"
+                    + "                            JOIN Barangay B ON B.BarangayID = F.BarangayID\n"
+                    + "                            JOIN Municipality M ON M.MunicipalityID = B.MunicipalityID\n"
+                    + "                            JOIN Problem PM ON PM.ProblemID = DI.ProblemReported\n"
+                    + "                            JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
+                    + "					 FROM DamageReport DR1\n"
+                    + "                                  GROUP BY DR1.DamageIncidentID) IT1 ON DR2.DamageIncidentID = IT1.DamageIncidentID AND STR_TO_DATE(DR2.DateReported, '%m-%d-%Y') = IT1.RecentDate\n"
+                    + "      WHERE DI.IncidentStatus = 'Approved'\n"
+                    + "      GROUP BY DI.ProblemReported, PR.PlantingReportID, P.PlotID, F.FarmID, B.BarangayID, M.MunicipalityID) T1\n"
+                    + "JOIN (SELECT M.MunicipalityName, B.*, SUM(P.PlotSize) AS 'TotalArea', COUNT(F.FarmName) AS 'TotalFarmCount'\n"
+                    + "      FROM Municipality M JOIN Barangay B ON M.MunicipalityID = B.MunicipalityID\n"
+                    + "				 JOIN Farm F ON F.BarangayID = B.BarangayID\n"
+                    + "                          JOIN Plot P ON P.FarmID = F.FarmID\n"
+                    + "      GROUP BY M.MunicipalityName, B.BarangayName) T2 ON T1.BarangayName = T2.BarangayName AND T1.MunicipalityName = T2.MunicipalityName\n"
+                    + "GROUP BY T1.BarangayName, T1.MunicipalityName, T1.ProblemName");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Municipality municipality = new Municipality();
+                municipality.setBarangayName(rs.getString("BarangayName"));
+                municipality.setMunicipalityName(rs.getString("MunicipalityName"));
+                municipality.setProblemName(rs.getString("ProblemName"));
+                municipality.setFarmCount(rs.getInt("TotalFarmCount"));
+                municipality.setFarmAffected(rs.getInt("FarmsAffected"));
+                municipality.setArea(rs.getDouble("TotalArea"));
+                municipality.setMinorDamagedArea(rs.getDouble("AreaAffected"));
+                municipality.setMajorDamagedArea(rs.getDouble("AreaDamaged"));
+                barangays.add(municipality);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(BarangayDAO.class.getName()).log(Level.SEVERE, null, x);
+        }
+        return barangays;
+    }
 
     private ArrayList<Municipality> getDataFromResultSet(ResultSet rs) throws SQLException {
         ArrayList<Municipality> municipalities = new ArrayList<>();

@@ -97,24 +97,24 @@ public class ProvincialPerformance extends BaseServlet {
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
         String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
-        ArrayList<Municipality> municipalities = new MunicipalityDAO().getListOfMunicipalities();
-        for (int a = 0; a < municipalities.size(); a++) {
-            ArrayList<Barangay> currentWeekBarangay = getBarangayArea(municipalities.get(a).getMunicipalityID(), date);
-            double plantableArea = 0, plantedArea = 0, unplantedArea = 0, minorDamaged = 0, majorDamaged = 0;
-            for (int b = 0; b < currentWeekBarangay.size(); b++) {
-                plantableArea += currentWeekBarangay.get(b).getPlantableArea();
-                plantedArea += currentWeekBarangay.get(b).getPlantedArea();
-                unplantedArea += currentWeekBarangay.get(b).getUnplantedArea();
-                minorDamaged += currentWeekBarangay.get(b).getMinorDamagedArea();
-                majorDamaged += currentWeekBarangay.get(b).getMajorDamagedArea();
-            }
-
-            municipalities.get(a).setPlantableArea(plantableArea);
-            municipalities.get(a).setPlantedArea(plantedArea);
-            municipalities.get(a).setUnplantedArea(unplantedArea);
-            municipalities.get(a).setMinorDamagedArea(minorDamaged);
-            municipalities.get(a).setMajorDamagedArea(majorDamaged);
-        }
+        ArrayList<Municipality> municipalities = new MunicipalityDAO().getMunicipalAreaMonitoring(date);
+//        for (int a = 0; a < municipalities.size(); a++) {
+//            ArrayList<Barangay> currentWeekBarangay = getBarangayArea(municipalities.get(a).getMunicipalityID(), date);
+//            double plantableArea = 0, plantedArea = 0, unplantedArea = 0, minorDamaged = 0, majorDamaged = 0;
+//            for (int b = 0; b < currentWeekBarangay.size(); b++) {
+//                plantableArea += currentWeekBarangay.get(b).getPlantableArea();
+//                plantedArea += currentWeekBarangay.get(b).getPlantedArea();
+//                unplantedArea += currentWeekBarangay.get(b).getUnplantedArea();
+//                minorDamaged += currentWeekBarangay.get(b).getMinorDamagedArea();
+//                majorDamaged += currentWeekBarangay.get(b).getMajorDamagedArea();
+//            }
+//
+//            municipalities.get(a).setPlantableArea(plantableArea);
+//            municipalities.get(a).setPlantedArea(plantedArea);
+//            municipalities.get(a).setUnplantedArea(unplantedArea);
+//            municipalities.get(a).setMinorDamagedArea(minorDamaged);
+//            municipalities.get(a).setMajorDamagedArea(majorDamaged);
+//        }
         session.setAttribute("municipalities", municipalities);
     }
 
@@ -123,7 +123,7 @@ public class ProvincialPerformance extends BaseServlet {
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
         String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
-        ArrayList<Municipality> municipalities = new MunicipalityDAO().getListOfMunicipalities();
+        /*ArrayList<Municipality> municipalities = new MunicipalityDAO().getListOfMunicipalities();
         for (int z = 0; z < municipalities.size(); z++) {
             ArrayList<Barangay> barangays = new BarangayDAO().getListOfBarangaysInMunicipality(municipalities.get(z).getMunicipalityID());
             double newlyPlanted = 0, tillering = 0, reporoductive = 0, harvesting = 0;
@@ -158,6 +158,24 @@ public class ProvincialPerformance extends BaseServlet {
             municipalities.get(z).setTilleringArea(tillering);
             municipalities.get(z).setReproductiveArea(reporoductive);
             municipalities.get(z).setHarvestingArea(harvesting);
+        }*/
+        
+        ArrayList<Municipality> municipalities = new MunicipalityDAO().getListOfMunicipalities();
+        ArrayList<Municipality> municipalCropStage = new MunicipalityDAO().getMunicipalCropGrowthMonitoring(date);
+        for (int a = 0; a < municipalities.size(); a++) {
+            for (int b = 0; b < municipalCropStage.size(); b++) {
+                if (municipalities.get(a).getMunicipalityName().equals(municipalCropStage.get(b).getMunicipalityName())) {
+                    if (municipalCropStage.get(b).getCropStage().equals("Newly Planted")) {
+                        municipalities.get(a).setNewlyPlantedArea(municipalCropStage.get(b).getArea());
+                    } else if (municipalCropStage.get(b).getCropStage().equals("Tillering")) {
+                        municipalities.get(a).setTilleringArea(municipalCropStage.get(b).getArea());
+                    } else if (municipalCropStage.get(b).getCropStage().equals("Reproductive")) {
+                        municipalities.get(a).setReproductiveArea(municipalCropStage.get(b).getArea());
+                    } else {
+                        municipalities.get(a).setHarvestingArea(municipalCropStage.get(b).getArea());
+                    }
+                }
+            }
         }
 
         session.setAttribute("municipalities", municipalities);

@@ -187,7 +187,6 @@ public class BarangayDAO {
             ps.setString(4, municipalityName);
 
             ResultSet rs = ps.executeQuery();
-            System.out.println(rs.getFetchSize());
             while (rs.next()) {
                 Barangay barangay = new Barangay();
                 barangay.setBarangayName(rs.getString(Barangay.COLUMN_BARANGAYNAME));
