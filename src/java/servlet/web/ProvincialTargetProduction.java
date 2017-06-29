@@ -90,7 +90,7 @@ public class ProvincialTargetProduction extends BaseServlet {
             totalProduction += municipalHarvested;
 
             object.setAttribute3(format.doubleToString(municipalPlanted) + " ha (" + format.doubleToString(municipalDamaged) + " ha)");
-            object.setAttribute4(format.doubleToString(municipalHarvested) + " MT");
+            object.setAttribute4(format.doubleToString(municipalHarvested));
             object.setAttribute5(""); //compute later
             double averageYield = municipalHarvested / (municipalPlanted - municipalDamaged);
             if (municipalPlanted - municipalDamaged == 0) {
@@ -102,7 +102,8 @@ public class ProvincialTargetProduction extends BaseServlet {
         }
 
         for (int a = 0; a < objects.size(); a++) {
-            String production = objects.get(a).getAttribute4().replace(",", "");
+            String harvest = objects.get(a).getAttribute4();
+            String production = harvest.replace(",", "");
             double municipalProduction = Double.parseDouble(production);
             double contributionShare = municipalProduction / totalProduction;
             contributionShare *= 100;
@@ -111,6 +112,7 @@ public class ProvincialTargetProduction extends BaseServlet {
             } else {
                 objects.get(a).setAttribute5(format.doubleToString(contributionShare) + "%");
             }
+            objects.get(a).setAttribute4(harvest + " MT");
         }
 
         session.setAttribute("municipals", objects);

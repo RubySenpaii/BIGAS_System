@@ -46,7 +46,10 @@ public class PAOTargetProduction extends HttpServlet {
             try {
                 JSONObject municipal = new JSONObject();
                 municipal.put("municipalName", municipalities.get(a).getAttribute1());
-                municipal.put("harvest", Double.parseDouble(municipalities.get(a).getAttribute4()));
+                String harvest = municipalities.get(a).getAttribute4();
+                harvest = harvest.replaceAll(",", "");
+                harvest = harvest.replaceAll(" MT", "");
+                municipal.put("harvest", Double.parseDouble(harvest));
                 jarrayMunicipal.put(municipal);
             } catch (JSONException ex) {
                 System.err.println(ex);
