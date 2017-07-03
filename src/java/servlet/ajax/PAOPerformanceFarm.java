@@ -57,6 +57,7 @@ public class PAOPerformanceFarm extends HttpServlet {
         JSONObject jsonObjects = new JSONObject();
         try {
             jsonObjects.put("farms", jarrayFarms);
+            jsonObjects.put("barangay", (String) session.getAttribute("barangaySelected"));
 
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");

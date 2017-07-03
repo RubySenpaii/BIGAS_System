@@ -43,9 +43,9 @@ public class MobileFarmer extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("farmer input form mobile upload");
         ArrayList<Farmer> farmers = new Gson().fromJson(request.getParameter("farmers"), new TypeToken<List<Farmer>>() {
         }.getType());
+        System.out.println(farmers.size() + " farmer inputs from mobile upload");
 
         int originalSize = new FarmerDAO().getListOfFarmers().size();
         int count = 0;

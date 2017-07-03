@@ -60,58 +60,13 @@
                     pied['key'] = values[0].farms[a].farmName;
                     pieDetail.push(pied);
                 }
-                
-                /*Highcharts.chart('container', {
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Production Total'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
-                            }, events: {
-                                click: function (e) {
-                                    location.href = e.point.url;
-                                    e.preventDefault();
-                                }
-                            }
-                        }
-                    },
-                    series: [{
-                            name: 'Brands',
-                            colorByPoint: true,
-                            data: pieDetail
-                        }]
-                });
-                
-                
-                /*var yearData = {};
-                yearData['name'] = values[0].farms[0].year;
-                yearData['data'] = farmValues;
-                var allData = [];
-                allData.push(yearData);*/
 
                 Highcharts.chart('container', {
                     chart: {
                         type: 'column'
                     },
                     title: {
-                        text: 'Production for San Rafael'
+                        text: 'Production for ' + values[0].barangay
                     },
                     xAxis: {
                         type: 'category',

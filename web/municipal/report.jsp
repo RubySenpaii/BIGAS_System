@@ -66,7 +66,7 @@
                                     <div class="x_content">
                                         <!-- view reported -->
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2 col-lg-2 col-sm-2">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -79,7 +79,7 @@
                                                             for (int a = 0; a < files.length; a++) {
                                                         %>
                                                         <tr>
-                                                            <td><%=files[a]%></td>
+                                                            <td><button onclick="document.getElementById('pdfContainer').src = '/BIGAS_System/PdfViewer?fileName=<%=files[a]%>'"><%=files[a]%></button></td>
                                                         </tr>
                                                         <%
                                                             }
@@ -87,13 +87,8 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-
-                                            <div class="col-md-10">
-                                                <a href="file:///C:/Users/RubySenpaii/Desktop/pdfoutputs/barangayProductionReportAsOf05-23-2017.pdf">if file doesn't appear click here</a>
-                                                <div class="box-body" style="height: min-content">
-                                                    <object data="C:\Users\RubySenpaii\Desktop\pdfoutputs\barangayProductionReportAsOf05-23-2017.pdf" type="application/pdf" width="100%" height="100%" >
-                                                    </object>
-                                                </div>
+                                            <div class="col-md-10 col-lg-10 col-sm-10" style="padding-left: 20px">
+                                                <iframe id="pdfContainer" style="height: 800px; width: 1200px"></iframe>
                                             </div>
                                         </div>
                                         <!-- /view reports -->

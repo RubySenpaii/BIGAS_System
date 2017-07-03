@@ -41,9 +41,9 @@ public class MobileFarm extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("farm input form mobile upload");
         ArrayList<Farm> farms = new Gson().fromJson(request.getParameter("farms"), new TypeToken<List<Farm>>() {
         }.getType());
+        System.out.println(farms.size() + "farm inputs from mobile upload");
         
         int originalSize = new FarmDAO().getListOfFarms().size();
         int count = 0;
@@ -64,7 +64,7 @@ public class MobileFarm extends HttpServlet {
                     + Farm.COLUMN_LANDELEVATION + ", " + Farm.COLUMN_LATITUDE + ", " + Farm.COLUMN_LONGITUDE + ", " + Farm.COLUMN_ASSIGNEDTECHNICIAN + ") "
                     + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             for (int a = 0; a < farms.size(); a++) {
-                if (a <= originalSize) {
+                if (a < originalSize) {
                     updatePS.setString(1, farms.get(a).getAddress());
                     updatePS.setInt(2, farms.get(a).getAssignedTechnician());
                     updatePS.setInt(3, farms.get(a).getBarangayID());

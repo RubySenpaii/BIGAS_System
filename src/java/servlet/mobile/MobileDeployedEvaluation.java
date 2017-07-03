@@ -43,13 +43,10 @@ public class MobileDeployedEvaluation extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int addCount = 0;
-        int updateCount = 0;
-
-        System.out.println("deployedEvaluation input form mobile upload");
         ArrayList<DeployedEvaluation> deployedEvaluations = new Gson().fromJson(request.getParameter("deployedEvaluations"), new TypeToken<List<DeployedEvaluation>>() {
         }.getType());
-
+        System.out.println(deployedEvaluations.size() + " DeployedEvaluation inputs from mobile upload");
+        
         int originalSize = new DeployedEvaluationDAO().getListOfProgramEvaluations().size();
         int count = 0;
         try {
@@ -63,7 +60,7 @@ public class MobileDeployedEvaluation extends HttpServlet {
                     + "VALUES(?, ?, ?, ?)");
             PreparedStatement updatePS = conn.prepareStatement("");
             for (int a = 0; a < deployedEvaluations.size(); a++) {
-                if (a <= originalSize) {
+                if (a < originalSize) {
                     //cannot update
                 } else {
                     addPS.setInt(1, deployedEvaluations.get(a).getDeployedID());
@@ -75,16 +72,18 @@ public class MobileDeployedEvaluation extends HttpServlet {
             }
 
             int[] adds = addPS.executeBatch();
-            int[] updates = updatePS.executeBatch();
-            count = adds.length + updates.length;
+            //int[] updates = updatePS.executeBatch();
+            count = adds.length; //+ updates.length;
             System.out.println("added evaluation rows: " + adds.length);
-            System.out.println("updated evaluation rows: " + updates.length);
+            //System.out.println("updated evaluation rows: " + updates.length);
             conn.commit();
             addPS.close();
-            updatePS.close();
+            //updatePS.close();
             conn.close();
         } catch (SQLException x) {
             Logger.getLogger(MobileFarmer.class.getName()).log(Level.SEVERE, null, x);
+        } catch (NullPointerException x) {
+            System.err.println("nullpointer");
         }
         System.out.println("eval rows affected: " + count);
 

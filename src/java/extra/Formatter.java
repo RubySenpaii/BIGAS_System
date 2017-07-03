@@ -16,7 +16,7 @@ import java.util.Date;
 public class Formatter {
 
     public String doubleToString(double value) {
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#,###.00");
         if (value > 0 && value < 1) {
             return "0" + df.format(value);
         } else if (value != 0) {

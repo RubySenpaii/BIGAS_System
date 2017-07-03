@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="1008" whenNoDataType="BlankPage" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="128"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -36,29 +36,91 @@
 	<parameter name="approvedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="programPlanID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[2]]></defaultValueExpression>
+	</parameter>
+	<parameter name="programPlan" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select *
-from municipality
-where municipalityid = 23]]>
+		<![CDATA[SELECT PT.*, DPB.FarmCount
+FROM 
+(SELECT DP.*, SUM(T1.AreaAffected) AS 'MinorDamaged', SUM(T1.AreaDamaged) AS 'MajorDamaged', SUM(P.PlotSize) AS 'AreaPlanted'
+FROM DeployedProgram DP JOIN DamageIncident DI ON DI.DeployedID = DP.DeployedID
+                        JOIN (SELECT DI.DamageIncidentID, DR.AreaAffected, DR.AreaDamaged
+							  FROM DamageIncident DI JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID
+												     JOIN (SELECT DR1.DamageIncidentID, MAX(str_to_date(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'
+														   FROM DamageReport DR1
+														   GROUP BY DR1.DamageIncidentID) IT1 ON DR.DamageIncidentID = IT1.DamageIncidentID AND IT1.RecentDate = str_to_date(DR.DateReported, '%m-%d-%Y')) T1 ON T1.DamageIncidentID = DI.DamageIncidentID
+						JOIN PlantingReport PR ON DI.PlantingReportID = PR.PlantingReportID
+                        JOIN Plot P ON PR.PlotID = P.PlotID
+WHERE ProgramPlanID = $P{programPlanID}
+GROUP BY DP.DeployedID) PT
+JOIN
+(SELECT DP.*, COUNT(PB.FarmID) AS 'FarmCount'
+FROM DeployedProgram DP JOIN ProgramBeneficiary PB ON DP.DeployedID = PB.DeployedID
+GROUP BY DP.DeployedID) DPB ON PT.DeployedID = DPB.DeployedID]]>
 	</queryString>
-	<field name="MunicipalityID" class="java.lang.Integer">
+	<field name="DeployedID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="MunicipalityName" class="java.lang.String">
+	<field name="ProgramPlanID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="District" class="java.lang.Integer">
+	<field name="AssignedMunicipality" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Area" class="java.lang.Double">
+	<field name="VarietyProvided" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Latitude" class="java.lang.Double">
+	<field name="VarietyAmount" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Longitude" class="java.lang.Double">
+	<field name="FertilizerProvided" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="FertilizerAmount" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DateStarted" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DateCompleted" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DeployedStatus" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MinorDamaged" class="java.lang.Double"/>
+	<field name="MajorDamaged" class="java.lang.Double"/>
+	<field name="AreaPlanted" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FarmCount" class="java.lang.Long"/>
+	<variable name="averageMinorDamagedArea" class="java.lang.Double" calculation="Average">
+		<variableExpression><![CDATA[$F{MinorDamaged}]]></variableExpression>
+	</variable>
+	<variable name="completed" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[($F{DeployedStatus}.equals("Completed") ? 1 : 0)]]></variableExpression>
+	</variable>
+	<variable name="averageMajorDamagedArea" class="java.lang.Double" calculation="Average">
+		<variableExpression><![CDATA[$F{MajorDamaged}]]></variableExpression>
+	</variable>
+	<variable name="averageParticipants" class="java.lang.Integer" calculation="Average">
+		<variableExpression><![CDATA[$F{MinorDamaged}]]></variableExpression>
+	</variable>
+	<variable name="incomplete" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[($F{DeployedStatus}.equals("Incomplete") ? 1 : 0)]]></variableExpression>
+	</variable>
+	<variable name="ongoing" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[($F{DeployedStatus}.equals("Deployed") ? 1 : 0 )]]></variableExpression>
+	</variable>
+	<variable name="deployedCount" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{DeployedID}]]></variableExpression>
+	</variable>
+	<group name="DeployedStatuses">
+		<groupExpression><![CDATA[$F{DeployedID}]]></groupExpression>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -83,7 +145,7 @@ where municipalityid = 23]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14"/>
 				</textElement>
-				<text><![CDATA[Provincial Agriculture Office]]></text>
+				<text><![CDATA[Municipal Agriculture Office]]></text>
 			</staticText>
 			<textField pattern="MMMMM dd, yyyy">
 				<reportElement x="243" y="67" width="172" height="21" uuid="87b038fb-0f1b-4a3f-af82-f5b1912541c4"/>
@@ -98,199 +160,190 @@ where municipalityid = 23]]>
 			</image>
 		</band>
 	</pageHeader>
-	<detail>
-		<band height="380" splitType="Stretch">
+	<columnHeader>
+		<band height="65">
 			<staticText>
-				<reportElement x="0" y="0" width="193" height="20" uuid="4eb5c0bd-5ed0-4b35-929e-0dd0bb1cc9c2"/>
-				<text><![CDATA[Program ID 001 - Ant Extermination]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="45" width="135" height="20" uuid="e7744fe7-ebe2-4e8b-8627-4dfc92715c95"/>
-				<text><![CDATA[Barangay]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="222" y="45" width="118" height="20" uuid="b45862ac-ac16-4639-bef4-1fe6ebdfa548"/>
+				<reportElement style="table" x="125" y="33" width="65" height="32" uuid="b45862ac-ac16-4639-bef4-1fe6ebdfa548"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Minor Damaged]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="45" width="116" height="20" uuid="e25bbabe-1488-4dfb-a0fd-6c2e9c987cca"/>
+				<reportElement style="table" x="190" y="33" width="66" height="32" uuid="e25bbabe-1488-4dfb-a0fd-6c2e9c987cca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Major Damaged]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="456" y="45" width="116" height="20" uuid="47aa3685-c755-4c78-895d-5b9d93d968ab"/>
+				<reportElement style="table" x="256" y="33" width="65" height="32" uuid="47aa3685-c755-4c78-895d-5b9d93d968ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Planted Area]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="135" y="45" width="87" height="20" uuid="4cecb653-8723-41de-9d2d-430c25858593"/>
+				<reportElement style="table" x="61" y="33" width="64" height="32" uuid="4cecb653-8723-41de-9d2d-430c25858593"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Participants]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="65" width="135" height="20" uuid="55453205-72d1-4f8e-8065-3c3a84ef5132"/>
-				<text><![CDATA[San Rafael]]></text>
+				<reportElement style="table" x="0" y="33" width="61" height="32" uuid="572e491b-15ec-49b9-a586-b4b25c5496b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Deployed ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="65" width="116" height="20" uuid="72078094-3e78-4097-baac-abe76e8f14dd"/>
-				<text><![CDATA[11 ha]]></text>
+				<reportElement style="table" x="321" y="33" width="121" height="32" uuid="e7ba2367-5354-4e6a-8a46-2cf6b73fe030"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Fertilizer Provided]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="65" width="118" height="20" uuid="383e141e-6252-4f5f-bebb-549284d27d70"/>
-				<text><![CDATA[15 ha]]></text>
+				<reportElement style="table" x="442" y="33" width="130" height="32" uuid="35cc9e64-88e2-4ab4-ad3d-083275b549d1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Seed Provided]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="135" y="65" width="87" height="20" uuid="2fd8d7e3-98cb-496a-aecd-cb20e5eab999"/>
-				<text><![CDATA[23]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="456" y="65" width="116" height="20" uuid="e4d4fd47-ccd0-47b4-b3da-fe0f566e5aff"/>
-				<text><![CDATA[60 ha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="456" y="85" width="116" height="20" uuid="d11266c3-e1d5-4209-a3e3-7a8b4739aa5c"/>
-				<text><![CDATA[40 ha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="340" y="85" width="116" height="20" uuid="d52b110f-8ee5-44b8-aa0c-c6fbb2d1f335"/>
-				<text><![CDATA[11 ha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="135" y="85" width="87" height="20" uuid="55397590-3a26-428b-9178-475e45dbb3a7"/>
-				<text><![CDATA[15]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="222" y="85" width="118" height="20" uuid="f649caff-75e4-4308-af8b-a300a11c5b26"/>
-				<text><![CDATA[15 ha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="85" width="135" height="20" uuid="85929dce-16f8-478e-ae02-c37486d82cf2"/>
-				<text><![CDATA[San Isidro]]></text>
-			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="321" height="20" uuid="b9f4fe78-fdac-4cb2-8ee8-7041168a046a"/>
+				<textElement markup="none"/>
+				<textFieldExpression><![CDATA["Program ID " + $P{programPlanID} + " - " + $P{programPlan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement style="table" x="0" y="0" width="61" height="27" uuid="1ef1750b-13bd-48ea-a80d-dfbb57d4868c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DeployedID}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0 farmer(s)">
+				<reportElement style="table" x="61" y="0" width="64" height="27" uuid="1961b978-58f5-479a-a00d-cac9aeb07561"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{FarmCount} + " farmer(s)"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha">
+				<reportElement style="table" x="125" y="0" width="65" height="27" uuid="a0517260-4265-4cf2-9641-a58cc45cf1a6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{MinorDamaged} + " ha"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha">
+				<reportElement style="table" x="190" y="0" width="66" height="27" uuid="931a8fee-e002-4172-b83b-f4f7f455f411"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{MajorDamaged}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha">
+				<reportElement style="table" x="256" y="0" width="65" height="27" uuid="d4ecf4b5-2a04-41bc-acaa-b58d5c5b9fff"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{AreaPlanted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="table" x="321" y="0" width="121" height="27" uuid="95bb6160-db5e-4fae-a887-45d104be578f"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FertilizerProvided} + "\nProvided: " + $F{FertilizerAmount} + " kg"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="table" x="442" y="0" width="130" height="27" uuid="4934e064-719b-459b-a7ec-0ee6545b3622"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VarietyProvided} + "\nProvided:" + $F{VarietyAmount} + " kg"]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="84" splitType="Stretch">
+		<band height="88" splitType="Stretch">
+			<textField pattern="EEE, d MMM yyyy HH:mm:ss Z">
+				<reportElement x="0" y="68" width="193" height="20" uuid="1bb724cc-66d0-492b-a8eb-1e00ddcb8db3"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 			<line>
-				<reportElement x="0" y="29" width="135" height="1" uuid="f65d4127-d3f2-4ccd-8591-bf6fd456480b"/>
+				<reportElement x="0" y="31" width="135" height="1" uuid="f65d4127-d3f2-4ccd-8591-bf6fd456480b"/>
 			</line>
 			<staticText>
 				<reportElement x="0" y="0" width="100" height="20" uuid="4c7395e1-a9d9-4c21-b5ac-ee7a4ea55b6b"/>
 				<text><![CDATA[Prepared By:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="0" width="100" height="20" uuid="257a7686-14d8-47a3-b8df-5318532c68a3"/>
+				<reportElement x="432" y="0" width="100" height="20" uuid="257a7686-14d8-47a3-b8df-5318532c68a3"/>
 				<text><![CDATA[Approved By:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="422" y="28" width="135" height="1" uuid="b57aada4-011b-4f62-94a4-a999d7e07de6"/>
+				<reportElement x="432" y="28" width="135" height="1" uuid="b57aada4-011b-4f62-94a4-a999d7e07de6"/>
 			</line>
 			<textField>
-				<reportElement x="0" y="30" width="100" height="16" uuid="4785faac-756f-4f51-8970-c4165d38f5cf"/>
+				<reportElement x="0" y="32" width="100" height="16" uuid="4785faac-756f-4f51-8970-c4165d38f5cf"/>
 				<textFieldExpression><![CDATA[$P{preparedBy}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="422" y="30" width="100" height="16" uuid="b88aade0-538c-4964-bf2c-bddaab03e67a"/>
+				<reportElement x="432" y="30" width="100" height="16" uuid="b88aade0-538c-4964-bf2c-bddaab03e67a"/>
 				<textFieldExpression><![CDATA[$P{approvedBy}]]></textFieldExpression>
 			</textField>
-			<textField pattern="EEE, d MMM yyyy HH:mm:ss Z">
-				<reportElement x="0" y="64" width="193" height="20" uuid="8b0d08fd-cc8a-4820-8f94-4c7427d8917f"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement x="452" y="64" width="80" height="20" uuid="6d02e6c0-c56e-4f71-a4fa-79a93a6bd03a"/>
+				<reportElement x="452" y="68" width="80" height="20" uuid="311fbf19-c534-40f5-b9d7-7f3841234c1f"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="532" y="64" width="40" height="20" uuid="98102f6a-cc38-4f29-8b94-5faffc6b664e"/>
+				<reportElement x="532" y="68" width="40" height="20" uuid="f52a89f3-d8d9-4eee-b734-01262cb06014"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="353" splitType="Stretch">
+		<band height="264" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="130" width="503" height="20" uuid="0230b730-0d97-4c24-bc13-3956327196a4"/>
-				<text><![CDATA[Success]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="150" width="503" height="20" uuid="fad1c3a5-5f73-4dce-b4c4-353b94d7de2b"/>
-				<text><![CDATA[Failed]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="130" width="69" height="20" uuid="80d5d871-21e3-4957-ae92-965e74b72742"/>
-				<text><![CDATA[10]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="130" width="69" height="20" uuid="5fe60ad0-92e0-4c0b-960a-6b9ad678f807"/>
-				<text><![CDATA[10]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="150" width="69" height="20" uuid="1ae18d66-9bea-4f53-a220-0ed709c92f43"/>
-				<text><![CDATA[0]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="71" width="503" height="20" uuid="769b7352-a76d-48eb-954f-c7796df5307e"/>
+				<reportElement x="0" y="64" width="503" height="20" uuid="769b7352-a76d-48eb-954f-c7796df5307e"/>
 				<text><![CDATA[Average Number of Participants:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="51" width="503" height="20" uuid="912e3525-15e0-4580-a07f-35c83ec72b10"/>
+				<reportElement x="0" y="44" width="503" height="20" uuid="912e3525-15e0-4580-a07f-35c83ec72b10"/>
 				<text><![CDATA[Average Major Damaged Area:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="31" width="503" height="20" uuid="11d183f4-c826-4291-8872-e93a0de3b405"/>
-				<text><![CDATA[Average Minor Damaged Area:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="91" width="503" height="20" uuid="3d4458a1-15e7-41d5-b092-2012895d1a5f"/>
-				<text><![CDATA[Average Program Ratings:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="31" width="69" height="20" uuid="77d211e6-b4e8-4bb8-b9bf-4cc25a77a903"/>
-				<text><![CDATA[20 ha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="51" width="69" height="20" uuid="7b22c29a-bbda-4905-ab4f-37b8e44f35c9"/>
-				<text><![CDATA[30 ha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="71" width="69" height="20" uuid="1af896b8-f28c-48a4-b702-68b31e0d8f00"/>
-				<text><![CDATA[100]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="91" width="69" height="20" uuid="9c69962d-9aeb-4493-9604-6804bc973821"/>
-				<text><![CDATA[Satisfactory]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="211" width="503" height="20" uuid="d6e9f1aa-d08c-4d08-af92-528bfa9c92d0"/>
+				<reportElement x="0" y="174" width="503" height="20" uuid="d6e9f1aa-d08c-4d08-af92-528bfa9c92d0"/>
 				<text><![CDATA[Number of Times Incompleted:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="231" width="503" height="20" uuid="300e904a-eba9-4d17-a294-a4d1a5b2b477"/>
+				<reportElement x="0" y="194" width="503" height="20" uuid="300e904a-eba9-4d17-a294-a4d1a5b2b477"/>
 				<text><![CDATA[Number of Times Deployed:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="503" y="211" width="69" height="20" uuid="ce494df0-f142-45cf-b371-bb83426ef576"/>
-				<text><![CDATA[5]]></text>
+				<reportElement x="0" y="24" width="503" height="20" uuid="11d183f4-c826-4291-8872-e93a0de3b405"/>
+				<text><![CDATA[Average Minor Damaged Area:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00 ha">
+				<reportElement x="503" y="24" width="69" height="20" uuid="9a8ed902-22eb-4054-964e-41c5893158f6"/>
+				<textFieldExpression><![CDATA[$V{averageMinorDamagedArea}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="134" width="503" height="20" uuid="aba83995-15a1-44c0-88b9-f1164b6abb39"/>
+				<text><![CDATA[Number of Ongoing:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="503" y="231" width="69" height="20" uuid="c7ceb8f9-5524-4a97-b28f-38cb6a134255"/>
-				<text><![CDATA[15]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="288" width="503" height="20" uuid="38bc8f69-9648-4856-a8b5-6232db0cc893"/>
+				<reportElement x="0" y="154" width="503" height="20" uuid="5421e697-1334-4cb7-9731-25df9029e4fa"/>
 				<text><![CDATA[Number of Times Completed:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="503" y="291" width="69" height="20" uuid="a146c68e-a082-4c6a-920b-44f591d17141"/>
-				<text><![CDATA[10]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="503" y="311" width="69" height="20" uuid="4f806ba3-40ce-4772-8b1d-0f8b8ead5e70"/>
-				<text><![CDATA[100%]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="311" width="503" height="20" uuid="6a37dbde-a895-405f-bc29-fa577a10c8a4"/>
-				<text><![CDATA[Success Rate]]></text>
-			</staticText>
+			<textField pattern="###0 farmer(s)">
+				<reportElement x="503" y="64" width="69" height="20" uuid="1a34720c-d27d-4b27-abbc-093582af2b7f"/>
+				<textFieldExpression><![CDATA[$V{averageParticipants}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha">
+				<reportElement x="503" y="44" width="69" height="20" uuid="fc2e6ac2-61be-4e58-9db8-b6ea48e5bd18"/>
+				<textFieldExpression><![CDATA[$V{averageMajorDamagedArea}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="503" y="154" width="69" height="20" uuid="0a9c6f3b-f8a2-41c7-9487-46dd233b6aed"/>
+				<textFieldExpression><![CDATA[$V{completed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="503" y="174" width="69" height="20" uuid="860a4908-8c7b-4745-a1e3-be22664cc57d"/>
+				<textFieldExpression><![CDATA[$V{incomplete}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="503" y="194" width="69" height="20" uuid="aaab07dd-2daa-49f5-b159-cb6010a50add"/>
+				<textFieldExpression><![CDATA[$V{deployedCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="503" y="134" width="69" height="20" uuid="ce3558a5-14db-4f0c-aee5-dc9d93afb392"/>
+				<textFieldExpression><![CDATA[$V{ongoing}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 	<noData>

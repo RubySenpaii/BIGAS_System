@@ -57,6 +57,7 @@ public class PAOPerformanceBarangay extends HttpServlet {
         JSONObject jsonObjects = new JSONObject();
         try {
             jsonObjects.put("barangays", jarrayBarangays);
+            jsonObjects.put("municipal", (String) session.getAttribute("municipalSelected"));
 
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");

@@ -172,6 +172,10 @@
         <servlet-name>MunicipalEvaluation</servlet-name>
         <servlet-class>servlet.web.MunicipalEvaluation</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PdfViewer</servlet-name>
+        <servlet-class>servlet.web.PdfViewer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebLogin</servlet-name>
         <url-pattern>/WebLogin</url-pattern>
@@ -343,6 +347,10 @@
     <servlet-mapping>
         <servlet-name>MunicipalEvaluation</servlet-name>
         <url-pattern>/MunicipalEvaluation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PdfViewer</servlet-name>
+        <url-pattern>/PdfViewer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

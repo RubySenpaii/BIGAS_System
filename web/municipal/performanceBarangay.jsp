@@ -47,12 +47,7 @@
                     },
                     async: false
                 });
-                /*
-                 var categoryLinks = {};
-                 
-                 var categories = [];
-                 var brgyValues = [];
-                 */
+                
                 var pieDetail = [];
                 for (var a = 0; a < values[0].barangays.length; a++) {
                     //categories.push(values[0].barangays[a].brgyName);
@@ -66,49 +61,6 @@
                     pieDetail.push(pied);
                 }
                 var year = values[0].barangays[0].year;
-                /*var yearData = {};
-                 yearData['name'] = values[0].barangays[0].year;
-                 yearData['data'] = brgyValues;
-                 var allData = [];
-                 allData.push(yearData);*/
-
-//                Highcharts.chart('container', {
-//                    chart: {
-//                        plotBackgroundColor: null,
-//                        plotBorderWidth: null,
-//                        plotShadow: false,
-//                        type: 'pie'
-//                    },
-//                    title: {
-//                        text: 'Production per Barangay For ' + year
-//                    },
-//                    tooltip: {
-//                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-//                    },
-//                    plotOptions: {
-//                        pie: {
-//                            allowPointSelect: true,
-//                            cursor: 'pointer',
-//                            dataLabels: {
-//                                enabled: true,
-//                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-//                                style: {
-//                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-//                                }
-//                            }, events: {
-//                                click: function (e) {
-//                                    location.href = e.point.url;
-//                                    e.preventDefault();
-//                                }
-//                            }
-//                        }
-//                    },
-//                    series: [{
-//                            name: 'Brands',
-//                            colorByPoint: true,
-//                            data: pieDetail
-//                        }]
-//                });
 
                 Highcharts.chart('container', {
                     chart: {
@@ -201,7 +153,7 @@
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-transitiongoal="<%=target + "%"%>"></div>
                                                         <div style="height: 20px; position: absolute; top: 0; right: 50%; color: black">
-                                                            <b><%=targetProduction.getTargetValue()%> MT</b>
+                                                            <b><%=formatter.doubleToString(targetProduction.getTargetValue())%> MT</b>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -210,7 +162,7 @@
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" data-transitiongoal="<%=actual + "%"%>"></div>
                                                         <div style="height: 20px; position: absolute; top: 0; right: 50%; color: black">
-                                                            <b><%=municipality.getHarvestedTotal()%> MT</b>
+                                                            <b><%=formatter.doubleToString(municipality.getHarvestedTotal())%> MT</b>
                                                         </div>
                                                     </div>
                                                 </div>

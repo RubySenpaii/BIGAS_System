@@ -41,9 +41,9 @@ public class MobileWeeklyPlantingReport extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("weeklyPlantingReport input form mobile upload");
         ArrayList<WeeklyPlantingReport> weeklyPlantingReports = new Gson().fromJson(request.getParameter("weeklyPlantingReports"), new TypeToken<List<WeeklyPlantingReport>>() {
         }.getType());
+        System.out.println(weeklyPlantingReports.size() + " weeklyPlantingReport inputs form mobile upload");
 
         int originalSize = new WeeklyPlantingReportDAO().getListOfWeeklyPlantingReports().size();
         int count = 0;
@@ -75,12 +75,13 @@ public class MobileWeeklyPlantingReport extends HttpServlet {
             }
 
             int[] adds = addPS.executeBatch();
-            int[] updates = updatePS.executeBatch();
-            count = adds.length + updates.length;
+            //int[] updates = updatePS.executeBatch();
+            count = adds.length; //+ updates.length;
+            conn.commit();
             System.out.println("added weeklyPlantingReport rows: " + adds.length);
-            System.out.println("updated weeklyPlantingReport rows: " + updates.length);
+            //System.out.println("updated weeklyPlantingReport rows: " + updates.length);
             addPS.close();
-            updatePS.close();
+            //updatePS.close();
             conn.close();
         } catch (SQLException x) {
             Logger.getLogger(MobileWeeklyPlantingReport.class.getName()).log(Level.SEVERE, null, x);

@@ -10,7 +10,6 @@ import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
 import extra.Calculator;
 import extra.GenericObject;
-import extra.JasperJava;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,6 +30,7 @@ import object.Barangay;
 import object.Employee;
 import object.Municipality;
 import object.PlantingReport;
+import reporting.JasperMunicipal;
 
 /**
  *
@@ -57,7 +57,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createPlanting")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createMunicipalWeeklyPlantingReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyPlantingReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -66,7 +66,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createGrowthStage")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createMunicipalWeeklyCropGrowthReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyCropGrowthReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -75,7 +75,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createDamages")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createMunicipalWeeklyDamagesReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyDamagesReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -84,7 +84,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createHarvest")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperJava().createMunicipalWeeklyHarvestReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyHarvestReport(preparedBy, approvedBy, municipal);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);

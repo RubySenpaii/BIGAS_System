@@ -245,6 +245,7 @@ public class ProvincialPerformance extends BaseServlet {
         System.out.println(barangays.size());
 
         session.setAttribute("year", year);
+        session.setAttribute("municipalSelected", new MunicipalityDAO().getMunicipalDetail(municipalityID).getMunicipalityName());
         session.setAttribute("barangays", barangays);
     }
 
@@ -258,6 +259,7 @@ public class ProvincialPerformance extends BaseServlet {
         System.out.println(farms.size());
 
         session.setAttribute("year", year);
+        session.setAttribute("barangaySelected", barangayName);
         session.setAttribute("farms", farms);
     }
 

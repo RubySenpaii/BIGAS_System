@@ -41,9 +41,9 @@ public class MobilePlot extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("plot input form mobile upload");
         ArrayList<Plot> plots = new Gson().fromJson(request.getParameter("plots"), new TypeToken<List<Plot>>() {
         }.getType());
+        System.out.println(plots.size() + " plot inputs form mobile upload");
 
         int originalSize = new PlotDAO().getListOfPlots().size();
         int count = 0;
@@ -61,11 +61,11 @@ public class MobilePlot extends HttpServlet {
                     + Plot.COLUMN_PLOTPLANTED + ", " + Plot.COLUMN_PLOTSIZE + ") "
                     + "VALUES(?, ?, ?, ?, ?)");
             for (int a = 0; a < plots.size(); a++) {
-                if (plots.get(a).getFarmID() == 910) {
-                    System.out.println("farmid " + plots.get(a).getFarmID());
-                    System.out.println("plotplanted " + plots.get(a).getPlotPlanted());
-                    System.out.println("plotid " + plots.get(a).getPlotID());
-                }
+//                if (plots.get(a).getFarmID() == 910) {
+//                    System.out.println("farmid " + plots.get(a).getFarmID());
+//                    System.out.println("plotplanted " + plots.get(a).getPlotPlanted());
+//                    System.out.println("plotid " + plots.get(a).getPlotID());
+//                }
                 if (a < originalSize) {
                     updatePS.setInt(1, plots.get(a).getFarmID());
                     updatePS.setInt(2, plots.get(a).getPlotID());

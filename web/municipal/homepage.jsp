@@ -321,7 +321,7 @@
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" data-transitiongoal="<%=target + "%"%>"></div>
                                                         <div style="height: 20px; position: absolute; top: 0; right: 50%; color: black">
-                                                            <b><%=targetProduction.getTargetValue()%> MT</b>
+                                                            <b><%=formatter.doubleToString(targetProduction.getTargetValue())%> MT</b>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -330,7 +330,7 @@
                                                     <div class="progress">
                                                         <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" data-transitiongoal="<%=actual + "%"%>"></div>
                                                         <div style="height: 20px; position: absolute; top: 0; right: 50%; color: black">
-                                                            <b><%=municipality.getHarvestedTotal()%> MT</b>
+                                                            <b><%=formatter.doubleToString(municipality.getHarvestedTotal())%> MT</b>
                                                         </div>
                                                     </div>
                                                 </div>

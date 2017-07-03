@@ -187,6 +187,7 @@ public class MunicipalPerformance extends BaseServlet {
         ArrayList<Farm> farms = new FarmDAO().getListOfFarmsProductionInBarangay(barangayName, year);
 
         session.setAttribute("year", year);
+        session.setAttribute("barangaySelected", barangayName);
         session.setAttribute("farms", farms);
     }
 

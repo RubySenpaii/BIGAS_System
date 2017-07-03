@@ -41,12 +41,9 @@ public class MobileDamageIncident extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int addCount = 0;
-        int updateCount = 0;
-
-        System.out.println("damageIncident input form mobile upload");
         ArrayList<DamageIncident> incidents = new Gson().fromJson(request.getParameter("damageIncidents"), new TypeToken<List<DamageIncident>>() {
         }.getType());
+        System.out.println(incidents.size() + " DamageIncident inputs from mobile upload");
 
         int originalSize = new DamageIncidentDAO().getListOfDamages().size();
         int count = 0;
@@ -70,7 +67,7 @@ public class MobileDamageIncident extends HttpServlet {
                     + DamageIncident.COLUMN_STATUS + " = ? "
                     + "WHERE " + DamageIncident.COLUMN_DAMAGEINCIDENTID + " = ?");
             for (int a = 0; a < incidents.size(); a++) {
-                if (a <= originalSize) {
+                if (a < originalSize) {
                     updatePS.setInt(1, incidents.get(a).getApprovedBy());
                     updatePS.setString(2, incidents.get(a).getCropStage());
                     updatePS.setInt(3, incidents.get(a).getDamagedDay());

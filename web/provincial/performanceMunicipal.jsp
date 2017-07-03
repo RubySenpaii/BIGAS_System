@@ -58,7 +58,7 @@
                     var pied = {};
                     pied['name'] = values[0].municipals[a].municipalName;
                     pied['y'] = values[0].municipals[a].harvest;
-                    pied['url'] = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewBarangayPerformance&municipalID=' + values[0].municipals[a].municipalID;
+                    pied['key'] = values[0].municipals[a].municipalID;
                     pieDetail.push(pied);
                 }
                 var year = values[0].municipals[0].year;
@@ -69,6 +69,53 @@
 //                allData.push(yearData);
                 
                 Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Production for San Rafael'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Production (MT)'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f} MT</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                              events: {
+                                  click: function() {
+                                      location.href = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewBarangayPerformance&municipalID=' + this.options.key;
+                                  }
+                              }
+                          }
+                        },
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                            name: 'Production',
+                            data: pieDetail
+                        }]
+                });
+                
+                /*Highcharts.chart('container', {
                     chart: {
                         plotBackgroundColor: null,
                         plotBorderWidth: null,
@@ -104,66 +151,7 @@
                             colorByPoint: true,
                             data: pieDetail
                         }]
-                });
-
-//                Highcharts.chart('container12', {
-//                    chart: {
-//                        type: 'bar'
-//                    },
-//                    title: {
-//                        text: 'Historic World Population by Region'
-//                    },
-//                    subtitle: {
-//                        text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
-//                    },
-//                    xAxis: {
-//                        categories: categories,
-//                        title: {
-//                            text: null
-//                        },
-//                        labels: {
-//                            formatter: function () {
-//                                return '<a href="' + categoryLinks[this.value] + '">' +
-//                                        this.value + '</a>';
-//                            }
-//                        }
-//                    },
-//                    yAxis: {
-//                        min: 0,
-//                        title: {
-//                            text: 'Population (millions)',
-//                            align: 'high'
-//                        },
-//                        labels: {
-//                            overflow: 'justify'
-//                        }
-//                    },
-//                    tooltip: {
-//                        valueSuffix: ' MT'
-//                    },
-//                    plotOptions: {
-//                        bar: {
-//                            dataLabels: {
-//                                enabled: true
-//                            }
-//                        }
-//                    },
-//                    legend: {
-//                        layout: 'vertical',
-//                        align: 'right',
-//                        verticalAlign: 'top',
-//                        x: -40,
-//                        y: 80,
-//                        floating: false,
-//                        borderWidth: 1,
-//                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-//                        shadow: true
-//                    },
-//                    credits: {
-//                        enabled: false
-//                    },
-//                    series: allData
-//                });
+                });*/
             });
         </script>
     </head>

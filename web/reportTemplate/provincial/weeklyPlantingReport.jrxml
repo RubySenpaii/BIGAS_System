@@ -37,9 +37,6 @@
 	<parameter name="approvedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="municipality_name" class="java.lang.String">
-		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
-	</parameter>
 	<queryString>
 		<![CDATA[SELECT T1.MunicipalityName, T1.SeedType, T1.SeedAcquisition, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))

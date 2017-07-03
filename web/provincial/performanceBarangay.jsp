@@ -44,11 +44,6 @@
                     },
                     async: false
                 });
-
-//                var categoryLinks = {};
-//
-//                var categories = [];
-//                var brgyValues = [];
                 
                 var pieDetail = [];
                 for (var a = 0; a < values[0].barangays.length; a++) {
@@ -59,113 +54,57 @@
                     var pied = {};
                     pied['name'] = values[0].barangays[a].brgyName;
                     pied['y'] = values[0].barangays[a].harvest;
-                    pied['url'] = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewFarmPerformance&brgyName=' + values[0].barangays[a].brgyName;
+                    pied['key'] = values[0].barangays[a].brgyName;
                     pieDetail.push(pied);
-                }
-//                var yearData = {};
-//                yearData['name'] = values[0].barangays[0].year;
-//                yearData['data'] = brgyValues;
-//                var allData = [];
-//                allData.push(yearData);
-//                
+                } 
                 var year = values[0].barangays[0].year;
-
+                
                 Highcharts.chart('container', {
                     chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
+                        type: 'column'
                     },
                     title: {
-                        text: 'Production Total For ' + year
+                        text: 'Production for ' + values[0].municipal
+                    },
+                    xAxis: {
+                        type: 'category',
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Production (MT)'
+                        }
                     },
                     tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f} MT</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
                     },
                     plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
-                            }, events: {
-                                click: function (e) {
-                                    location.href = e.point.url;
-                                    e.preventDefault();
-                                }
-                            }
+                        series: {
+                          cursor: 'pointer',
+                          point: {
+                              events: {
+                                  click: function() {
+                                      location.href = 'http://localhost:8080/BIGAS_System/ProvincialPerformance?action=viewFarmPerformance&brgyName=' + this.options.key;
+                                  }
+                              }
+                          }
+                        },
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
                         }
                     },
                     series: [{
-                            name: 'Brands',
-                            colorByPoint: true,
+                            name: 'Production',
                             data: pieDetail
                         }]
                 });
-
-//                Highcharts.chart('container123', {
-//                    chart: {
-//                        type: 'bar'
-//                    },
-//                    title: {
-//                        text: 'Historic World Population by Region'
-//                    },
-//                    subtitle: {
-//                        text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
-//                    },
-//                    xAxis: {
-//                        categories: categories,
-//                        title: {
-//                            text: null
-//                        },
-//                        labels: {
-//                            formatter: function () {
-//                                return '<a href="' + categoryLinks[this.value] + '">' +
-//                                        this.value + '</a>';
-//                            }
-//                        }
-//                    },
-//                    yAxis: {
-//                        min: 0,
-//                        title: {
-//                            text: 'Population (millions)',
-//                            align: 'high'
-//                        },
-//                        labels: {
-//                            overflow: 'justify'
-//                        }
-//                    },
-//                    tooltip: {
-//                        valueSuffix: ' MT'
-//                    },
-//                    plotOptions: {
-//                        bar: {
-//                            dataLabels: {
-//                                enabled: true
-//                            }
-//                        }
-//                    },
-//                    legend: {
-//                        layout: 'vertical',
-//                        align: 'right',
-//                        verticalAlign: 'top',
-//                        x: -40,
-//                        y: 80,
-//                        floating: false,
-//                        borderWidth: 1,
-//                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-//                        shadow: true
-//                    },
-//                    credits: {
-//                        enabled: false
-//                    },
-//                    series: allData
-//                });
             });
         </script>
     </head>

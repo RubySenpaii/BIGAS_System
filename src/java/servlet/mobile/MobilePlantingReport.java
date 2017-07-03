@@ -41,9 +41,9 @@ public class MobilePlantingReport extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("plantingReport input form mobile upload");
         ArrayList<PlantingReport> plantingReports = new Gson().fromJson(request.getParameter("plantingReports"), new TypeToken<List<PlantingReport>>() {
         }.getType());
+        System.out.println(plantingReports.size() + " PlantingReport inputs form mobile upload");
 
         int originalSize = new PlantingReportDAO().getListOfPlantingReports().size();
         int count = 0;
@@ -69,7 +69,7 @@ public class MobilePlantingReport extends HttpServlet {
                     + PlantingReport.COLUMN_SEEDVARIETY + ") "
                     + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             for (int a = 0; a < plantingReports.size(); a++) {
-                if (a <= originalSize) {
+                if (a < originalSize) {
                     updatePS.setDouble(1, plantingReports.get(a).getAmountHarvested());
                     updatePS.setDouble(2, plantingReports.get(a).getAmountPlanted());
                     updatePS.setInt(3, plantingReports.get(a).getHarvestDay());
@@ -87,7 +87,9 @@ public class MobilePlantingReport extends HttpServlet {
                     updatePS.setString(15, plantingReports.get(a).getSeedType());
                     updatePS.setString(16, plantingReports.get(a).getSeedVariety());
                     updatePS.setInt(17, plantingReports.get(a).getPlantingReportID());
+                    updatePS.addBatch();
                 } else {
+                    System.out.println(plantingReports.get(a).getPlantingReportID());
                     addPS.setDouble(1, plantingReports.get(a).getAmountHarvested());
                     addPS.setDouble(2, plantingReports.get(a).getAmountPlanted());
                     addPS.setInt(3, plantingReports.get(a).getHarvestDay());
@@ -104,11 +106,13 @@ public class MobilePlantingReport extends HttpServlet {
                     addPS.setString(14, plantingReports.get(a).getSeedAcquisition());
                     addPS.setString(15, plantingReports.get(a).getSeedType());
                     addPS.setString(16, plantingReports.get(a).getSeedVariety());
+                    addPS.addBatch();
                 }
             }
 
             int[] adds = addPS.executeBatch();
             int[] updates = updatePS.executeBatch();
+            conn.commit();
             count = adds.length + updates.length;
             System.out.println("added plantingReport rows: " + adds.length);
             System.out.println("updated plantingReport rows: " + updates.length);
