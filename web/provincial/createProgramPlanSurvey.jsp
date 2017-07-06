@@ -1,6 +1,6 @@
 <%-- 
-    Document   : barangayMonitoring
-    Created on : Feb 22, 2017, 5:11:28 PM
+    Document   : createProgramPlanSurvey
+    Created on : Jul 6, 2017, 2:31:43 PM
     Author     : RubySenpaii
 --%>
 
@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Provincial - Create Program Plan </title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">

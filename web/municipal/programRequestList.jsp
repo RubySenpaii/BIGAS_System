@@ -4,6 +4,7 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.Municipality"%>
 <%@page import="object.ProgramRequest"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -16,7 +17,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Municipal - Program Request List </title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,9 +64,9 @@
                                                             <div class="modal-body">
                                                                 <label for="requestDetail">Request Name * :</label>
                                                                 <input type="text" id="requestDetail" class="form-control" name="requestDetail" required />
-                                                                <label for="requestDetail">Barangay Name * :</label>
+                                                                <label for="requestDetail">Municipality Name * :</label>
                                                                 <select id="requestDetail" class="form-control" name="requestDetail" required>
-                                                                    <option>Barangay San Rafael</option>
+                                                                    <option><%=((Municipality) session.getAttribute("municipal")).getMunicipalityName()%></option>
                                                                 </select>
                                                                 <label for="requestDetail">Problem Name * :</label>
                                                                 <input type="text" id="requestDetail" class="form-control" name="requestDetail" required />

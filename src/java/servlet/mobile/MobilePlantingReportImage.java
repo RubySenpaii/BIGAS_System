@@ -39,13 +39,14 @@ public class MobilePlantingReportImage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("receiveing plantinReportImages");
-        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\images\\\\plantingReport";
+        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\images\\\\plantingReport";
         ArrayList<String> imagePath = new ArrayList<>();
         Iterable<Part> parts = request.getParts();
         OutputStream out = null;
         InputStream fileContent = null;
         for (Part part: parts) {
             try {
+                System.out.println("trying to receive...");
                 out = new FileOutputStream(new File(filepath + File.separator + part.getSubmittedFileName()));
                 fileContent = part.getInputStream();
                 int read = 0;
@@ -54,6 +55,7 @@ public class MobilePlantingReportImage extends HttpServlet {
                 while ((read = fileContent.read(bytes)) != -1) {
                     out.write(bytes, 0, read);
                 }
+                System.out.println("image created...");
                 imagePath.add("images\\plantingReport" + part.getSubmittedFileName());
             } catch (FileNotFoundException x) {
                 System.err.println("file not found");

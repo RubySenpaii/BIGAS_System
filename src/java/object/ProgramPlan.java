@@ -24,6 +24,7 @@ public class ProgramPlan {
     private int problemID;
     private String type;
     private int flag;
+    private int surveyForm;
     
     //additional attribute
     private double programTriggerFarmArea;
@@ -185,5 +186,19 @@ public class ProgramPlan {
      */
     public void setProblemID(int problemID) {
         this.problemID = problemID;
+    }
+
+    /**
+     * @return the surveyForm
+     */
+    public int getSurveyForm() {
+        return surveyForm;
+    }
+
+    /**
+     * @param surveyForm the surveyForm to set
+     */
+    public void setSurveyForm(int surveyForm) {
+        this.surveyForm = surveyForm;
     }
 }

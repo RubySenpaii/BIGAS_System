@@ -11,6 +11,7 @@ import dao.DeployedEvaluationDAO;
 import dao.DeployedProgramDAO;
 import dao.FarmDAO;
 import dao.FertilizerDAO;
+import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
 import dao.PlotDAO;
 import dao.ProblemDAO;
@@ -41,6 +42,7 @@ import object.DeployedProgram;
 import object.Employee;
 import object.Farm;
 import object.Fertilizer;
+import object.Municipality;
 import object.PlantingReport;
 import object.Plot;
 import object.Problem;
@@ -448,8 +450,10 @@ public class MunicipalProgram extends BaseServlet {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
+        Municipality municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID());
         ArrayList<ProgramRequest> requests = new ProgramRequestDAO().getListOfProgramRequestsInMunicipality(userLogged.getMunicipalityID());
 
+        session.setAttribute("municipal", municipal);
         session.setAttribute("requests", requests);
     }
 

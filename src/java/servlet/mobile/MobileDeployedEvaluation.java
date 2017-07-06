@@ -58,7 +58,7 @@ public class MobileDeployedEvaluation extends HttpServlet {
                     + "(" + DeployedEvaluation.COLUMN_DEPLOYEDID + ", " + DeployedEvaluation.COLUMN_EVALUATIONVALUES + ", "
                     + DeployedEvaluation.COLUMN_FEEDBACK + ", " + DeployedEvaluation.COLUMN_RESPONDENTNAME + ") "
                     + "VALUES(?, ?, ?, ?)");
-            PreparedStatement updatePS = conn.prepareStatement("");
+            //PreparedStatement updatePS = conn.prepareStatement("");
             for (int a = 0; a < deployedEvaluations.size(); a++) {
                 if (a < originalSize) {
                     //cannot update

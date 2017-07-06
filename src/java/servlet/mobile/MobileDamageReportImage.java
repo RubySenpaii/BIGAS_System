@@ -43,7 +43,7 @@ public class MobileDamageReportImage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("receiving damageReportImages");
-        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\images\\\\damageReport";
+        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\images\\\\damageReport";
         ArrayList<String> imagePath = new ArrayList<>();
         Iterable<Part> parts = request.getParts();
         OutputStream out = null;

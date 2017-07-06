@@ -562,7 +562,7 @@ public class ProvincialProgram extends BaseServlet {
                 trigger.setProgramID(programPlan.getProgramPlanID());
                 triggers.add(trigger);
             }
-        } else if (problemType.equals("Calamity")) {
+        } else if (problemType.contains("Calamity")) {
             int farmsAffected = Integer.parseInt(request.getParameter("farmsAffected"));
             double majorDamaged = Double.parseDouble(request.getParameter("majorDamaged"));
 

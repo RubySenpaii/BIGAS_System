@@ -16,7 +16,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Provincial - Farm Performance </title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">

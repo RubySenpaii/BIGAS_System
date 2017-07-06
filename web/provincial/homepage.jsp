@@ -243,7 +243,7 @@
                         text: 'Total Harvest Production For March 16, 2016 - March 15, 2017'
                     },
                     subtitle: {
-                        text: 'San Miguel'
+                        text: 'Bulacan'
                     },
                     xAxis: {
                         type: 'category'

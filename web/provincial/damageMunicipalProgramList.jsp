@@ -16,7 +16,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Provincial - Program Damage List Per Municipal </title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -54,7 +54,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th style="width: 20%">Problem Name</th>
-                                                            <th style="width: 15%">Barangay</th>
+                                                            <th style="width: 15%">Municipal</th>
                                                             <th style="width: 12%">Farm(s) Affected</th>
                                                             <th style="width: 12%">Minor Damaged</th>
                                                             <th style="width: 12%">Major Damaged</th>

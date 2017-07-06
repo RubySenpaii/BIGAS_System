@@ -7,6 +7,7 @@ package servlet.ajax;
 
 import dao.BarangayDAO;
 import dao.DamageIncidentDAO;
+import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
 import dao.PlotDAO;
 import dao.WeeklyPlantingReportDAO;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import object.Barangay;
 import object.DamageIncident;
 import object.Employee;
+import object.Municipality;
 import object.PlantingReport;
 import object.Plot;
 import object.WeeklyPlantingReport;
@@ -54,10 +56,12 @@ public class MAODashboard extends HttpServlet {
         //get additional info for populating charts
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
+        Municipality municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID());
 
         JSONObject jsonObjects = new JSONObject();
         try {
             jsonObjects.put("cropProduction", getProduction(userLogged.getMunicipalityID()));
+            jsonObjects.put("municipal", municipal.getMunicipalityName());
 
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");

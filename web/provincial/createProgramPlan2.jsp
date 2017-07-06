@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Provincial - Create Program Plan </title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -62,14 +62,7 @@
                                                         </tr>
                                                         <%
                                                             String problemType = (String) session.getAttribute("problemType");
-                                                            if (problemType.equals("Calamity")) {
-                                                        %>
-                                                        <tr>
-                                                            <td>Major Damaged Area</td>
-                                                            <td><input type="text" name="majorDamaged" value="0"></td>
-                                                        </tr>
-                                                        <%
-                                                            } else if (problemType.equals("Underproduction")) {
+                                                            if (problemType.equals("Underproduction")) {
                                                         %>
                                                         <tr>
                                                             <td>Underproduction</td>
@@ -79,10 +72,18 @@
                                                             } else {
                                                         %>
                                                         <tr>
+                                                            <td>Major Damaged Area</td>
+                                                            <td><input type="text" name="majorDamaged" value="0"></td>
+                                                        </tr>
+                                                        <%
+                                                                if (!problemType.contains("Calamity")) {
+                                                        %>
+                                                        <tr>
                                                             <td>Minor Damaged Area</td>
                                                             <td><input type="text" name="minorDamaged" value="0"></td>
                                                         </tr>
                                                         <%
+                                                                }
                                                             }
                                                         %>
                                                     </tbody>

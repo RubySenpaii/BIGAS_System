@@ -7,6 +7,7 @@ package servlet.ajax;
 
 import dao.BarangayDAO;
 import dao.DamageIncidentDAO;
+import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
 import dao.PlotDAO;
 import dao.WeeklyPlantingReportDAO;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import object.Barangay;
 import object.DamageIncident;
 import object.Employee;
+import object.Municipality;
 import object.PlantingReport;
 import object.Plot;
 import object.WeeklyPlantingReport;
@@ -53,6 +55,7 @@ public class MAOMonitorCropArea extends HttpServlet {
         //get additional info for populating charts
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
+        Municipality municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID());
         String currentDate = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         String lastDate = new Calculator().getLastWeekDate(currentDate);
         System.out.println(currentDate + " | " + lastDate);
@@ -61,6 +64,7 @@ public class MAOMonitorCropArea extends HttpServlet {
         try {
             jsonObjects.put("lastWeek", getAreaInfo(userLogged.getMunicipalityID(), lastDate));
             jsonObjects.put("thisWeek", getAreaInfo(userLogged.getMunicipalityID(), currentDate));
+            jsonObjects.put("municipal", municipal.getMunicipalityName());
 
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");

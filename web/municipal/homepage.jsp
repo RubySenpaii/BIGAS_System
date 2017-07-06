@@ -21,7 +21,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Municipal - Homepage</title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -244,7 +244,7 @@
                         text: 'Total Harvest Production For March 16, 2016 - March 15, 2017'
                     },
                     subtitle: {
-                        text: 'San Miguel'
+                        text: values[0].municipal
                     },
                     xAxis: {
                         type: 'category'

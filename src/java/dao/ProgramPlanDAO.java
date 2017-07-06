@@ -140,6 +140,7 @@ public class ProgramPlanDAO {
             programPlan.setProgramPlanID(rs.getInt(ProgramPlan.COLUMN_PROGRAMPLANID));
             programPlan.setType(rs.getString(ProgramPlan.COLUMN_TYPE));
             programPlan.setFlag(rs.getInt(ProgramPlan.COLUMN_FLAG));
+            programPlan.setSurveyForm(rs.getInt("SurveyForm"));
             programPlans.add(programPlan);
         }
         return programPlans;

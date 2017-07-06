@@ -17,7 +17,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gentallela Alela! | </title>
+        <title>B.I.G.A.S. System | Municipal - Area Monitoring</title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -60,7 +60,7 @@
                         type: 'pie'
                     },
                     title: {
-                        text: 'San Rafael Area Last Week'
+                        text: values[0].municipal + ' Area Last Week'
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -105,7 +105,7 @@
                         type: 'pie'
                     },
                     title: {
-                        text: 'San Rafael Area This Week'
+                        text: values[0].municipal + ' Area This Week'
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
