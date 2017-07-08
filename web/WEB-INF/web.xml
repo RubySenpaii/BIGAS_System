@@ -176,6 +176,10 @@
         <servlet-name>PdfViewer</servlet-name>
         <servlet-class>servlet.web.PdfViewer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PAOCreateSurvey</servlet-name>
+        <servlet-class>servlet.ajax.PAOCreateSurvey</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebLogin</servlet-name>
         <url-pattern>/WebLogin</url-pattern>
@@ -351,6 +355,10 @@
     <servlet-mapping>
         <servlet-name>PdfViewer</servlet-name>
         <url-pattern>/PdfViewer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PAOCreateSurvey</servlet-name>
+        <url-pattern>/PAOCreateSurvey</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

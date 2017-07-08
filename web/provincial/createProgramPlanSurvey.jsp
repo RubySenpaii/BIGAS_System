@@ -4,6 +4,8 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.ProgramSurvey"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +38,7 @@
                     <div class="">
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Plain Page</h3>
+                                <h3>Create Program Plan: Step 4</h3>
                             </div>
                         </div>
 
@@ -45,12 +47,55 @@
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="x_panel">
-                                    <div class="x_title">
-                                        <h2>Plain Page</h2>
-                                        <div class="clearfix"></div>
-                                    </div>
                                     <div class="x_content">
-                                        Add content to the page ...
+                                        <form class="ProvincialProgram form-horizontal form-label-left">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">Form Name: </label>
+                                                    <div class="col-md-7">
+                                                        <input class="form-control" type="text" list="surveys" onchange="input_table(this.value)">
+                                                        <datalist id="surveys">
+                                                            <%
+                                                                ArrayList<ProgramSurvey> surveys = (ArrayList<ProgramSurvey>) session.getAttribute("surveys");
+                                                                for (int a = 0; a < surveys.size(); a++) {
+                                                            %>
+                                                            <option><%=surveys.get(a).getType()%></option>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </datalist>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 2%"><input type="checkbox" class="check_all" onclick="select_all()"></th>
+                                                        <th style="width: 10%">Question No</th>
+                                                        <th>Question</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><input type="checkbox" class="case"></td>
+                                                        <td><span id='snum'>1</span></td>
+                                                        <td>
+                                                            <textarea style="width: 100%; resize: none" rows="1" maxlength="600" name="questions"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <button type="button" onclick="delete_row()">- Delete</button>
+                                                <button type="button" onclick="add_row()">+ Add More</button>
+                                            </table>
+                                            <br/>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-4 col-xs-12 col-md-offset-3">
+                                                    <button type="submit" class="btn btn-primary">Cancel</button>
+                                                    <button type="submit" class="btn btn-success" name="action" value="createProgramStep4">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -61,6 +106,66 @@
                 <jsp:include page="pageFooter.jsp"/>
             </div>
         </div>
+
+        <script>
+            function delete_row() {
+                $('.case:checkbox:checked').parents("tr").remove();
+                $('.check_all').prop("checked", false);
+                check();
+            }
+            var i = 2;
+            function add_row() {
+                count = $('table tr').length;
+                var data = "<tr><td><input type='checkbox' class='case'/></td><td><span id='snum" + i + "'>" + count + "</span></td>";
+                data += "<td><textarea style='width: 100% ; resize: none' rows='1' maxlength='600' name='questions'></textarea></td></tr>";
+                $('table').append(data);
+                i++;
+            }
+
+            function select_all() {
+                $('input[class=case]:checkbox').each(function () {
+                    if ($('input[class=check_all]:checkbox:checked').length === 0) {
+                        $(this).prop("checked", false);
+                    } else {
+                        $(this).prop("checked", true);
+                    }
+                });
+            }
+
+            function check() {
+                obj = $('table tr').find('span');
+                $.each(obj, function (key, value) {
+                    id = value.id;
+                    $('#' + id).html(key + 1);
+                });
+            }
+
+            var json_values;
+            function input_table(type) {
+                $.ajax({
+                    url: "PAOCreateSurvey",
+                    type: 'POST',
+                    data: jQuery.param({type: type}),
+                    dataType: 'JSON',
+                    success: function (json_data) {
+                        json_values = json_data;
+                        var table_data;
+                        var surveys = json_values[0].surveys;
+                        for (var a = 0; a < surveys.length; a++) {
+                            console.log(surveys[a].question);
+                            var survey_count = a + 1;
+                            var tempData = "";
+                            tempData += "<tr><td><input type='checkbox' class='case'/></td><td><span id='snum" + a + "'>" + survey_count + "</span></td>";
+                            tempData += "<td><textarea style='width: 100% ; resize: none' rows='1' maxlength='600' name='questions'>" + surveys[a].question + "</textarea></td></tr>"
+                            table_data += tempData;
+                        }
+
+                        $('table').html(table_data);
+                    },
+                    async: false
+                });
+            }
+        </script>
 
         <!-- jQuery -->
         <script src="/BIGAS_System/vendors/jquery/dist/jquery.min.js"></script>

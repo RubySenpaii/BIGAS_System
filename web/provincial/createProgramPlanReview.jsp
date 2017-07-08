@@ -4,6 +4,7 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.ProgramSurvey"%>
 <%@page import="object.ProgramProcedure"%>
 <%@page import="object.ProgramTrigger"%>
 <%@page import="java.util.ArrayList"%>
@@ -114,7 +115,34 @@
                                                         %>
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                        </div>
 
+                                        <div class="ln_solid"></div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 10%">Question No</th>
+                                                            <th>Question</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%
+                                                            ArrayList<ProgramSurvey> surveys = (ArrayList<ProgramSurvey>) session.getAttribute("surveys");
+                                                            for (int a = 0; a < surveys.size(); a++) {
+                                                        %>
+                                                        <tr>
+                                                            <td><%=surveys.get(a).getQuestionNo()%></td>
+                                                            <td><%=surveys.get(a).getQuestion()%></td>
+                                                        </tr>
+                                                        <%
+                                                            }
+                                                        %>
+                                                    </tbody>
+                                                </table>
                                                 <div class="text-center">
                                                     <a href="/BIGAS_System/ProvincialProgram?action=submitProgramDetail" class="btn btn-success">Submit</a>
                                                 </div>

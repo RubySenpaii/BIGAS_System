@@ -98,7 +98,6 @@
         </div>
 
         <script>
-            
             function delete_row() {
                 $('.case:checkbox:checked').parents("tr").remove();
                 $('.check_all').prop("checked", false);

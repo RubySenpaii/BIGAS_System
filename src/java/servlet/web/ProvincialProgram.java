@@ -21,6 +21,7 @@ import dao.ProgramPlanDAO;
 import dao.ProgramProcedureDAO;
 import dao.ProgramProgressDAO;
 import dao.ProgramRequestDAO;
+import dao.ProgramSurveyDAO;
 import dao.ProgramTriggerDAO;
 import dao.SeedVarietyDAO;
 import extra.Calculator;
@@ -53,6 +54,7 @@ import object.ProgramPlan;
 import object.ProgramProcedure;
 import object.ProgramProgress;
 import object.ProgramRequest;
+import object.ProgramSurvey;
 import object.ProgramTrigger;
 import object.SeedVariety;
 
@@ -136,8 +138,12 @@ public class ProvincialProgram extends BaseServlet {
                 createProgramStep2(request, response);
                 path = "/provincial/createProgramPlan3.jsp";
             } else if (action.equals("createProgramStep3")) {
-                System.out.println("directing to createProgramPlanReview.jsp");
+                System.out.println("directing to createProgramPlanSurvey.jsp");
                 createProgramStep3(request, response);
+                path = "/provincial/createProgramPlanSurvey.jsp";
+            } else if (action.equals("createProgramStep4")) {
+                System.out.println("directing to createProgramPlanReview.jsp");
+                createProgramStep4(request, response);
                 path = "/provincial/createProgramPlanReview.jsp";
             } else if (action.equals("submitProgramDetail")) {
                 System.out.println("directing to programList.jsp");
@@ -622,7 +628,31 @@ public class ProvincialProgram extends BaseServlet {
             procedures.add(procedure);
         }
 
+        ArrayList<ProgramSurvey> programSurveys = new ProgramSurveyDAO().getListOfProgramSurveyName();
+        session.setAttribute("surveys", programSurveys);
         session.setAttribute("newProcedures", procedures);
+    }
+
+    private void createProgramStep4(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String surveyName = request.getParameter("surveyName");
+
+        ArrayList<ProgramSurvey> surveys = new ArrayList<>();
+        boolean surveyExists = new ProgramSurveyDAO().doesSurveyExist(surveyName);
+        if (!surveyExists) {
+            String[] questions = request.getParameterValues("questions");
+            for (int a = 0; a < questions.length; a++) {
+                ProgramSurvey survey = new ProgramSurvey();
+                survey.setQuestionNo(a + 1);
+                survey.setQuestion(questions[a]);
+                survey.setType(surveyName);
+                survey.setSurveyID(new ProgramSurveyDAO().getListOfProgramSurveys().size());
+                surveys.add(survey);
+            }
+        } else {
+            surveys = new ProgramSurveyDAO().getProgramSurveyQuestions(surveyName);
+        }
+        session.setAttribute("surveys", surveys);
     }
 
     private void submitReviewedProgramDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

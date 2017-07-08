@@ -214,7 +214,7 @@ public class DeployedProgramDAO {
             PreparedStatement ps = conn.prepareStatement("SELECT DP.*, M.MunicipalityName, T1.FarmCount\n"
                     + "FROM DeployedProgram DP JOIN ProgramPlan PP ON DP.ProgramPlanID = PP.ProgramPlanID\n"
                     + "                        JOIN Municipality M ON DP.AssignedMunicipality = M.MunicipalityID\n"
-                    + "                        JOIN (SELECT PB.DeployedID, COUNT(PB.FarmID) AS 'FarmCount'\n"
+                    + "                        LEFT JOIN (SELECT PB.DeployedID, COUNT(PB.FarmID) AS 'FarmCount'\n"
                     + "                              FROM ProgramBeneficiary PB\n"
                     + "                              GROUP BY PB.DeployedID) T1 ON T1.DeployedID = DP.DeployedID\n"
                     + "WHERE PP.ProgramPlanID = ?");
