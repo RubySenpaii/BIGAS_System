@@ -33,7 +33,7 @@ public class PdfViewer extends HttpServlet {
             throws ServletException, IOException {
         String fileName = request.getParameter("fileName");
         System.out.println("accessed pdf viewer with pdf file: " + fileName);
-        String pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\";
+        String pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal\\\\";
         File file = new File(pathname + fileName);
         response.setContentType("application/pdf;charset=UTF-8");
         response.setHeader("Content-Length", String.valueOf(file.length()));

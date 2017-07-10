@@ -59,7 +59,7 @@ public class MobileWeeklyPlantingReport extends HttpServlet {
                             + WeeklyPlantingReport.COLUMN_WATERLEVEL + ") "
                             + "VALUES(?, ?, ?, ?, ?, ?, ?)");
             for (int a = 0; a < weeklyPlantingReports.size(); a++) {
-                if (a <= originalSize) {
+                if (a < originalSize) {
                     //do nothing
                     updatePS.addBatch();
                 } else {

@@ -101,7 +101,7 @@ public class MunicipalReport extends BaseServlet {
 
     private void goToReportPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs");
+        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal");
         String fileNames[] = file.list();
 
         session.setAttribute("fileList", fileNames);

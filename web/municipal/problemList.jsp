@@ -77,7 +77,7 @@
                                                 <tr>
                                                     <td><%=importantProblems.get(a).getProblem().getProblemName()%></td>
                                                     <td><%=importantProblems.get(a).getBarangayName()%></td>
-                                                    <td><%=importantProblems.get(a).getFarmCount()%> farm(s)</td>
+                                                    <td><%=importantProblems.get(a).getFarmAffected()%> farm(s)</td>
                                                     <td>
                                                         <%
                                                             String column = "";

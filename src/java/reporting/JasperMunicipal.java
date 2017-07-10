@@ -28,17 +28,17 @@ import object.ProgramPlan;
  * @author RubySenpaii
  */
 public class JasperMunicipal {
-    private String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal";
+    private final String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal";
     
     public void createMunicipalWeeklyPlantingReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyPlantingReport.jasper";
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyPlantingReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         Map parameters = new HashMap();
         parameters.put("report_date", dateNow);
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
-        parameters.put("municipal_name", municipal);
+        parameters.put("municipality_name", municipal);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
         try (Connection conn = myFactory.getConnection()) {
@@ -51,11 +51,11 @@ public class JasperMunicipal {
     }
     
     public void createMunicipalWeeklyDamagesReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyDamageReport.jasper";
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyDamageReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         Map parameters = new HashMap();
-        parameters.put("report_date", "01-10-2017");
+        parameters.put("report_date", dateNow);
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
         parameters.put("municipalityName", municipal);
@@ -71,7 +71,7 @@ public class JasperMunicipal {
     }
     
     public void createMunicipalWeeklyHarvestReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyHarvestingReport.jasper";
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyHarvestingReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         Map parameters = new HashMap();
@@ -91,7 +91,7 @@ public class JasperMunicipal {
     }
     
     public void createMunicipalWeeklyCropGrowthReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyGrowthStageReport.jasper";
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyGrowthStageReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         Map parameters = new HashMap();
@@ -111,7 +111,7 @@ public class JasperMunicipal {
     }
     
     public void createMunicipalProgramReport(String preparedBy, String approvedBy, Municipality municipal, ProgramPlan programPlan) throws JRException, FileNotFoundException, SQLException {
-        String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\programReport.jasper";
+        String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\programReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
         Map parameters = new HashMap();

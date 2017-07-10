@@ -749,7 +749,7 @@ public class DamageIncidentDAO {
                     + "                      JOIN PlantingReport PR ON PR.PlantingReportID = DI.PlantingReportID\n"
                     + "                      JOIN Plot P ON PR.PlotID = P.PlotID\n"
                     + "                      JOIN Farm F ON F.FarmID = P.FarmID\n"
-                    + "                      JOIN PlotFertilizer PF ON P.PlotID = PF.PlotID\n"
+                    + "                      LEFT JOIN PlotFertilizer PF ON P.PlotID = PF.PlotID\n"
                     + "                      JOIN Barangay B ON B.BarangayID = F.BarangayID\n"
                     + "                      JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
                     + "                            FROM DamageReport DR1\n"

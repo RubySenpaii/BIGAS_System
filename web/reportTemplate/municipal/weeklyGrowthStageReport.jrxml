@@ -87,7 +87,7 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 		<field name="PlantedArea" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="report_date" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["07-08-2017"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="preparedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Cynthia Nunez"]]></defaultValueExpression>
@@ -96,7 +96,7 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="municipal" class="java.lang.String">
-		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["Paombong"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
