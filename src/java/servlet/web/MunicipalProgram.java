@@ -20,6 +20,7 @@ import dao.ProgramPlanDAO;
 import dao.ProgramProcedureDAO;
 import dao.ProgramProgressDAO;
 import dao.ProgramRequestDAO;
+import dao.ProgramSurveyDAO;
 import dao.ProgramTriggerDAO;
 import dao.SeedVarietyDAO;
 import extra.Calculator;
@@ -51,6 +52,7 @@ import object.ProgramPlan;
 import object.ProgramProcedure;
 import object.ProgramProgress;
 import object.ProgramRequest;
+import object.ProgramSurvey;
 import object.ProgramTrigger;
 import object.SeedVariety;
 
@@ -316,12 +318,17 @@ public class MunicipalProgram extends BaseServlet {
         }
 
         ArrayList<DeployedEvaluation> deployedEvaluations = new DeployedEvaluationDAO().getListOfProgramEvaluationsOnDeployedID(deployedID);
+        ArrayList<ProgramSurvey> survey = new ArrayList<>();
+        if (programPlan.getSurveyForm() != -1) {
+            survey = new ProgramSurveyDAO().getProgramSurveyQuestionsBySurveyID(programPlan.getSurveyForm());
+        }
 
         session.setAttribute("deployedID", deployedID);
         session.setAttribute("deployedProgram", deployedProgram);
         session.setAttribute("deployedProgress", deployedProgress);
         session.setAttribute("beneficiaries", beneficiaries);
         session.setAttribute("deployedEvaluations", deployedEvaluations);
+        session.setAttribute("survey", survey);
     }
 
     private void viewProgramList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -25,13 +25,24 @@ public class ProgramSurveyDAO {
         try {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
             Connection conn = myFactory.getConnection();
+            conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement("INSERT INTO " + ProgramSurvey.TABLE_NAME + " "
                     + "(" + ProgramSurvey.COLUMN_QUESTION + ", " + ProgramSurvey.COLUMN_QUESTIONNO + ", " + ProgramSurvey.COLUMN_SURVEYID + ", " 
                     + ProgramSurvey.COLUMN_TYPE + ") "
                     + "VALUES(?, ?, ?, ?)");
             
-            ps.executeUpdate();
+            for (int a = 0; a < surveys.size(); a++) {
+                ps.setString(1, surveys.get(a).getQuestion());
+                ps.setInt(2, surveys.get(a).getQuestionNo());
+                ps.setInt(3, surveys.get(a).getSurveyID());
+                ps.setString(4, surveys.get(a).getType());
+                ps.addBatch();
+            }
+            
+            int[] added = ps.executeBatch();
+            System.out.println("added rows on ProgramSurvey: " + added.length);
+            conn.commit();
             ps.close();
             conn.close();
         } catch (SQLException x) {
@@ -81,7 +92,7 @@ public class ProgramSurveyDAO {
         return surveys;
     }
     
-    public ArrayList<ProgramSurvey> getProgramSurveyQuestions(String type) {
+    public ArrayList<ProgramSurvey> getProgramSurveyQuestionsByType(String type) {
         ArrayList<ProgramSurvey> surveys = new ArrayList<>();
         try {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
@@ -89,6 +100,27 @@ public class ProgramSurveyDAO {
 
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM ProgramSurvey PS WHERE PS.Type = ?");
             ps.setString(1, type);
+
+            ResultSet rs = ps.executeQuery();
+            surveys = getDataFromResultSet(rs);
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(ProgramSurveyDAO.class.getName()).log(Level.SEVERE, null, x);
+        }
+        return surveys;
+    }
+    
+    public ArrayList<ProgramSurvey> getProgramSurveyQuestionsBySurveyID(int surveyID) {
+        ArrayList<ProgramSurvey> surveys = new ArrayList<>();
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM ProgramSurvey PS WHERE PS.SurveyID = ?");
+            ps.setInt(1, surveyID);
 
             ResultSet rs = ps.executeQuery();
             surveys = getDataFromResultSet(rs);

@@ -53,7 +53,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3">Form Name: </label>
                                                     <div class="col-md-7">
-                                                        <input class="form-control" type="text" list="surveys" onchange="input_table(this.value)">
+                                                        <input class="form-control" type="text" list="surveys" name="surveyName" onchange="input_table(this.value)">
                                                         <datalist id="surveys">
                                                             <%
                                                                 ArrayList<ProgramSurvey> surveys = (ArrayList<ProgramSurvey>) session.getAttribute("surveys");

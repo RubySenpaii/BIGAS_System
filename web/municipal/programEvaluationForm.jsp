@@ -4,6 +4,8 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.ProgramSurvey"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,236 +71,36 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <%
+                                                        ArrayList<ProgramSurvey> survey = (ArrayList<ProgramSurvey>) session.getAttribute("survey");
+                                                        for (int a = 0; a < survey.size(); a++) {
+                                                    %>
                                                     <tr>
                                                         <td>
-                                                            Materials provided aids in solving and preventing the problem.
+                                                            <%=survey.get(a).getQuestion()%>
                                                         </td>
                                                         <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer1" value='0' required>
+                                                            <input type="radio" name="quesAnswer<%=a + 1%>" value='0' required>
                                                         </td>
                                                         <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer1" value='1' required>
+                                                            <input type="radio" name="quesAnswer<%=a + 1%>" value='1' required>
                                                         </td>
                                                         <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer1" value='2' required>
+                                                            <input type="radio" name="quesAnswer<%=a + 1%>" value='2' required>
                                                         </td>
                                                         <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer1" value='3' required>
+                                                            <input type="radio" name="quesAnswer<%=a + 1%>" value='3' required>
                                                         </td>
                                                         <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer1" value='4' required>
+                                                            <input type="radio" name="quesAnswer<%=a + 1%>" value='4' required>
                                                         </td>
                                                         <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer1" value='5' required>
+                                                            <input type="radio" name="quesAnswer<%=a + 1%>" value='5' required>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Objectives of the program was clearly defined.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer2" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer2" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer2" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer2" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer2" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer2" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Activities are done were relevant to the farm.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer3" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer3" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer3" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer3" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer3" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer3" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            The program was easy to understand and apply.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer4" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer4" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer4" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer4" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer4" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer4" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Programs implemented improves farmer's knowledge and skills in farming.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer5" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer5" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer5" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer5" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer5" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer5" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Materials are received in good condition and in a timely manner.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer6" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer6" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer6" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer6" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer6" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer6" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            Time allotted was sufficient.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer7" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer7" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer7" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer7" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer7" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer7" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            The program met farmer's expectations.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer8" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer8" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer8" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer8" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer8" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer8" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            The program is recommendable to other farmers.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer9" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer9" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer9" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer9" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer9" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer9" value='5' required>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            The program helped farmers identify the problem.
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer10" value='0' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer10" value='1' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer10" value='2' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer10" value='3' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer10" value='4' required>
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            <input type="radio" name="quesAnswer10" value='5' required>
-                                                        </td>
-                                                    </tr>
+                                                    <%
+                                                        }
+                                                    %>
                                                 </tbody>
                                             </table>
                                             

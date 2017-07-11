@@ -4,6 +4,7 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.ProgramSurvey"%>
 <%@page import="extra.Calculator"%>
 <%@page import="object.DeployedEvaluation"%>
 <%@page import="object.DeployedProgram"%>
@@ -273,49 +274,51 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th style='width: 15%'>Evaluator's Name</th>
-                                                                    <th style='width: 7%'>Question 1</th>
-                                                                    <th style='width: 7%'>Question 2</th>
-                                                                    <th style='width: 7%'>Question 3</th>
-                                                                    <th style='width: 7%'>Question 4</th>
-                                                                    <th style='width: 7%'>Question 5</th>
-                                                                    <th style='width: 7%'>Question 6</th>
-                                                                    <th style='width: 7%'>Question 7</th>
-                                                                    <th style='width: 7%'>Question 8</th>
-                                                                    <th style='width: 7%'>Question 9</th>
-                                                                    <th style='width: 7%'>Question 10</th>
-                                                                    <th style='width: 20%'>Rating</th>
+                                                                        <%
+                                                                            ArrayList<ProgramSurvey> survey = (ArrayList<ProgramSurvey>) session.getAttribute("survey");
+                                                                            for (int a = 0; a < survey.size(); a++) {
+                                                                        %>
+                                                                    <th style='width: 7%'>Question <%=a + 1%></th>
+                                                                        <%
+                                                                            }
+                                                                        %>
+                                                                    <th style="width: 15%">Remarks</th>
+                                                                    <th style='width: 15%'>Rating</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <%
                                                                     ArrayList<DeployedEvaluation> evaluations = (ArrayList<DeployedEvaluation>) session.getAttribute("deployedEvaluations");
+                                                                    double averageRating = 0;
+                                                                    Calculator calc = new Calculator();
                                                                     for (int a = 0; a < evaluations.size(); a++) {
-                                                                        Calculator calc = new Calculator();
                                                                         double result = calc.getRespondentResult(evaluations.get(a).getEvaluationValues());
+                                                                        averageRating += result;
                                                                         String rating = calc.getEffectivityResult(result);
                                                                 %>
                                                                 <tr>
                                                                     <td><%=evaluations.get(a).getRespondentName()%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(0)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(2)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(4)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(6)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(8)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(10)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(12)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(14)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(16)%></td>
-                                                                    <td><%=evaluations.get(a).getEvaluationValues().charAt(18)%></td>
+                                                                    <%
+                                                                        String[] answers = evaluations.get(a).getEvaluationValues().split(",");
+                                                                        for (int b = 0; b < answers.length; b++) {
+                                                                    %>
+                                                                    <td><%=answers[b]%></td>
+                                                                    <%
+                                                                        }
+                                                                    %>
+                                                                    <td><%=evaluations.get(a).getFeedback()%></td>
                                                                     <td><%=rating%> (<%=formatter.doubleToString(result)%>)</td>
                                                                 </tr>
                                                                 <%
                                                                     }
+                                                                    averageRating /= evaluations.size();
+                                                                    String avgRating = calc.getEffectivityResult(averageRating);
                                                                 %>
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <th colspan="11">Total</th>
-                                                                    <th></th>
+                                                                    <th colspan="<%=survey.size() + 2%>">Average Rating</th>
+                                                                    <th><%=avgRating%> (<%=formatter.doubleToString(averageRating)%>)</th>
                                                                 </tr>
                                                             </tfoot>
                                                         </table>

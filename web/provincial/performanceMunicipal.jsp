@@ -73,7 +73,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Production for San Rafael'
+                        text: 'Production for Bulacan'
                     },
                     xAxis: {
                         type: 'category',

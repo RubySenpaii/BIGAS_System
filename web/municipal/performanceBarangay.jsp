@@ -67,7 +67,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Production for San Rafael'
+                        text: 'Production for ' + values[0].municipal
                     },
                     xAxis: {
                         type: 'category',

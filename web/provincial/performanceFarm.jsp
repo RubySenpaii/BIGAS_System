@@ -46,7 +46,6 @@
                 });
 
                 var pieDetail = [];
-                alert(values[0].farms.length);
                 for (var a = 0; a < values[0].farms.length; a++) {
 //                    categories.push(values[0].farms[a].farmName);
 //                    farmValues.push(values[0].farms[a].harvest);

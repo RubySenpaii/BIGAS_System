@@ -63,13 +63,21 @@ public class MunicipalEvaluation extends BaseServlet {
         int deployedID = (int) session.getAttribute("deployedID");
         
         String result = "";
-        for (int a = 1; a <= 10; a++) {
+//        for (int a = 1; a <= 10; a++) {
+//            String value = request.getParameter("quesAnswer" + a);
+//            result += value;
+//            if (a < 10) {
+//                result += ",";
+//            }
+//        }
+        
+        int a = 1;
+        do {
             String value = request.getParameter("quesAnswer" + a);
-            result += value;
-            if (a < 10) {
-                result += ",";
-            }
-        }
+            result += value + ",";
+            a++;
+        } while (request.getParameter("quesAnswer" + a) != null);
+        result = result.substring(0, result.length() - 1);
         
         String feedback = request.getParameter("feedback");
         if (feedback.equals("") || feedback.isEmpty()) {

@@ -141,17 +141,17 @@
                                                             <p style="font-size: medium"><b>Date Affected: </b><%=dateAffected%></p>
                                                         </div>
                                                     </div>
-                                                    <%
-                                                        ArrayList<DeployedProgram> deployedPrograms = (ArrayList<DeployedProgram>) session.getAttribute("deployedPrograms");
-                                                        for (int a = 0; a < deployedPrograms.size(); a++) {
+                                                   <%
+                                                        DeployedProgram deployedProgram = (DeployedProgram) session.getAttribute("deployedProgram");
+                                                        if (!deployedProgram.getProgramName().equals("N/A")) {
                                                     %>
                                                     <div class="ln_solid"></div>
                                                     <div class="row">
                                                         <div class="col-md-3">
-                                                            <p style="font-size: medium"><b>Program Deployed: </b><%=deployedPrograms.get(a).getProgramName()%></p>
+                                                            <p style="font-size: medium"><b>Program Deployed: </b><%=deployedProgram.getProgramName()%></p>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <p style="font-size: medium"><b>Date Started: </b><%=deployedPrograms.get(a).getDateStarted()%></p>
+                                                            <p style="font-size: medium"><b>Date Started: </b><%=deployedProgram.getDateStarted()%></p>
                                                         </div>
                                                     </div>
                                                     <%

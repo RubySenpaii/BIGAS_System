@@ -44,7 +44,7 @@ public class PAOCreateSurvey extends HttpServlet {
         String type = request.getParameter("type");
         System.out.println("parameter received: " + type);
         JSONArray jarrraySurvey = new JSONArray();
-        ArrayList<ProgramSurvey> surveys = new ProgramSurveyDAO().getProgramSurveyQuestions(type);
+        ArrayList<ProgramSurvey> surveys = new ProgramSurveyDAO().getProgramSurveyQuestionsByType(type);
         for (int a = 0; a < surveys.size(); a++) {
             try {
                 JSONObject survey = new JSONObject();

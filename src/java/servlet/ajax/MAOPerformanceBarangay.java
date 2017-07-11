@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import object.Barangay;
+import object.Municipality;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class MAOPerformanceBarangay extends HttpServlet {
         
         JSONArray jarrayBarangays = new JSONArray();
         int year = (int) session.getAttribute("year");
+        Municipality municipal = (Municipality) session.getAttribute("municipality");
         ArrayList<Barangay> barangays = (ArrayList<Barangay>) session.getAttribute("barangays");
         for (int a = 0; a < barangays.size(); a++) {
             try {
@@ -57,6 +59,7 @@ public class MAOPerformanceBarangay extends HttpServlet {
         JSONObject jsonObjects = new JSONObject();
         try {
             jsonObjects.put("barangays", jarrayBarangays);
+            jsonObjects.put("municipal", municipal.getMunicipalityName());
 
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");

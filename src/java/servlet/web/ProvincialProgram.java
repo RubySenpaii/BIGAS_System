@@ -101,9 +101,9 @@ public class ProvincialProgram extends BaseServlet {
                 System.out.println("deploy programs");
                 boolean success = deployProgram(request, response);
                 if (success) {
-                    path = "/MunicipalProgram?action=goToListOfOngoingPrograms";
+                    path = "/ProvincialProgram?action=goToListOfOngoingPrograms";
                 } else {
-                    path = "/MunicipalHomepage?action=goToHomePage";
+                    path = "/ProvincialHomepage?action=goToHomePage";
                 }
             } else if (action.equals("viewProblemRecommendation")) {
                 System.out.println("directing to problemList.jsp");
@@ -112,7 +112,7 @@ public class ProvincialProgram extends BaseServlet {
             } else if (action.equals("updateProgress")) {
                 System.out.println("directing to programDeployedDetail.jsp");
                 int deployedID = updateProgress(request, response);
-                path = "/MunicipalProgram?action=viewDeployedProgramDetails&deployedID=" + deployedID;
+                path = "/ProvincialProgram?action=viewDeployedProgramDetails&deployedID=" + deployedID;
             } else if (action.equals("viewRequestList")) {
                 System.out.println("directing to programRequestList.jsp");
                 viewRequestList(request, response);
@@ -529,7 +529,7 @@ public class ProvincialProgram extends BaseServlet {
         String problem = request.getParameter("problem");
 
         Problem problemInfo = new ProblemDAO().getProblemWithName(problem);
-        int programID = new ProgramPlanDAO().getListOfProgramPlans().size() + 1;
+        int programID = new ProgramPlanDAO().getListOfProgramPlans().size() + 3;
 
         ProgramPlan programPlan = new ProgramPlan();
         programPlan.setProgramPlanID(programID);
@@ -646,13 +646,14 @@ public class ProvincialProgram extends BaseServlet {
                 survey.setQuestionNo(a + 1);
                 survey.setQuestion(questions[a]);
                 survey.setType(surveyName);
-                survey.setSurveyID(new ProgramSurveyDAO().getListOfProgramSurveys().size());
+                survey.setSurveyID(new ProgramSurveyDAO().getListOfProgramSurveyName().size() + 2);
                 surveys.add(survey);
             }
         } else {
-            surveys = new ProgramSurveyDAO().getProgramSurveyQuestions(surveyName);
+            surveys = new ProgramSurveyDAO().getProgramSurveyQuestionsByType(surveyName);
         }
         session.setAttribute("surveys", surveys);
+        session.setAttribute("surveyExists", surveyExists);
     }
 
     private void submitReviewedProgramDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -662,17 +663,26 @@ public class ProvincialProgram extends BaseServlet {
         ArrayList<ProgramTrigger> triggers = (ArrayList<ProgramTrigger>) session.getAttribute("newTriggers");
         ArrayList<ProgramProcedure> procedures = (ArrayList<ProgramProcedure>) session.getAttribute("newProcedures");
 
-        boolean addPlan = new ProgramPlanDAO().addProgramPlan(programPlan);
-        System.out.println("add plan success: " + addPlan);
-        if (addPlan) {
-            for (int a = 0; a < triggers.size(); a++) {
-                boolean addTriggers = new ProgramTriggerDAO().addProgramTrigger(triggers.get(a));
-                System.out.println("trigger " + a + " added: " + addTriggers);
-            }
+        boolean surveyExists = (boolean) session.getAttribute("surveyExists");
+        if (!surveyExists) {
+            ArrayList<ProgramSurvey> survey = (ArrayList<ProgramSurvey>) session.getAttribute("surveys");
+            boolean surveyCreated = new ProgramSurveyDAO().addProgramSurvey(survey);
+            System.out.println("survey created: " + surveyCreated);
 
-            for (int a = 0; a < procedures.size(); a++) {
-                boolean addProcedure = new ProgramProcedureDAO().addProgramProcedure(procedures.get(a));
-                System.out.println("procedure " + a + " added: " + addProcedure);
+            if (surveyCreated) {
+                boolean addPlan = new ProgramPlanDAO().addProgramPlan(programPlan);
+                System.out.println("add plan success: " + addPlan);
+                if (addPlan) {
+                    for (int a = 0; a < triggers.size(); a++) {
+                        boolean addTriggers = new ProgramTriggerDAO().addProgramTrigger(triggers.get(a));
+                        System.out.println("trigger " + a + " added: " + addTriggers);
+                    }
+
+                    for (int a = 0; a < procedures.size(); a++) {
+                        boolean addProcedure = new ProgramProcedureDAO().addProgramProcedure(procedures.get(a));
+                        System.out.println("procedure " + a + " added: " + addProcedure);
+                    }
+                }
             }
         }
     }
