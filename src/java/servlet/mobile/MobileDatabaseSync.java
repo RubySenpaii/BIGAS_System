@@ -31,6 +31,7 @@ import dao.ProgramPlanDAO;
 import dao.ProgramProcedureDAO;
 import dao.ProgramProgressDAO;
 import dao.ProgramRequestDAO;
+import dao.ProgramSurveyDAO;
 import dao.ProgramTargetDAO;
 import dao.ProgramTriggerDAO;
 import dao.SeedVarietyDAO;
@@ -78,6 +79,7 @@ import object.ProgramPlan;
 import object.ProgramProcedure;
 import object.ProgramProgress;
 import object.ProgramRequest;
+import object.ProgramSurvey;
 import object.ProgramTarget;
 import object.ProgramTrigger;
 import object.SeedVariety;
@@ -221,6 +223,10 @@ public class MobileDatabaseSync extends HttpServlet {
             System.out.println("send weeklyPlantingReport data to mobile");
             ArrayList<WeeklyPlantingReport> weeklyPlantingReports = new WeeklyPlantingReportDAO().getListOfWeeklyPlantingReports();
             response.getWriter().write(new Gson().toJson(weeklyPlantingReports));
+        } else if (dataReceived.equals("programSurvey")) {
+            System.out.println("send programSurvey data to mobile");
+            ArrayList<ProgramSurvey> surveys = new ProgramSurveyDAO().getListOfProgramSurveys();
+            response.getWriter().write(new Gson().toJson(surveys));
         } else if (dataReceived.equals("getData")) {
 //            retrieveMunicipalityDataFromMobile(request, response);
 //            retrieveBarangayDataFromMobile(request, response);

@@ -72,7 +72,7 @@ GROUP BY IT2.ProblemName]]>
 		</group>
 	</subDataset>
 	<parameter name="report_date" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["08-10-2017"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="preparedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Cynthia Nunez"]]></defaultValueExpression>

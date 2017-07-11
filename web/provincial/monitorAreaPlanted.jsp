@@ -197,7 +197,7 @@
                                                         %>
                                                         <tr>
                                                             <td><%=municipalities.get(a).getMunicipalityName()%></td>
-                                                            <td><%=new Formatter().doubleToString(municipalities.get(a).getPlantableArea()) + " ha"%></td>
+                                                            <td><%=new Formatter().doubleToString(municipalities.get(a).getArea()) + " ha"%></td>
                                                             <td><%=new Formatter().doubleToString(municipalities.get(a).getPlantedArea()) + " ha"%></td>
                                                             <td><%=new Formatter().doubleToString(municipalities.get(a).getUnplantedArea()) + " ha"%></td>
                                                             <td><%=new Formatter().doubleToString(municipalities.get(a).getMinorDamagedArea()) + " ha"%></td>

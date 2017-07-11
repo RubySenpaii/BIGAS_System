@@ -149,18 +149,25 @@
                     dataType: 'JSON',
                     success: function (json_data) {
                         json_values = json_data;
-                        var table_data;
-                        var surveys = json_values[0].surveys;
-                        for (var a = 0; a < surveys.length; a++) {
-                            console.log(surveys[a].question);
-                            var survey_count = a + 1;
+                        var isSuccessful = json_values[0].success;
+                        if (isSuccessful) {
+                            var table_data = "<thead><tr><th style='width: 2%'><input type='checkbox' class='check_all' onclick='select_all()'></th><th style='width: 10%'>Question No</th><th>Question</th></tr></thead><tbody>";
+                            var surveys = json_values[0].surveys;
+                            for (var a = 0; a < surveys.length; a++) {
+                                var survey_count = a + 1;
+                                var tempData = "";
+                                tempData += "<tr><td><input type='checkbox' class='case'/></td><td><span id='snum" + a + "'>" + survey_count + "</span></td>";
+                                tempData += "<td><textarea style='width: 100% ; resize: none' rows='1' maxlength='600' name='questions'>" + surveys[a].question + "</textarea></td></tr>"
+                                table_data += tempData;
+                            }
+                            table_data += "</tbody>";
+                            $('table').html(table_data);
+                        } else {
                             var tempData = "";
-                            tempData += "<tr><td><input type='checkbox' class='case'/></td><td><span id='snum" + a + "'>" + survey_count + "</span></td>";
-                            tempData += "<td><textarea style='width: 100% ; resize: none' rows='1' maxlength='600' name='questions'>" + surveys[a].question + "</textarea></td></tr>"
-                            table_data += tempData;
+                            tempData += "<thead><tr><th style='width: 2%'><input type='checkbox' class='check_all' onclick='select_all()'></th><th style='width: 10%'>Question No</th><th>Question</th></tr></thead>";
+                            tempData += "<tbody><tr><td><input type='checkbox' class='case'></td><td><span id='snum'>1</span></td><td><textarea style='width: 100%; resize: none' rows='1' maxlength='600' name='questions'></textarea></td></tr></tbody>"
+                            $('table').html(tempData);
                         }
-
-                        $('table').html(table_data);
                     },
                     async: false
                 });

@@ -218,7 +218,7 @@ public class BarangayDAO {
                     + "                          JOIN Plot P ON P.FarmID = F.FarmID\n"
                     + "      WHERE M.MunicipalityID = ? AND P.PlotPlanted != -1\n"
                     + "      GROUP BY M.MunicipalityName, B.BarangayName) T1\n"
-                    + "LEFT JOIN (SELECT IT1.MunicipalityName, IT1.BarangayName, SUM(IT1.PlotSize) AS 'PlantedArea', IT1.MinorDamaged, IT1.MajorDamaged\n"
+                    + "LEFT JOIN (SELECT IT1.MunicipalityName, IT1.BarangayName, SUM(IT1.PlotSize) AS 'PlantedArea', SUM(IT1.MinorDamaged) AS 'MinorDamaged', SUM(IT1.MajorDamaged) AS 'MajorDamaged'\n"
                     + "		  FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')), SUM(DR.AreaAffected) AS 'MinorDamaged', SUM(DR.AreaDamaged) AS 'MajorDamaged'\n"
                     + "			FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID\n"
                     + "                                        JOIN Farm F ON P.FarmID = F.FarmID\n"

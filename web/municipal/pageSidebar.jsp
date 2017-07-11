@@ -9,7 +9,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><span>&nbsp;&nbsp;B.I.G.A.S. System</span></a>
+            <a href="/BIGAS_System/MunicipalHomepage?action=goToHomePage" class="site_title"><span>&nbsp;&nbsp;B.I.G.A.S. System</span></a>
         </div>
         <div class="clearfix"></div>
 

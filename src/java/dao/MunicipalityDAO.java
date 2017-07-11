@@ -215,20 +215,20 @@ public class MunicipalityDAO {
             Connection conn = myFactory.getConnection();
 
             PreparedStatement ps = conn.prepareStatement("SELECT T1.MunicipalityName, T1.TotalArea, T2.PlantedArea, T2.MinorDamaged, T2.MajorDamaged\n"
-                    + "FROM (SELECT M.MunicipalityName, B.BarangayName, SUM(P.PlotSize) AS 'TotalArea'\n"
+                    + "FROM (SELECT M.MunicipalityName, SUM(P.PlotSize) AS 'TotalArea'\n"
                     + "	     FROM Municipality M JOIN Barangay B ON M.MunicipalityID = B.MunicipalityID\n"
                     + "		      	         JOIN Farm F ON F.BarangayID = B.BarangayID\n"
                     + "                          JOIN Plot P ON P.FarmID = F.FarmID\n"
                     + "      GROUP BY M.MunicipalityName) T1\n"
-                    + "LEFT JOIN (SELECT IT1.MunicipalityName, SUM(IT1.PlotSize) AS 'PlantedArea', IT1.MinorDamaged, IT1.MajorDamaged\n"
-                    + "		  FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')), SUM(DR.AreaAffected) AS 'MinorDamaged', SUM(DR.AreaDamaged) AS 'MajorDamaged'\n"
+                    + "LEFT JOIN (SELECT IT1.MunicipalityName, SUM(IT1.PlotSize) AS 'PlantedArea', SUM(IT1.MinorDamaged) AS 'MinorDamaged', SUM(IT1.MajorDamaged) AS 'MajorDamaged'\n"
+                    + "		  FROM (SELECT PR.*, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')), SUM(DR.AreaAffected) AS 'MinorDamaged', SUM(DR.AreaDamaged) AS 'MajorDamaged'\n"
                     + "			FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID\n"
                     + "                                        JOIN Farm F ON P.FarmID = F.FarmID\n"
                     + "                                        JOIN Barangay B ON F.BarangayID = B.BarangayID\n"
                     + "                                        JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID\n"
                     + "                                        LEFT JOIN DamageIncident DI ON PR.PlantingReportID = DI.PlantingReportID\n"
-                    + "                                        JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID\n"
-                    + "                                        JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
+                    + "                                        LEFT JOIN DamageReport DR ON DI.DamageIncidentID = DR.DamageIncidentID\n"
+                    + "                                        LEFT JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
                     + "                                              FROM DamageReport DR1\n"
                     + "                                              GROUP BY DR1.DamageIncidentID) IDR ON IDR.DamageIncidentID = DR.DamageIncidentID AND IDR.RecentDate = STR_TO_DATE(DR.DateReported,'%m-%d-%Y')\n"
                     + "                 WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE(?, '%m-%d-%Y')\n"
@@ -249,7 +249,7 @@ public class MunicipalityDAO {
                 municipality.setMinorDamagedArea(rs.getDouble("MinorDamaged"));
                 municipality.setMajorDamagedArea(rs.getDouble("MajorDamaged"));
                 municipality.setUnplantedArea(rs.getDouble("TotalArea") - rs.getDouble("PlantedArea"));
-                municipalities .add(municipality);
+                municipalities.add(municipality);
             }
 
             rs.close();
@@ -268,7 +268,7 @@ public class MunicipalityDAO {
             Connection conn = myFactory.getConnection();
 
             PreparedStatement ps = conn.prepareStatement("SELECT T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea' "
-                    + "FROM (SELECT PR.*, B.BarangayName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')) "
+                    + "FROM (SELECT PR.*, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y')) "
                     + "      FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID "
                     + "                             JOIN Farm F ON P.FarmID = F.FarmID "
                     + "                             JOIN Barangay B ON F.BarangayID = B.BarangayID "

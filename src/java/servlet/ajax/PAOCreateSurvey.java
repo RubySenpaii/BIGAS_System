@@ -40,7 +40,7 @@ public class PAOCreateSurvey extends HttpServlet {
             throws ServletException, IOException {
         //get additional info for survey
         HttpSession session = request.getSession();
-        
+
         String type = request.getParameter("type");
         System.out.println("parameter received: " + type);
         JSONArray jarrraySurvey = new JSONArray();
@@ -56,6 +56,11 @@ public class PAOCreateSurvey extends HttpServlet {
         }
         JSONObject jsonObjects = new JSONObject();
         try {
+            if (surveys.size() > 0) {
+                jsonObjects.put("success", true);
+            } else {
+                jsonObjects.put("success", false);
+            }
             jsonObjects.put("surveys", jarrraySurvey);
 
             response.setContentType("application/json");
