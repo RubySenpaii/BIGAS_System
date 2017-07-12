@@ -30,7 +30,7 @@ import object.ProgramPlan;
 public class JasperProvincial {
     private String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\provincial";
     
-    public void createMunicipalWeeklyPlantingReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
+    public void createProvincialWeeklyPlantingReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\provincial\\\\weeklyPlantingReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -49,7 +49,7 @@ public class JasperProvincial {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
     
-    public void createMunicipalWeeklyDamagesReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
+    public void createProvincialWeeklyDamagesReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\provincial\\\\weeklyDamageReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -68,7 +68,7 @@ public class JasperProvincial {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
     
-    public void createMunicipalWeeklyHarvestReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
+    public void createProvincialWeeklyHarvestReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\provincial\\\\weeklyHarvestingReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -87,7 +87,7 @@ public class JasperProvincial {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
     
-    public void createMunicipalWeeklyCropGrowthReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
+    public void createProvincialWeeklyCropGrowthReport(String preparedBy, String approvedBy) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\provincial\\\\weeklyGrowthStageReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -106,7 +106,7 @@ public class JasperProvincial {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
     
-    public void createMunicipalProgramReport(String preparedBy, String approvedBy, Municipality municipal, ProgramPlan programPlan) throws JRException, FileNotFoundException, SQLException {
+    public void createProvincialProgramReport(String preparedBy, String approvedBy, ProgramPlan programPlan) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\provincial\\\\programReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -122,7 +122,7 @@ public class JasperProvincial {
             JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
             jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
         }
-        String filename = municipal + programPlan.getProgramName() + "ProgramReport" + dateNow;
+        String filename = "Bulacan" + programPlan.getProgramName() + "ProgramReport" + dateNow;
         filename = filename.replaceAll(" ", "");
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }

@@ -12,9 +12,11 @@ import dao.PlotDAO;
 import extra.Calculator;
 import extra.GenericObject;
 import extra.JasperJava;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +31,7 @@ import net.sf.jasperreports.engine.JRException;
 import object.Employee;
 import object.Municipality;
 import object.PlantingReport;
+import reporting.JasperProvincial;
 
 /**
  *
@@ -40,16 +43,54 @@ public class ProvincialReport extends BaseServlet {
     protected void servletAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         ServletContext context = getServletContext();
-
+        
         String action = request.getParameter("action");
         String path = "/homepage.jsp";
+        
         Employee userLogged = (Employee) session.getAttribute("userLogged");
+        String preparedBy = userLogged.getFirstName() + " " + userLogged.getMiddleName().charAt(0) + ". " + userLogged.getLastName();
+        String approvedBy = "Cynthia N. Nunez";
         if (userLogged.getOfficeLevel().equals("PAO")) {
             if (action.equals("viewReports")) {
                 System.out.println("directing to reports.jsp");
-                
-                generateReports(request, response);
+                goToReportPage(request, response);
                 path = "/provincial/report.jsp";
+            } else if (action.equals("createPlanting")) {
+                path = "/ProvincialReport?action=viewReports";
+                try {
+                    new JasperProvincial().createProvincialWeeklyPlantingReport(preparedBy, approvedBy);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
+            } else if (action.equals("createGrowthStage")) {
+                path = "/ProvincialReport?action=viewReports";
+                try {
+                    new JasperProvincial().createProvincialWeeklyCropGrowthReport(preparedBy, approvedBy);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
+            } else if (action.equals("createDamages")) {
+                path = "/ProvincialReport?action=viewReports";
+                try {
+                    new JasperProvincial().createProvincialWeeklyDamagesReport(preparedBy, approvedBy);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
+            } else if (action.equals("createHarvest")) {
+                path = "/ProvincialReport?action=viewReports";
+                try {
+                    new JasperProvincial().createProvincialWeeklyHarvestReport(preparedBy, approvedBy);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
             }
         } else {
             //redirect to restricted access
@@ -57,6 +98,14 @@ public class ProvincialReport extends BaseServlet {
 
         RequestDispatcher rd = context.getRequestDispatcher(path);
         rd.forward(request, response);
+    }
+    
+    private void goToReportPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\provincial");
+        String fileNames[] = file.list();
+
+        session.setAttribute("fileList", fileNames);
     }
     
     private void generateReports(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {

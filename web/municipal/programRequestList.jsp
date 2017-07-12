@@ -62,22 +62,23 @@
                                                                 <h4 class="modal-title" id="myModalLabel2">Program Request</h4>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <label for="requestDetail">Request Name * :</label>
-                                                                <input type="text" id="requestDetail" class="form-control" name="requestDetail" required />
-                                                                <label for="requestDetail">Municipality Name * :</label>
-                                                                <select id="requestDetail" class="form-control" name="requestDetail" required>
+                                                                <label for="requestName">Request Name * :</label>
+                                                                <input type="text" id="requestName" class="form-control" name="requestName" required />
+                                                                <label for="municipal">Municipality Name * :</label>
+                                                                <select id="municipal" class="form-control" name="municipal" required>
                                                                     <option><%=((Municipality) session.getAttribute("municipal")).getMunicipalityName()%></option>
                                                                 </select>
-                                                                <label for="requestDetail">Problem Name * :</label>
-                                                                <input type="text" id="requestDetail" class="form-control" name="requestDetail" required />
-                                                                <label for="requestDetail">Farms Affected * :</label>
-                                                                <input type="text" id="requestDetail" class="form-control" name="requestDetail" required />
+                                                                <label for="problemName">Problem Name * :</label>
+                                                                <input type="text" id="problemName" class="form-control" name="problemName" required />
+                                                                <label for="farmsAffected">Farms Affected * :</label>
+                                                                <input type="number" id="farmsAffected" class="form-control" name="farmsAffected" required />
                                                                 <label for="requestDetail">Damages * :</label>
                                                                 <div class="form-control">
-                                                                    <select class="col-md-4">
+                                                                    <select class="col-md-4" name="damageType">
                                                                         <option>Minor Damages</option>
+                                                                        <option>Major Damages</option>
                                                                     </select>
-                                                                    <input type="text" class="col-md-8">
+                                                                    <input type="text" name="damageValue" class="col-md-8">
                                                                 </div>
                                                                 <label for="requestDetail">Description * :</label>
                                                                 <textarea id="requestDetail" class="form-control" name="requestDetail" required rows="7"></textarea>
@@ -116,7 +117,7 @@
                                                     <td><%=requests.get(a).getRequestBy()%></td>
                                                     <td><%=requests.get(a).getDateRequested()%></td>
                                                     <td><%=requests.get(a).getRequestStatus()%></td>
-                                                    <td><%=requests.get(a).getProgramPlanID()%></td>
+                                                    <td><%=requests.get(a).getProgramName()%></td>
                                                 </tr>
                                                 <%
                                                     }

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import object.ProgramPlan;
 import object.ProgramRequest;
 
 /**
@@ -20,15 +21,15 @@ import object.ProgramRequest;
  * @author RubySenpaii
  */
 public class ProgramRequestDAO {
-    
+
     public boolean addProgramRequest(ProgramRequest programRequest) {
         try {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
             Connection conn = myFactory.getConnection();
 
             PreparedStatement ps = conn.prepareStatement("INSERT INTO " + ProgramRequest.TABLE_NAME + " "
-                    + "(" + ProgramRequest.COLUMN_DATEREQUESTED + ", " + ProgramRequest.COLUMN_PROGRAMPLANID + ", " + ProgramRequest.COLUMN_REQUESTBY + ", " 
-                    + ProgramRequest.COLUMN_REQUESTDETAIL + ", " + ProgramRequest.COLUMN_REQUESTID + ", " + ProgramRequest.COLUMN_MUNICIPALITYID + ", " 
+                    + "(" + ProgramRequest.COLUMN_DATEREQUESTED + ", " + ProgramRequest.COLUMN_PROGRAMPLANID + ", " + ProgramRequest.COLUMN_REQUESTBY + ", "
+                    + ProgramRequest.COLUMN_REQUESTDETAIL + ", " + ProgramRequest.COLUMN_REQUESTID + ", " + ProgramRequest.COLUMN_MUNICIPALITYID + ", "
                     + ProgramRequest.COLUMN_REQUESTSTATUS + ") "
                     + "VALUES(?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, programRequest.getDateRequested());
@@ -48,14 +49,14 @@ public class ProgramRequestDAO {
         }
         return true;
     }
-    
+
     public boolean updateProgramRequest(ProgramRequest programRequest) {
         try {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
             Connection conn = myFactory.getConnection();
-            
-            PreparedStatement ps = conn.prepareStatement("UPDATE " + ProgramRequest.TABLE_NAME + 
-                    " SET " + ProgramRequest.COLUMN_DATEREQUESTED + " = ?, " + ProgramRequest.COLUMN_PROGRAMPLANID + " = ?, " + ProgramRequest.COLUMN_REQUESTBY + " = ?, "
+
+            PreparedStatement ps = conn.prepareStatement("UPDATE " + ProgramRequest.TABLE_NAME
+                    + " SET " + ProgramRequest.COLUMN_DATEREQUESTED + " = ?, " + ProgramRequest.COLUMN_PROGRAMPLANID + " = ?, " + ProgramRequest.COLUMN_REQUESTBY + " = ?, "
                     + ProgramRequest.COLUMN_REQUESTDETAIL + " = ?, " + ProgramRequest.COLUMN_REQUESTID + " = ?, " + ProgramRequest.COLUMN_MUNICIPALITYID + " = ?, "
                     + ProgramRequest.COLUMN_REQUESTSTATUS + " = ? "
                     + "WHERE " + ProgramRequest.COLUMN_REQUESTID + " = ?");
@@ -67,14 +68,15 @@ public class ProgramRequestDAO {
             ps.setInt(6, programRequest.getMunicipalityID());
             ps.setString(7, programRequest.getRequestStatus());
             ps.setInt(8, programRequest.getRequestID());
-            
+
             ps.executeUpdate();
             ps.close();
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProgramRequestDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } return true;
+        }
+        return true;
     }
 
     public ArrayList<ProgramRequest> getListOfProgramRequests() {
@@ -96,7 +98,7 @@ public class ProgramRequestDAO {
         }
         return programRequests;
     }
-    
+
     public ArrayList<ProgramRequest> getListOfProgramRequestsInMunicipality(int municipalityID) {
         ArrayList<ProgramRequest> programRequests = new ArrayList<>();
         try {
@@ -107,7 +109,19 @@ public class ProgramRequestDAO {
             ps.setInt(1, municipalityID);
 
             ResultSet rs = ps.executeQuery();
-            programRequests = getDataFromResultSet(rs);
+            while (rs.next()) {
+                ProgramRequest programRequest = new ProgramRequest();
+                programRequest.setDateRequested(rs.getString(ProgramRequest.COLUMN_DATEREQUESTED));
+                programRequest.setProgramPlanID(rs.getInt(ProgramRequest.COLUMN_PROGRAMPLANID));
+                programRequest.setRequestBy(rs.getString(ProgramRequest.COLUMN_REQUESTBY));
+                programRequest.setRequestDetail(rs.getString(ProgramRequest.COLUMN_REQUESTDETAIL));
+                programRequest.setRequestID(rs.getInt(ProgramRequest.COLUMN_REQUESTID));
+                programRequest.setRequestStatus(rs.getString(ProgramRequest.COLUMN_REQUESTSTATUS));
+                programRequest.setMunicipalityID(rs.getInt(ProgramRequest.COLUMN_MUNICIPALITYID));
+                ProgramPlan programPlan = new ProgramPlanDAO().getProgramPlanDetail(programRequest.getProgramPlanID());
+                programRequest.setProgramName(programPlan.getProgramName());
+                programRequests.add(programRequest);
+            }
 
             rs.close();
             ps.close();

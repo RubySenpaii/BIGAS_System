@@ -13,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import object.Employee;
 
 /**
  *
@@ -31,9 +33,17 @@ public class PdfViewer extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Employee userLogged = (Employee) session.getAttribute("userLogged");
+
         String fileName = request.getParameter("fileName");
         System.out.println("accessed pdf viewer with pdf file: " + fileName);
-        String pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal\\\\";
+        String pathname = "";
+        if (userLogged.getOfficeLevel().equals("MAO")) {
+            pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal\\\\";
+        } else if (userLogged.getOfficeLevel().equals("PAO")) {
+            pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\provincial\\\\";
+        }
         File file = new File(pathname + fileName);
         response.setContentType("application/pdf;charset=UTF-8");
         response.setHeader("Content-Length", String.valueOf(file.length()));

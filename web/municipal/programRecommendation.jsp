@@ -4,6 +4,7 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.Municipality"%>
 <%@page import="extra.ImportantProblem"%>
 <%@page import="extra.Formatter"%>
 <%@page import="object.ProgramPlan"%>
@@ -131,19 +132,19 @@
                                                                 <h4 class="modal-title" id="myModalLabel2">Program Request</h4>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <label for="requestDetail">Request Name * :</label>
-                                                                <input type="text" id="requestDetail" class="form-control" name="requestDetail" value="Request program for <%=importantProblem.getProblem().getProblemName()%>" required />
-                                                                <label for="barangayName">Barangay Name * :</label>
-                                                                <select id="barangayName" class="form-control" name="requestDetail" required disabled>
-                                                                    <option>Barangay San Rafael</option>
+                                                                <label for="requestName">Request Name * :</label>
+                                                                <input type="text" id="requestName" class="form-control" name="requestName" value="Request program for <%=importantProblem.getProblem().getProblemName()%>" required />
+                                                                <label for="municipal">Municipality * :</label>
+                                                                <select id="municipal" class="form-control" name="municipal" required disabled>
+                                                                    <option><%=((Municipality) session.getAttribute("municipal")).getMunicipalityName()%></option>
                                                                 </select>
                                                                 <label for="problemName">Problem Name * :</label>
                                                                 <input type="text" id="problemName" class="form-control" name="problemName" value="<%=importantProblem.getProblem().getProblemName()%>" required />
                                                                 <label for="farmsAffected">Farms Affected * :</label>
-                                                                <input type="text" id="farmsAffected" class="form-control" name="farmsAffected" value="<%=formatter.doubleToString(importantProblem.getFarmCount()/ importantProblem.getFarmCount()* 100)%>" required />
+                                                                <input type="number" id="farmsAffected" class="form-control" name="farmsAffected" value="<%=formatter.doubleToString(importantProblem.getFarmCount()/ importantProblem.getFarmCount()* 100)%>" required />
                                                                 <label for="requestDetail">Damages * :</label>
                                                                 <div class="form-control">
-                                                                    <select class="col-md-4" disabled>
+                                                                    <select class="col-md-4" disabled name="damageType">
                                                                         <option><%=importantProblem.getDamageType()%></option>
                                                                     </select>
                                                                     <%

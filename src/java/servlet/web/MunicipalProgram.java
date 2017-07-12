@@ -237,9 +237,13 @@ public class MunicipalProgram extends BaseServlet {
 
         ImportantProblem importantProblem = (ImportantProblem) session.getAttribute("importantProblem");
         ArrayList<DamageIncident> farms = new DamageIncidentDAO().getFarmListWithApprovedProblemInBarangay(importantProblem.getProblem().getProblemID(), importantProblem.getBarangayName());
-
+        ArrayList<ProgramProcedure> procedures = new ProgramProcedureDAO().getListOfProgramProceduresForProgramID(programPlanID);
+        ProgramPlan programPlan = new ProgramPlanDAO().getProgramPlanDetail(programPlanID);
+        
+        session.setAttribute("procedures", procedures);
         session.setAttribute("varieties", varieties);
         session.setAttribute("fertilizers", fertilizers);
+        session.setAttribute("programPlan", programPlan);
         session.setAttribute("programPlanID", programPlanID);
         session.setAttribute("farms", farms);
     }
@@ -471,13 +475,31 @@ public class MunicipalProgram extends BaseServlet {
         String name = userLogged.getLastName() + ", " + userLogged.getFirstName();
 
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
+        String completeDetails = "";
+        String requestName = request.getParameter("requestName");
+        completeDetails += "Title: " + requestName + "<br>";
+        
+        String problem = request.getParameter("problemName");
+        completeDetails += "Problem: " + problem + "<br>";
+        
+        int farmsAffected = Integer.parseInt(request.getParameter("farmsAffected"));
+        completeDetails += "Farm(s) Affected: " + farmsAffected + " farm(s)<br>";
+        
+        String damageType = request.getParameter("damageType");
+        completeDetails += "Damage Type: " + damageType + "<br>";
+        
+        double damageValue = Double.parseDouble(request.getParameter("damageValue"));
+        completeDetails += "Amount Damaged: " + damageValue + " ha<br>";
+        
         String requestDetail = request.getParameter("requestDetail");
+        completeDetails += "Description: " + requestDetail;
+        
         ProgramRequest progRequest = new ProgramRequest();
         progRequest.setDateRequested(dateNow);
         progRequest.setMunicipalityID(userLogged.getMunicipalityID());
         progRequest.setProgramPlanID(-1);
         progRequest.setRequestBy(name);
-        progRequest.setRequestDetail(requestDetail);
+        progRequest.setRequestDetail(completeDetails);
         progRequest.setRequestID(prdao.getListOfProgramRequests().size() + 1);
         progRequest.setRequestStatus("Requested");
         boolean success = prdao.addProgramRequest(progRequest);

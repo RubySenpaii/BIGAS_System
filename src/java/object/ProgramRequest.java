@@ -27,6 +27,8 @@ public class ProgramRequest {
     private int programPlanID;
     private int municipalityID;
     
+    private String programName;
+    
     public ProgramRequest() {
         
     }
@@ -127,5 +129,19 @@ public class ProgramRequest {
      */
     public void setRequestStatus(String requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    /**
+     * @return the programName
+     */
+    public String getProgramName() {
+        return programName;
+    }
+
+    /**
+     * @param programName the programName to set
+     */
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 }

@@ -60,25 +60,33 @@
                 
                 Highcharts.chart('container', {
                     chart: {
-                        type: 'line'
+                        type: 'column'
                     },
                     title: {
-                        text: 'Minor Damages vs Major Damages'
+                        text: 'Monitor Reported Major and Minor Damages'
                     },
                     xAxis: {
-                        categories: dates
+                        categories: dates,
+                        crosshair: true
                     },
                     yAxis: {
+                        min: 0,
                         title: {
-                            text: 'Hectares (ha)'
+                            text: 'Area (ha)'
                         }
                     },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f} ha</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
                     plotOptions: {
-                        line: {
-                            dataLabels: {
-                                enabled: true
-                            },
-                            enableMouseTracking: false
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
                         }
                     },
                     series: [{
