@@ -4,6 +4,7 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="object.Barangay"%>
 <%@page import="extra.GenericObject"%>
 <%@page import="object.Employee"%>
 <%@page import="java.util.ArrayList"%>
@@ -69,19 +70,37 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <label for="barangayName">Barangay Name * :</label>
-                                                                        <input type="text" id="barangayName" class="form-control" name="barangayName" required />
+                                                                        <select id="barangayName" class="form-control" name="barangayName" required>
+                                                                            <%
+                                                                                ArrayList<Barangay> barangays = (ArrayList<Barangay>) session.getAttribute("barangays");
+                                                                                for (int a = 0; a < barangays.size(); a++) {
+                                                                            %>
+                                                                            <option><%=barangays.get(a).getBarangayName()%></option>
+                                                                            <%
+                                                                                }
+                                                                            %>
+                                                                        </select>
                                                                         <br/>
                                                                         <label for="farmName">Farm Name * :</label>
                                                                         <input type="text" id="farmName" class="form-control" name="farmName" required />
+                                                                        <br/>
+                                                                        <label for="farmableArea">Farmable Area * :</label>
+                                                                        <input type="text" id="farmableArea" class="form-control" name="farmableArea" required />
                                                                         <br/>
                                                                         <label for="address">Address * :</label>
                                                                         <input type="text" id="address" class="form-control" name="address" required />
                                                                         <br/>
                                                                         <label for="irrigationMethod">Irrigation Method * :</label>
-                                                                        <input type="text" id="irrigationMethod" class="form-control" name="irrigationMethod" required />
+                                                                        <select id="irrigationMethod" class="form-control" name="irrigationMethod" required >
+                                                                            <option>Irrigated</option>
+                                                                            <option>Rainfed</option>
+                                                                        </select>
                                                                         <br/>
                                                                         <label for="landElevation">Land Elevation * :</label>
-                                                                        <input type="text" id="landElevation" class="form-control" name="landElevation" required />
+                                                                        <select id="landElevation" class="form-control" name="landElevation" required>
+                                                                            <option>Lowland</option>
+                                                                            <option>Upland</option>
+                                                                        </select>
                                                                         <br/>
                                                                         <label for="longitude">Longitude * :</label>
                                                                         <input type="text" id="longitude" class="form-control" name="longitude" required />
@@ -91,7 +110,7 @@
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                                        <button type="submit" class="btn btn-primary" name="action" value="sendFarmDetail">Send Request</button>
+                                                                        <button type="submit" class="btn btn-primary" name="action" value="sendFarmDetail">Add Farm</button>
                                                                     </div>
                                                                 </form>
                                                             </div>

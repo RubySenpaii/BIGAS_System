@@ -90,7 +90,7 @@
                                         <!-- damage image -->
                                         <div class="row">
                                             <div id="image" class="col-md-10 col-md-offset-1">
-                                                <img src="/BIGAS_System/images/damageReport/<%=report.getImage()%>.jpg" border="0" height="100%" width="100%">
+                                                <iframe src="/BIGAS_System/ImageViewer" style="height: 800px; width: 100%"></iframe>
                                             </div>
                                         </div>
                                         <!-- /damage image -->

@@ -77,7 +77,7 @@
                                                     %>
                                                     <tr>
                                                         <td>
-                                                            <%=survey.get(a).getQuestion()%>
+                                                            <%=a + 1%>. <%=survey.get(a).getQuestion()%>
                                                         </td>
                                                         <td style="text-align: center">
                                                             <input type="radio" name="quesAnswer<%=a + 1%>" value='0' required>

@@ -5,6 +5,7 @@
  */
 package servlet.web;
 
+import dao.BarangayDAO;
 import dao.EmployeeDAO;
 import dao.FarmDAO;
 import extra.GenericObject;
@@ -17,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import object.Barangay;
 import object.Employee;
 import object.Farm;
 import object.Municipality;
@@ -53,6 +55,10 @@ public class MunicipalFarmAssignment extends BaseServlet {
                 System.out.println("view technician assignment...");
                 editTechAssign(request, response);
                 path = "/MunicipalFarmAssignment?action=goToTechnicianList";
+            } else if (action.equals("sendFarmDetail")) {
+                System.out.println("adding new farm...");
+                submitFarmDetails(request, response);
+                path = "/MunicipalFarmAssignment?action=goToTechnicianList";
             } else {
                 //unknown action
             }
@@ -71,6 +77,7 @@ public class MunicipalFarmAssignment extends BaseServlet {
         System.out.println(municipal.getMunicipalityID() + "");
         ArrayList<Farm> unassignedFarms = new FarmDAO().getListOfUnassignedFarmsInMunicipality(municipal.getMunicipalityID());
         ArrayList<Employee> technicians = new EmployeeDAO().getListOfTechniciansInMunicipal(municipal.getMunicipalityID());
+        ArrayList<Barangay> barangays = new BarangayDAO().getListOfBarangaysInMunicipality(municipal.getMunicipalityID());
 
         ArrayList<GenericObject> technicianFarms = new ArrayList<>();
         for (int a = 0; a < technicians.size(); a++) {
@@ -91,6 +98,7 @@ public class MunicipalFarmAssignment extends BaseServlet {
 
         System.out.println("techs: " + technicians.size() + " unassigned: " + unassignedFarms.size());
 
+        session.setAttribute("barangays", barangays);
         session.setAttribute("technicians", technicians);
         session.setAttribute("unassignedFarms", unassignedFarms);
         session.setAttribute("technicianFarms", technicianFarms);
@@ -136,5 +144,28 @@ public class MunicipalFarmAssignment extends BaseServlet {
             boolean assigned  = new FarmDAO().assignFarmAssign(farm);
             System.out.println(farm.getFarmID() + " " + assigned);
         }
+    }
+    
+    private void submitFarmDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        
+        ArrayList<Farm> farms = new FarmDAO().getListOfFarms();
+        
+        Farm farm = new Farm();
+        farm.setFarmID(farms.size() + 1);
+        farm.setBarangayID(new BarangayDAO().getBarangayInfoWithBrgyName(request.getParameter("barangayName")).getBarangayID());
+        farm.setFarmName(request.getParameter("farmName"));
+        farm.setAddress(request.getParameter("address"));
+        farm.setFarmableArea(Double.parseDouble(request.getParameter("farmableArea")));
+        farm.setIrrigationMethod(request.getParameter("irrigationMethod"));
+        farm.setLandElevation(request.getParameter("landElevation"));
+        farm.setLongitude(Double.parseDouble(request.getParameter("longitude")));
+        farm.setLatitude(Double.parseDouble(request.getParameter("latitude")));
+        farm.setDateVisited("12-31-9999");
+        farm.setFlag(1);
+        farm.setAssignedTechnician(-1);
+        
+        boolean farmAdd = new FarmDAO().addFarm(farm);
+        System.out.println(farm.getFarmName() + " added: " + farmAdd);
     }
 }

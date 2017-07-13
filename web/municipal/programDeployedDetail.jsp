@@ -193,7 +193,7 @@
                                                                     <td><%=progress.get(a).getPhase()%></td>
                                                                     <td><%=progress.get(a).getActivity()%></td>
                                                                     <%
-                                                                        if (progress.get(a).getDateCompleted().equals("N/A")) {
+                                                                        if (progress.get(a).getDateCompleted().equals("N/A") && deployedProgram.getStatus().equals("Ongoing")) {
                                                                     %>
                                                                     <td colspan="3">
 <!--                                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateProgress&procedureNo=<%=a + 1%>" class="btn btn-success btn-small">
@@ -237,6 +237,16 @@
                                                                 %>
                                                             </tbody>
                                                         </table>
+
+                                                        <%
+                                                            if (deployedProgram.getStatus().equals("Ongoing")) {
+                                                        %>
+                                                        <div class="center">
+                                                            <a href="/BIGAS_System/MunicipalProgram?action=incompleteProgram&deployedID=<%=deployedProgram.getDeployedID()%>" class="btn btn-warning">Incomplete</a>
+                                                        </div>
+                                                        <%
+                                                            }
+                                                        %>
                                                     </div>
                                                     <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                                                         <table class="table table-bordered">

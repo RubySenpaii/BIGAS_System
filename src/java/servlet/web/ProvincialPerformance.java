@@ -281,17 +281,19 @@ public class ProvincialPerformance extends BaseServlet {
                 } else {
                     plantingReports.get(a).setStage(weeklyPlantingReport.getCropStage());
                 }
-
-                double damagedArea = 0;
-                ArrayList<DamageIncident> incidents = new DamageIncidentDAO().getDamageIncidentForPlantingReportBefore(plantingReports.get(a).getPlantingReportID(), date);
-                for (int d = 0; d < incidents.size(); d++) {
-                    damagedArea += incidents.get(d).getTotalAreaDamaged();
-                }
-
-                plantingReports.get(a).setAreaDamaged(damagedArea);
-            } catch (NullPointerException nullEx) {
-                System.out.println("no values received");
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println("Index out of bounds at line 205 " + ex);
+                System.out.println("no weekly planting reports at plantingreportid " + plantingReports.get(a).getPlantingReportID());
+                plantingReports.get(a).setStage("Unknown");
             }
+
+            double damagedArea = 0;
+            ArrayList<DamageIncident> incidents = new DamageIncidentDAO().getDamageIncidentForPlantingReportBefore(plantingReports.get(a).getPlantingReportID(), date);
+            for (int d = 0; d < incidents.size(); d++) {
+                damagedArea += incidents.get(d).getTotalAreaDamaged();
+            }
+
+            plantingReports.get(a).setAreaDamaged(damagedArea);
         }
 
         ArrayList<DeployedProgram> deployed = new DeployedProgramDAO().getListOfDeployedProgramsForFarm(farm.getFarmID());

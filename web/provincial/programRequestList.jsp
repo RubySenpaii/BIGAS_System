@@ -85,9 +85,9 @@
                                                         <%
                                                             if (requests.get(a).getRequestStatus().equals("Requested")) {
                                                         %>
-                                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-sm">Approve</button>
+                                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bs-example-modal-sm<%=a%>">Approve</button>
 
-                                                        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal fade bs-example-modal-sm<%=a%>" tabindex="-1" role="dialog" aria-hidden="true">
                                                             <div class="modal-dialog modal-sm">
                                                                 <div class="modal-content">
                                                                     <form id="demo-form" data-parsley-validate class="MunicipalProgram">
@@ -117,7 +117,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateRequest" class="btn btn-warning">Reject</a>
+                                                        <a href="/BIGAS_System/ProvincialProgram?action=rejectRequest&requestID=<%=requests.get(a).getRequestID()%>" class="btn btn-warning">Reject</a>
                                                         
                                                         <%
                                                             }

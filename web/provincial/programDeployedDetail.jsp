@@ -163,6 +163,7 @@
                                                                     <th>Activity</th>
                                                                     <th style="width: 12%">Completed</th>
                                                                     <th style="width: 12%">Updated By</th>
+                                                                    <th style="width: 15%">Remarks</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -175,19 +176,9 @@
                                                                     <td><%=progress.get(a).getProcedureNumber()%></td>
                                                                     <td><%=progress.get(a).getPhase()%></td>
                                                                     <td><%=progress.get(a).getActivity()%></td>
-                                                                    <%
-                                                                        if (progress.get(a).getDateCompleted().equals("N/A")) {
-                                                                    %>
-                                                                    <td colspan="2">
-                                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateProgress&procedureNo=<%=a + 1%>" class="btn btn-success btn-small">
-                                                                            Complete
-                                                                        </a>
-                                                                    </td>
-                                                                    <%
-                                                                    } else {
-                                                                    %>
                                                                     <td><%=progress.get(a).getDateCompleted()%></td>
                                                                     <td><%=progress.get(a).getUpdatedByName()%></td>
+                                                                    <td><%=progress.get(a).getRemarks()%></td>
                                                                     <%
                                                                         }
                                                                     %>

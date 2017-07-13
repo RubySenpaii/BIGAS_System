@@ -180,6 +180,10 @@
         <servlet-name>PAOCreateSurvey</servlet-name>
         <servlet-class>servlet.ajax.PAOCreateSurvey</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImageViewer</servlet-name>
+        <servlet-class>servlet.web.ImageViewer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebLogin</servlet-name>
         <url-pattern>/WebLogin</url-pattern>
@@ -359,6 +363,10 @@
     <servlet-mapping>
         <servlet-name>PAOCreateSurvey</servlet-name>
         <url-pattern>/PAOCreateSurvey</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageViewer</servlet-name>
+        <url-pattern>/ImageViewer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

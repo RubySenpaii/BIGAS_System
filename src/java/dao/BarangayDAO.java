@@ -175,7 +175,7 @@ public class BarangayDAO {
                     + "JOIN (SELECT WPR1.* "
                     + "      FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID "
                     + "                                           FROM WeeklyPlantingReport WPR2 "
-                    + "                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE(?, '%m-%d-%Y')"
+                    + "                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') <= STR_TO_DATE(?, '%m-%d-%Y')"
                     + "                                           GROUP BY WPR2.PlantingReportID) IT1 "
                     + "                                     ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2 "
                     + "ON T1.PlantingReportID = T2.PlantingReportID "

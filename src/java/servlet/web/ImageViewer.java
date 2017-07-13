@@ -3,29 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlet.mobile;
+package servlet.web;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.HttpSession;
+import object.Employee;
 
 /**
  *
  * @author RubySenpaii
  */
-@MultipartConfig
-public class MobilePlantingReportImage extends HttpServlet {
+public class ImageViewer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,37 +37,32 @@ public class MobilePlantingReportImage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("receiveing plantinReportImages");
-        String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\picsupload\\\\plantingReport\\\\";
-        ArrayList<String> imagePath = new ArrayList<>();
-        Iterable<Part> parts = request.getParts();
-        OutputStream out = null;
-        InputStream fileContent = null;
-        for (Part part: parts) {
-            try {
-                System.out.println("trying to receive planting image...");
-                out = new FileOutputStream(new File(filepath + File.separator + part.getSubmittedFileName()));
-                fileContent = part.getInputStream();
-                int read = 0;
-                final byte[] bytes = new byte[1024];
-                
-                while ((read = fileContent.read(bytes)) != -1) {
-                    out.write(bytes, 0, read);
-                }
-                System.out.println("planting image created...");
-                imagePath.add("images\\plantingReport" + part.getSubmittedFileName());
-            } catch (FileNotFoundException x) {
-                System.err.println("file not found");
-                System.err.println(x);
-            } finally {
-                if (out != null) {
-                    out.close();
-                }
-                if (fileContent != null) {
-                    fileContent.close();
-                }
-            }
-        }
+        HttpSession session = request.getSession();
+        Employee userLogged = (Employee) session.getAttribute("userLogged");
+
+        String fileName = "damageReport_05-30-2017_152742_53.jpg";
+        request.getParameter("fileName");
+        System.out.println("accessed image viewer with image file: " + fileName);
+        String pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\picsupload\\\\damageReport\\\\";
+        File file = new File(pathname + fileName);
+//        byte[] image = extractBytes(file);
+//        
+//        response.setContentType("image/jpg");
+//        response.setContentLength(image.length);
+//        response.getOutputStream().write(image);
+        response.setContentType("image/jpg");
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        Files.copy(file.toPath(), response.getOutputStream());
+    }
+
+    private byte[] extractBytes(File image) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(image);
+
+        // get DataBufferBytes from Raster
+        WritableRaster raster = bufferedImage.getRaster();
+        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
+
+        return (data.getData());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

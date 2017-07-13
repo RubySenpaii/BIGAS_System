@@ -66,13 +66,13 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Metric Tons per hectare (MT/ha)'
+                            text: 'Metric Tons (MT)'
                         }
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                '<td style="padding:0"><b>{point.y:.1f} MT</b></td></tr>',
                         footerFormat: '</table>',
                         shared: true,
                         useHTML: true
@@ -133,7 +133,7 @@
                                             <div class="row">
                                                 <div class="col-md-12 text-center">
                                                     <label>Target Production: </label>
-                                                    <input id="targetProduction" style="width: 500px" type="number" onblur="calculate()">
+                                                    <input id="targetProduction" style="width: 500px" type="text" onkeypress="calculate()">
                                                 </div>
                                             </div>
                                             <br/>

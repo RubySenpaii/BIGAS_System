@@ -118,7 +118,7 @@ public class MunicipalProgram extends BaseServlet {
                     deployedProgram.setStatus("Completed");
                     deployedProgram.setDateCompleted(new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime()));
                     boolean success = new DeployedProgramDAO().updateDeployedProgram(deployedProgram);
-                    System.out.println(deployedID + " has been successfully changed to completed");
+                    System.out.println(deployedID + " completed: " + success);
                 }
 
                 path = "/MunicipalProgram?action=viewDeployedProgramDetails&deployedID=" + deployedID;
@@ -127,9 +127,13 @@ public class MunicipalProgram extends BaseServlet {
                 viewRequestList(request, response);
                 path = "/municipal/programRequestList.jsp";
             } else if (action.equals("sendRequest")) {
-                System.out.println("directing to programDeployedDetail.jsp");
+                System.out.println("directing to programRequestList.jsp");
                 sendRequestList(request, response);
                 path = "/MunicipalProgram?action=viewRequestList";
+            } else if (action.equals("incompleteProgram")) {
+                System.out.println("directing to programDeployedDetail.jsp");
+                int deployedID = incompleteProgram(request, response);
+                path = "/MunicipalProgram?action=viewDeployedProgramDetails&deployedID=" + deployedID;
             } else {
                 //unknown action
             }
@@ -239,7 +243,7 @@ public class MunicipalProgram extends BaseServlet {
         ArrayList<DamageIncident> farms = new DamageIncidentDAO().getFarmListWithApprovedProblemInBarangay(importantProblem.getProblem().getProblemID(), importantProblem.getBarangayName());
         ArrayList<ProgramProcedure> procedures = new ProgramProcedureDAO().getListOfProgramProceduresForProgramID(programPlanID);
         ProgramPlan programPlan = new ProgramPlanDAO().getProgramPlanDetail(programPlanID);
-        
+
         session.setAttribute("procedures", procedures);
         session.setAttribute("varieties", varieties);
         session.setAttribute("fertilizers", fertilizers);
@@ -478,22 +482,22 @@ public class MunicipalProgram extends BaseServlet {
         String completeDetails = "";
         String requestName = request.getParameter("requestName");
         completeDetails += "Title: " + requestName + "<br>";
-        
+
         String problem = request.getParameter("problemName");
         completeDetails += "Problem: " + problem + "<br>";
-        
+
         int farmsAffected = Integer.parseInt(request.getParameter("farmsAffected"));
         completeDetails += "Farm(s) Affected: " + farmsAffected + " farm(s)<br>";
-        
+
         String damageType = request.getParameter("damageType");
         completeDetails += "Damage Type: " + damageType + "<br>";
-        
+
         double damageValue = Double.parseDouble(request.getParameter("damageValue"));
         completeDetails += "Amount Damaged: " + damageValue + " ha<br>";
-        
+
         String requestDetail = request.getParameter("requestDetail");
         completeDetails += "Description: " + requestDetail;
-        
+
         ProgramRequest progRequest = new ProgramRequest();
         progRequest.setDateRequested(dateNow);
         progRequest.setMunicipalityID(userLogged.getMunicipalityID());
@@ -504,6 +508,15 @@ public class MunicipalProgram extends BaseServlet {
         progRequest.setRequestStatus("Requested");
         boolean success = prdao.addProgramRequest(progRequest);
         System.out.println("program request submitted: " + success);
+    }
+
+    private int incompleteProgram(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DeployedProgram deployedProgram = new DeployedProgramDAO().getDeployedProgramDetails(Integer.parseInt(request.getParameter("deployedID")));
+        deployedProgram.setStatus("Incomplete");
+        deployedProgram.setDateCompleted(new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime()));
+        boolean updateSuccess = new DeployedProgramDAO().updateDeployedProgram(deployedProgram);
+        System.out.println("deployed id " + deployedProgram.getDeployedID() + " change to incomplete: " + updateSuccess);
+        return deployedProgram.getDeployedID();
     }
 
     private ArrayList<ImportantProblem> getListOfPestDiseaseProblem3(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

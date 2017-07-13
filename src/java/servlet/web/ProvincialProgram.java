@@ -123,7 +123,7 @@ public class ProvincialProgram extends BaseServlet {
                 path = "/ProvincialProgram?action=viewRequestList";
             } else if (action.equals("rejectRequest")) {
                 System.out.println("directing to programRequestList.jsp");
-                rejectRequestList(request, response);
+                rejectRequest(request, response);
                 path = "/ProvincialProgram?action=viewRequestList";
             } else if (action.equals("createProgram")) {
                 System.out.println("directing to createProgramPlan1.jsp");
@@ -493,7 +493,7 @@ public class ProvincialProgram extends BaseServlet {
         System.out.println("update status: " + update);
     }
 
-    private void rejectRequestList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void rejectRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 

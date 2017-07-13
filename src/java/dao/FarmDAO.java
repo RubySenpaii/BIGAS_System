@@ -33,7 +33,7 @@ public class FarmDAO {
                     + "(" + Farm.COLUMN_ADDRESS + ", " + Farm.COLUMN_BARANGAYID + ", " + Farm.COLUMN_DATEVISITED + ", " + Farm.COLUMN_FARMABLEAREA + ", "
                     + Farm.COLUMN_FARMID + ", " + Farm.COLUMN_FARMNAME + ", " + Farm.COLUMN_FLAG + ", " + Farm.COLUMN_IRRIGATIONMETHOD + ", "
                     + Farm.COLUMN_LANDELEVATION + ", " + Farm.COLUMN_LATITUDE + ", " + Farm.COLUMN_LONGITUDE + ", " + Farm.COLUMN_ASSIGNEDTECHNICIAN + ") "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, farm.getAddress());
             ps.setInt(2, farm.getBarangayID());
             ps.setString(3, farm.getDateVisited());
