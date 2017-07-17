@@ -49,6 +49,9 @@ public class WebLogin extends BaseServlet {
                 if (employee.getAuthority().equals("Technician")) {
                     System.out.println("directing technician homepage...");
                     path = "/technician/homepage.jsp";
+                } else if (employee.getAuthority().equals("Encoder")) {
+                    System.out.println("directing encoder homepage...");
+                    path = "/EncoderProgram?action=goToListOfOngoingPrograms";
                 } else {
                     System.out.println("directing mao homepage...");
                     path = "/MunicipalHomepage?action=goToHomePage";

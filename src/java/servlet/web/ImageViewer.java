@@ -41,7 +41,7 @@ public class ImageViewer extends HttpServlet {
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
         String fileName = "damageReport_05-30-2017_152742_53.jpg";
-        request.getParameter("fileName");
+        fileName = request.getParameter("fileName");
         System.out.println("accessed image viewer with image file: " + fileName);
         String pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\picsupload\\\\damageReport\\\\";
         File file = new File(pathname + fileName);
@@ -51,6 +51,7 @@ public class ImageViewer extends HttpServlet {
 //        response.setContentLength(image.length);
 //        response.getOutputStream().write(image);
         response.setContentType("image/jpg");
+        response.setHeader("Content-Type", getServletContext().getMimeType(fileName));
         response.setHeader("Content-Length", String.valueOf(file.length()));
         Files.copy(file.toPath(), response.getOutputStream());
     }

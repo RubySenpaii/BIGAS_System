@@ -184,6 +184,10 @@
         <servlet-name>ImageViewer</servlet-name>
         <servlet-class>servlet.web.ImageViewer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EncoderProgram</servlet-name>
+        <servlet-class>servlet.web.EncoderProgram</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebLogin</servlet-name>
         <url-pattern>/WebLogin</url-pattern>
@@ -367,6 +371,10 @@
     <servlet-mapping>
         <servlet-name>ImageViewer</servlet-name>
         <url-pattern>/ImageViewer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EncoderProgram</servlet-name>
+        <url-pattern>/EncoderProgram</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

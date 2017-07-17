@@ -204,6 +204,46 @@ public class DeployedProgramDAO {
         }
         return deployedPrograms;
     }
+    
+    public ArrayList<DeployedProgram> getListOfCompletedProgramsForMunicipality(int municipalityID) {
+        ArrayList<DeployedProgram> deployedPrograms = new ArrayList<>();
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT DP.*, PP.*, M.* "
+                    + "FROM DeployedProgram DP JOIN ProgramPlan PP ON DP.ProgramPlanID = PP.ProgramPlanID "
+                    + "                         JOIN Municipality M ON M.MunicipalityID = DP.AssignedMunicipality "
+                    + "WHERE DP.DeployedStatus = 'Completed' AND DP.AssignedMunicipality = ?");
+            ps.setInt(1, municipalityID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DeployedProgram deployedProgram = new DeployedProgram();
+                deployedProgram.setAssignedMunicipality(rs.getInt(DeployedProgram.COLUMN_ASSIGNEDMUNICIPALITY));
+                deployedProgram.setDateCompleted(rs.getString(DeployedProgram.COLUMN_DATECOMPLETED));
+                deployedProgram.setDateStarted(rs.getString(DeployedProgram.COLUMN_DATESTARTED));
+                deployedProgram.setDeployedID(rs.getInt(DeployedProgram.COLUMN_DEPLOYEDID));
+                deployedProgram.setFertilizerAmount(rs.getDouble(DeployedProgram.COLUMN_FERTILIZERAMOUNT));
+                deployedProgram.setFertilizerProvided(rs.getString(DeployedProgram.COLUMN_FERTILIZERPROVIDED));
+                deployedProgram.setProgramPlanID(rs.getInt(DeployedProgram.COLUMN_PROGRAMPLANID));
+                deployedProgram.setStatus(rs.getString(DeployedProgram.COLUMN_STATUS));
+                deployedProgram.setVarietyAmount(rs.getDouble(DeployedProgram.COLUMN_VARIETYAMOUNT));
+                deployedProgram.setVarietyProvided(rs.getString(DeployedProgram.COLUMN_VARIETYPROVIDED));
+                deployedProgram.setProgramName(rs.getString("ProgramName"));
+                deployedProgram.setProgramType(rs.getString("Type"));
+                deployedProgram.setMunicipalName(rs.getString("MunicipalityName"));
+                deployedPrograms.add(deployedProgram);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(DeployedProgramDAO.class.getName()).log(Level.SEVERE, null, x);
+        }
+        return deployedPrograms;
+    }
 
     public ArrayList<DeployedProgram> getListOfDeployedProgramsForProgramPlan(int programPlanID) {
         ArrayList<DeployedProgram> deployedPrograms = new ArrayList<>();
