@@ -193,7 +193,7 @@
                                                                     <td><%=progress.get(a).getPhase()%></td>
                                                                     <td><%=progress.get(a).getActivity()%></td>
                                                                     <%
-                                                                        if (progress.get(a).getDateCompleted().equals("N/A") && deployedProgram.getStatus().equals("Ongoing")) {
+                                                                        if (progress.get(a).getDateCompleted().equals("N/A") && deployedProgram.getStatus().equals("Deployed")) {
                                                                     %>
                                                                     <td colspan="3">
 <!--                                                                        <a href="/BIGAS_System/MunicipalProgram?action=updateProgress&procedureNo=<%=a + 1%>" class="btn btn-success btn-small">

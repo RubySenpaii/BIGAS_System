@@ -205,24 +205,23 @@
                                                                     %>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:void(0)" onclick="document.getElementById('incidentImage').src = src="/BIGAS_System/ImageViewer?fileName=<%=reports.get(a).getImage()%>">
-                                                                                <%=reports.get(a).getDateReported()%>
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <%
-                                                                        }
-                                                                    %>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <div id="image" class="col-md-10">
-                                                            <!--img id="incidentImage" src="" border="0" height="100%" width="100%"-->
-                                                            <iframe id="imageHandler"  style="height: 800px; width: 100%"></iframe>
-                                                        </div>
+                                                                            <a href="javascript:void(0)" onclick="document.getElementById('incidentImage').src = src ="/BIGAS_System/ImageViewer?fileName=<%=reports.get(a).getImage()%>">
+                                                                               <%=reports.get(a).getDateReported()%>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <%
+                                                                    }
+                                                                %>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
-                                                    <!-- /damage image -->
+                                                    <div id="image" class="col-md-10 col-md-offset-2">
+                                                        <iframe id="imageHandler"  style="height: 768px; width: 1024px"></iframe>
+                                                    </div>
                                                 </div>
+
+                                                <!-- /damage image -->
                                             </div>
                                         </div>
                                         <!-- /tab panel-->
@@ -230,7 +229,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
                 <!-- /page content -->
                 <jsp:include page="pageFooter.jsp"/>
@@ -246,5 +244,5 @@
 
         <!-- Custom Theme Scripts -->
         <script src="/BIGAS_System/build/js/custom.min.js"></script>
-    </body>
+</body>
 </html>

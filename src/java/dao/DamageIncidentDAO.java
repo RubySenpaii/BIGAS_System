@@ -804,7 +804,7 @@ public class DamageIncidentDAO {
                     + "                      JOIN Plot P ON PR.PlotID = P.PlotID\n"
                     + "                      JOIN Farm F ON F.FarmID = P.FarmID\n"
                     + "                      JOIN Barangay B ON B.BarangayID = F.BarangayID\n"
-                    + "                      JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
+                    + "                      LEFT JOIN (SELECT DR1.DamageIncidentID, MAX(STR_TO_DATE(DR1.DateReported, '%m-%d-%Y')) AS 'RecentDate'\n"
                     + "                            FROM DamageReport DR1\n"
                     + "                            GROUP BY DR1.DamageIncidentID) T1 ON DR2.DamageIncidentID = T1.DamageIncidentID\n"
                     + "WHERE STR_TO_DATE(DR2.DateReported, '%m-%d-%Y') = T1.RecentDate AND DI.IncidentStatus = 'Program' AND B.BarangayName = ?\n"

@@ -40,8 +40,8 @@ public class ImageViewer extends HttpServlet {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
 
-        String fileName = "damageReport_05-30-2017_152742_53.jpg";
-        fileName = request.getParameter("fileName");
+        String fileName = "images.jpg";
+        //fileName = request.getParameter("fileName");
         System.out.println("accessed image viewer with image file: " + fileName);
         String pathname = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\picsupload\\\\damageReport\\\\";
         File file = new File(pathname + fileName);

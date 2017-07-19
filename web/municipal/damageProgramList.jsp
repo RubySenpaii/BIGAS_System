@@ -86,7 +86,7 @@
                                                             <td><%=format.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
                                                             <td><%=incidents.get(a).getEscalationLevel()%></td>
                                                             <td>
-                                                                <a href="/BIGAS_System/MunicipalDamages?action=goToProgramDamagesOverview&problemID=<%=incidents.get(a).getProblemReported()%>&barangayName=<%=incidents.get(a).getBarangayName()%>" class="btn btn-success">
+                                                                <a href="/BIGAS_System/MunicipalDamages?action=goToProgramDamagesOverview&problemID=<%=incidents.get(a).getProblemReported()%>&barangayName=<%=incidents.get(a).getBarangayName()%>&deployedID=<%=incidents.get(a).getDeployedID()%>" class="btn btn-success">
                                                                     View Detail
                                                                 </a>
                                                             </td>

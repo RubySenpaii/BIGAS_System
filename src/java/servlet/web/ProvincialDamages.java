@@ -149,6 +149,12 @@ public class ProvincialDamages extends BaseServlet {
         int problemID = Integer.parseInt(request.getParameter("problemID"));
         Municipality municipality = new MunicipalityDAO().getMunicipalDetail(municipalityName);
         ArrayList<DamageIncident> damageIncidents = new DamageIncidentDAO().getBarangayProblemListWithProgramDamagesInMunicipality(municipality.getMunicipalityID());
+        for (int a = 0; a < damageIncidents.size(); a++) {
+            if (damageIncidents.get(a).getProblemReported() != problemID) {
+                damageIncidents.remove(damageIncidents.get(a));
+                a--;
+            }
+        }
         
 
         session.setAttribute("damageIncidents", damageIncidents);

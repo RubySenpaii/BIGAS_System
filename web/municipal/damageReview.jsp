@@ -89,9 +89,9 @@
 
                                         <!-- damage image -->
                                         <div class="row">
-                                            <div id="image" class="col-md-12">
+                                            <div id="image" class="col-md-10 col-md-offset-2">
                                                 <!--img src="C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\picsupload\\\\damageReport\\\\damageReport_05-30-2017_152742_53.jpg"/-->
-                                                <iframe id="imageHandler" src="/BIGAS_System/ImageViewer?fileName=<%=report.getImage()%>" style="height: 1000px; width: 100%"></iframe>
+                                                <iframe id="imageHandler" src="/BIGAS_System/ImageViewer?fileName=<%=report.getImage()%>" style="height: 780px; width: 1030px"></iframe>
                                             </div>
                                         </div>
                                         <!-- /damage image -->

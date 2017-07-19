@@ -14,6 +14,7 @@ import dao.FarmDAO;
 import dao.MunicipalityDAO;
 import dao.PlotDAO;
 import dao.ProblemDAO;
+import dao.ProgramBeneficiaryDAO;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
@@ -31,6 +32,7 @@ import object.Farm;
 import object.Municipality;
 import object.Plot;
 import object.Problem;
+import object.ProgramBeneficiary;
 
 /**
  *
@@ -135,6 +137,21 @@ public class MunicipalDamages extends BaseServlet {
         int problemID = Integer.parseInt(request.getParameter("problemID"));
         String barangayName = request.getParameter("barangayName");
         ArrayList<DamageIncident> damageIncidents = new DamageIncidentDAO().getFarmListWithProgramProblemInBarangay(problemID, barangayName);
+        if (request.getParameter("action").toLowerCase().contains("program")) {
+            int deployedID = Integer.parseInt(request.getParameter("deployedID"));
+            ArrayList<ProgramBeneficiary> beneficiaries = new ProgramBeneficiaryDAO().getListOfProgramBeneficiariesForDeployedID(deployedID);
+            for (int a = 0; a < damageIncidents.size(); a++) {
+                for (int b = 0; b < beneficiaries.size(); b++) {
+                    System.out.println("incident farm: " + damageIncidents.get(a).getFarmName() + a);
+                    System.out.println("beneficiary: " + beneficiaries.get(b).getFarmName());
+                    if (damageIncidents.get(a).getFarmName().equals(beneficiaries.get(b).getFarmName())) {
+                        break;
+                    } else if (b + 1 == beneficiaries.size()) {
+                        damageIncidents.remove(a);
+                    }
+                }
+            }
+        }
 
         session.setAttribute("damageIncidents", damageIncidents);
     }
