@@ -239,7 +239,7 @@
                                                         </table>
 
                                                         <%
-                                                            if (deployedProgram.getStatus().equals("Ongoing")) {
+                                                            if (deployedProgram.getStatus().equals("Deployed")) {
                                                         %>
                                                         <div class="center">
                                                             <a href="/BIGAS_System/MunicipalProgram?action=incompleteProgram&deployedID=<%=deployedProgram.getDeployedID()%>" class="btn btn-warning">Incomplete</a>
