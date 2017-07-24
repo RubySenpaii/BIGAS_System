@@ -8,6 +8,7 @@ package servlet.web;
 import dao.BarangayDAO;
 import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
+import dao.ProgramPlanDAO;
 import extra.Calculator;
 import extra.GenericObject;
 import java.io.File;
@@ -30,6 +31,7 @@ import object.Barangay;
 import object.Employee;
 import object.Municipality;
 import object.PlantingReport;
+import object.ProgramPlan;
 import reporting.JasperMunicipal;
 
 /**
@@ -85,6 +87,18 @@ public class MunicipalReport extends BaseServlet {
                 path = "/MunicipalReport?action=viewReports";
                 try {
                     new JasperMunicipal().createMunicipalWeeklyHarvestReport(preparedBy, approvedBy, municipal);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
+            } else if (action.equals("createProgramReport")) {
+                path = "/MunicipalReport?action=viewReports";
+                try {
+                    int programID = Integer.parseInt(request.getParameter("programID"));
+                    ProgramPlan programPlan = new ProgramPlanDAO().getProgramPlanDetail(programID);
+                    Municipality municipality = new MunicipalityDAO().getMunicipalDetail(municipal);
+                    new JasperMunicipal().createMunicipalProgramReport(preparedBy, approvedBy, municipality, programPlan);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);

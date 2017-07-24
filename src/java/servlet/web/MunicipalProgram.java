@@ -526,14 +526,33 @@ public class MunicipalProgram extends BaseServlet {
         ArrayList<ImportantProblem> importantProblems = new ArrayList<>();
         ArrayList<Barangay> barangays = new BarangayDAO().getMunicipalNotification(userLogged.getMunicipalityID());
         for (int a = 0; a < barangays.size(); a++) {
-            Problem problem = new ProblemDAO().getProblemWithName(barangays.get(a).getProblemName());
-            double plantableArea = barangays.get(a).getArea();
-            double majorDamaged = barangays.get(a).getMajorDamagedArea();
-            double minorDamaged = barangays.get(a).getMinorDamagedArea();
 
-            if (problem.getType().equals("Calamity")) {
-                double calamityMajor = majorDamaged / plantableArea;
-                if (calamityMajor >= 0.4) {
+            System.out.print(barangays.get(a).getBarangayName() + ":");
+            System.out.print("problem: " + barangays.get(a).getProblemName());
+            System.out.print("totalarea: " + barangays.get(a).getArea());
+            System.out.print("major: " + barangays.get(a).getMajorDamagedArea());
+            System.out.print("minor: " + barangays.get(a).getMinorDamagedArea());
+            if (barangays.get(a).getProblemName() != null) {
+                Problem problem = new ProblemDAO().getProblemWithName(barangays.get(a).getProblemName());
+                double plantableArea = barangays.get(a).getArea();
+                double majorDamaged = barangays.get(a).getMajorDamagedArea();
+                double minorDamaged = barangays.get(a).getMinorDamagedArea();
+
+                if (problem.getType().equals("Calamity")) {
+                    double calamityMajor = majorDamaged / plantableArea;
+                    if (calamityMajor >= 0.4) {
+                        ImportantProblem importantProblem = new ImportantProblem();
+                        importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                        importantProblem.setProblem(problem);
+                        importantProblem.setTotalMajor(majorDamaged);
+                        importantProblem.setTotalMinor(minorDamaged);
+                        importantProblem.setPlantableArea(plantableArea);
+                        importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
+                        importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                        importantProblem.setDamageType("Major Damages");
+                        importantProblems.add(importantProblem);
+                    }
+                } else if (majorDamaged / plantableArea >= 0.03) {
                     ImportantProblem importantProblem = new ImportantProblem();
                     importantProblem.setBarangayName(barangays.get(a).getBarangayName());
                     importantProblem.setProblem(problem);
@@ -544,29 +563,18 @@ public class MunicipalProgram extends BaseServlet {
                     importantProblem.setFarmCount(barangays.get(a).getFarmCount());
                     importantProblem.setDamageType("Major Damages");
                     importantProblems.add(importantProblem);
+                } else if (minorDamaged / plantableArea >= 0.045) {
+                    ImportantProblem importantProblem = new ImportantProblem();
+                    importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                    importantProblem.setProblem(problem);
+                    importantProblem.setTotalMajor(majorDamaged);
+                    importantProblem.setTotalMinor(minorDamaged);
+                    importantProblem.setPlantableArea(plantableArea);
+                    importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
+                    importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                    importantProblem.setDamageType("Minor Damages");
+                    importantProblems.add(importantProblem);
                 }
-            } else if (majorDamaged / plantableArea >= 0.03) {
-                ImportantProblem importantProblem = new ImportantProblem();
-                importantProblem.setBarangayName(barangays.get(a).getBarangayName());
-                importantProblem.setProblem(problem);
-                importantProblem.setTotalMajor(majorDamaged);
-                importantProblem.setTotalMinor(minorDamaged);
-                importantProblem.setPlantableArea(plantableArea);
-                importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
-                importantProblem.setFarmCount(barangays.get(a).getFarmCount());
-                importantProblem.setDamageType("Major Damages");
-                importantProblems.add(importantProblem);
-            } else if (minorDamaged / plantableArea >= 0.045) {
-                ImportantProblem importantProblem = new ImportantProblem();
-                importantProblem.setBarangayName(barangays.get(a).getBarangayName());
-                importantProblem.setProblem(problem);
-                importantProblem.setTotalMajor(majorDamaged);
-                importantProblem.setTotalMinor(minorDamaged);
-                importantProblem.setPlantableArea(plantableArea);
-                importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
-                importantProblem.setFarmCount(barangays.get(a).getFarmCount());
-                importantProblem.setDamageType("Minor Damages");
-                importantProblems.add(importantProblem);
             }
         }
         System.out.println("problem size " + importantProblems.size());

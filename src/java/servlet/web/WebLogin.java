@@ -47,9 +47,9 @@ public class WebLogin extends BaseServlet {
                 session.setAttribute("municipal", municipal);
                 
                 if (employee.getAuthority().equals("Technician")) {
-                    System.out.println("directing technician homepage...");
-                    path = "/technician/homepage.jsp";
-                } else if (employee.getAuthority().equals("Encoder")) {
+//                    System.out.println("directing technician homepage...");
+//                    path = "/technician/homepage.jsp";
+//                } else if (employee.getAuthority().equals("Encoder")) {
                     System.out.println("directing encoder homepage...");
                     path = "/EncoderProgram?action=goToListOfOngoingPrograms";
                 } else {

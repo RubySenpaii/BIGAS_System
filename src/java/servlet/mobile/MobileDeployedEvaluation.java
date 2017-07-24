@@ -60,15 +60,15 @@ public class MobileDeployedEvaluation extends HttpServlet {
                     + "VALUES(?, ?, ?, ?)");
             //PreparedStatement updatePS = conn.prepareStatement("");
             for (int a = 0; a < deployedEvaluations.size(); a++) {
-                if (a < originalSize) {
+                //if (a < originalSize) {
                     //cannot update
-                } else {
+                //} else {
                     addPS.setInt(1, deployedEvaluations.get(a).getDeployedID());
                     addPS.setString(2, deployedEvaluations.get(a).getEvaluationValues());
-                    addPS.setString(3, deployedEvaluations.get(a).getFeedback());
+                    addPS.setString(3, deployedEvaluations.get(a).getFeedback().substring(0, 30));
                     addPS.setString(4, deployedEvaluations.get(a).getRespondentName());
                     addPS.addBatch();
-                }
+                //}
             }
 
             int[] adds = addPS.executeBatch();

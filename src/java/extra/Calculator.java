@@ -231,6 +231,59 @@ public class Calculator {
         return notifications;
     }
 
+    public ArrayList<ImportantProblem> getPestAndDiseaseNotification4(int municipalityID) {
+        ArrayList<ImportantProblem> importantProblems = new ArrayList<>();
+        ArrayList<Barangay> barangays = new BarangayDAO().getMunicipalNotification(municipalityID);
+        for (int a = 0; a < barangays.size(); a++) {
+            if (barangays.get(a).getProblemName() != null) {
+                Problem problem = new ProblemDAO().getProblemWithName(barangays.get(a).getProblemName());
+                double plantableArea = barangays.get(a).getArea();
+                double majorDamaged = barangays.get(a).getMajorDamagedArea();
+                double minorDamaged = barangays.get(a).getMinorDamagedArea();
+
+                if (problem.getType().equals("Calamity")) {
+                    double calamityMajor = majorDamaged / plantableArea;
+                    if (calamityMajor >= 0.4) {
+                        ImportantProblem importantProblem = new ImportantProblem();
+                        importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                        importantProblem.setProblem(problem);
+                        importantProblem.setTotalMajor(majorDamaged);
+                        importantProblem.setTotalMinor(minorDamaged);
+                        importantProblem.setPlantableArea(plantableArea);
+                        importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
+                        importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                        importantProblem.setDamageType("Major Damages");
+                        importantProblems.add(importantProblem);
+                    }
+                } else if (majorDamaged / plantableArea >= 0.03) {
+                    ImportantProblem importantProblem = new ImportantProblem();
+                    importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                    importantProblem.setProblem(problem);
+                    importantProblem.setTotalMajor(majorDamaged);
+                    importantProblem.setTotalMinor(minorDamaged);
+                    importantProblem.setPlantableArea(plantableArea);
+                    importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
+                    importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                    importantProblem.setDamageType("Major Damages");
+                    importantProblems.add(importantProblem);
+                } else if (minorDamaged / plantableArea >= 0.045) {
+                    ImportantProblem importantProblem = new ImportantProblem();
+                    importantProblem.setBarangayName(barangays.get(a).getBarangayName());
+                    importantProblem.setProblem(problem);
+                    importantProblem.setTotalMajor(majorDamaged);
+                    importantProblem.setTotalMinor(minorDamaged);
+                    importantProblem.setPlantableArea(plantableArea);
+                    importantProblem.setFarmAffected(barangays.get(a).getFarmAffected());
+                    importantProblem.setFarmCount(barangays.get(a).getFarmCount());
+                    importantProblem.setDamageType("Minor Damages");
+                    importantProblems.add(importantProblem);
+                }
+            }
+        }
+        System.out.println("problem size " + importantProblems.size());
+        return importantProblems;
+    }
+
     public String getSeason() {
         Calendar cal = Calendar.getInstance();
         if (cal.getTime().getMonth() < 2) {

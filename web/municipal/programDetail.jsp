@@ -4,6 +4,7 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="extra.Calculator"%>
 <%@page import="object.DeployedProgram"%>
 <%@page import="object.ProgramProcedure"%>
 <%@page import="object.ProgramPlan"%>
@@ -98,8 +99,8 @@
                                                         </li>
                                                         <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Deployed List</a>
                                                         </li>
-                                                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="additional-tab" data-toggle="tab" aria-expanded="false">Program Target</a>
-                                                        </li>
+                                                        <!--li role="presentation" class=""><a href="#tab_content3" role="tab" id="additional-tab" data-toggle="tab" aria-expanded="false">Program Target</a>
+                                                        </li-->
                                                     </ul>
                                                     <div id="myTabContent" class="tab-content">
                                                         <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
@@ -126,6 +127,9 @@
                                                                     %>
                                                                 </tbody>
                                                             </table>
+                                                            <div class="col-md-offset-11">
+                                                                <a href="/BIGAS_System/MunicipalReport?action=createProgramReport&programID=<%=plan.getProgramPlanID()%>" class="btn-danger btn">Generate Reports</a>
+                                                            </div>
                                                         </div>
                                                         <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                                                             <table class="table table-bordered">
@@ -168,15 +172,25 @@
                                                                                 View
                                                                             </a>
                                                                         </td>
-                                                                    </tr>
                                                                     <%
                                                                         }
                                                                     %>
                                                                 </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <%
+                                                                            Calculator calc = new Calculator();
+                                                                            double programRating = calc.getProgramRating(plan.getProgramPlanID());
+                                                                            String effRating = calc.getEffectivityResult(programRating);
+                                                                        %>
+                                                                        <th colspan="7">Average Rating</th>
+                                                                        <th colspan="2"><%=effRating%></th>
+                                                                    </tr>
+                                                                </tfoot>
                                                             </table>
                                                         </div>
 
-                                                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="additional-tab">
+                                                        <!--div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="additional-tab">
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr>
@@ -197,7 +211,7 @@
                                                                     Add New Target
                                                                 </a>
                                                             </div>
-                                                        </div>
+                                                        </div-->
                                                     </div>
                                                 </div>
                                             </div>

@@ -43,7 +43,11 @@
                     <div class="">
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Farm Details</h3>
+                                <%
+                                    Farm farm = (Farm) session.getAttribute("farm");
+                                    Farmer farmer = (Farmer) session.getAttribute("farmer");
+                                %>
+                                <h3>Farm ID#<%=farm.getFarmID()%> - Details</h3>
                             </div>
                         </div>
 
@@ -55,10 +59,6 @@
                                     <div class="x_content">
                                         <div class="row">
                                             <br/>
-                                            <%
-                                                Farm farm = (Farm) session.getAttribute("farm");
-                                                Farmer farmer = (Farmer) session.getAttribute("farmer");
-                                            %>
                                             <div class="col-md-4">
                                                 <p style="font-size: medium"><b>Farm Name: </b><%=farm.getFarmName()%></p>
                                                 <br/>
@@ -180,8 +180,8 @@
                                                                             if (provisions.length() > 1) {
                                                                                 provisions += " | ";
                                                                             }
-                                                                            if (deployeds.get(a).getVarietyReceived()> 0) {
-                                                                                provisions += deployeds.get(a).getVarietyProvided()+ ": " + deployeds.get(a).getVarietyReceived() + "kg";
+                                                                            if (deployeds.get(a).getVarietyReceived() > 0) {
+                                                                                provisions += deployeds.get(a).getVarietyProvided() + ": " + deployeds.get(a).getVarietyReceived() + "kg";
                                                                             }
                                                                     %>
                                                                     <tr>
@@ -193,7 +193,7 @@
                                                                         <td><%=deployeds.get(a).getDateCompleted()%></td>
                                                                     </tr>
                                                                     <%
-                                                                    }
+                                                                        }
                                                                     %>
                                                                 </tbody>
                                                             </table>

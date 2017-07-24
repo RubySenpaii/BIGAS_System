@@ -109,6 +109,27 @@ public class PlotDAO {
         return plots;
     }
     
+    public ArrayList<Plot> getListOfActivePlotsInFarm(Farm farm) {
+        ArrayList<Plot> plots = new ArrayList<>();
+        try {
+            DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
+            Connection conn = myFactory.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + Plot.TABLE_NAME + " WHERE " + Plot.COLUMN_FARMID + " = ? AND " + Plot.COLUMN_PLOTPLANTED + " != -1");
+            ps.setInt(1, farm.getFarmID());
+
+            ResultSet rs = ps.executeQuery();
+            plots = getDataFromResultSet(rs);
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException x) {
+            Logger.getLogger(PlotDAO.class.getName()).log(Level.SEVERE, null, x);
+        }
+        return plots;
+    }
+    
     public boolean updatePlot(Plot plot) {
         try {
             DBConnectionFactory myFactory = DBConnectionFactory.getInstance();

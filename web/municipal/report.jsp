@@ -66,7 +66,7 @@
                                     <div class="x_content">
                                         <!-- view reported -->
                                         <div class="row">
-                                            <div class="col-md-2 col-lg-2 col-sm-2">
+                                            <div class="col-md-2">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -87,8 +87,8 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="col-md-10 col-lg-10 col-sm-10" style="padding-left: 20px">
-                                                <iframe id="pdfContainer" style="height: 800px; width: 1200px"></iframe>
+                                            <div class="col-md-9 col-md-offset-1">
+                                                <iframe id="pdfContainer" style="height: 800px; width: 100%"></iframe>
                                             </div>
                                         </div>
                                         <!-- /view reports -->

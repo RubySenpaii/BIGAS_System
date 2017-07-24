@@ -205,7 +205,7 @@
                                                                     %>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:void(0)" onclick="document.getElementById('incidentImage').src = src ="/BIGAS_System/ImageViewer?fileName=<%=reports.get(a).getImage()%>">
+                                                                            <a href="javascript:void(0)" onclick="document.getElementById('incidentImage').src ='/BIGAS_System/ImageViewer?fileName=<%=reports.get(a).getImage()%>'">
                                                                                <%=reports.get(a).getDateReported()%>
                                                                         </a>
                                                                     </td>
@@ -216,8 +216,8 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <div id="image" class="col-md-10 col-md-offset-2">
-                                                        <iframe id="imageHandler"  style="height: 768px; width: 1024px"></iframe>
+                                                    <div id="image" class="col-md-9 col-md-offset-1">
+                                                        <iframe id="incidentImage"  style="height: 768px; width: 1024px"></iframe>
                                                     </div>
                                                 </div>
 

@@ -62,12 +62,12 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 40%">Questionnaire</th>
-                                                        <th style="width: 10%; text-align: center">Not Applicable</th>
-                                                        <th style="width: 10%; text-align: center">Strongly Disagree</th>
-                                                        <th style="width: 10%; text-align: center">Slightly Disagree</th>
-                                                        <th style="width: 10%; text-align: center">Neutral</th>
-                                                        <th style="width: 10%; text-align: center">Slightly Agree</th>
-                                                        <th style="width: 10%; text-align: center">Strongly Agree</th>
+                                                        <th style="width: 10%; text-align: center">0 - Not Applicable</th>
+                                                        <th style="width: 10%; text-align: center">1 - Strongly Disagree</th>
+                                                        <th style="width: 10%; text-align: center">2 - Slightly Disagree</th>
+                                                        <th style="width: 10%; text-align: center">3 - Neutral</th>
+                                                        <th style="width: 10%; text-align: center">4 - Slightly Agree</th>
+                                                        <th style="width: 10%; text-align: center">5 - Strongly Agree</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

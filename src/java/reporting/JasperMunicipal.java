@@ -127,7 +127,7 @@ public class JasperMunicipal {
             JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
             jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
         }
-        String filename = municipal + programPlan.getProgramName() + "ProgramReport" + dateNow;
+        String filename = municipal.getMunicipalityName() + programPlan.getProgramName() + "ProgramReport" + dateNow;
         filename = filename.replaceAll(" ", "");
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }

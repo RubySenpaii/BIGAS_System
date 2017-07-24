@@ -198,7 +198,7 @@ public class MunicipalPerformance extends BaseServlet {
         String farmName = request.getParameter("farmName");
         Farm farm = new FarmDAO().getFarmDetailOnFarmName(farmName);
         Farmer farmer = new FarmerDAO().getFarmerDetaillsOnFarm(farm.getFarmID());
-        ArrayList<Plot> plots = new PlotDAO().getListOfPlotsInFarm(farm);
+        ArrayList<Plot> plots = new PlotDAO().getListOfActivePlotsInFarm(farm);
         ArrayList<PlantingReport> plantingReports = new PlantingReportDAO().getListOfPlantingReportsInFarm(farm.getFarmID());
         for (int a = 0; a < plantingReports.size(); a++) {
             String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());

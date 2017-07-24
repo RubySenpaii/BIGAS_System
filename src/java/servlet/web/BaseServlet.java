@@ -8,6 +8,7 @@ package servlet.web;
 import dao.MunicipalityDAO;
 import dao.NotificationDAO;
 import extra.Calculator;
+import extra.ImportantProblem;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -82,25 +83,25 @@ public abstract class BaseServlet extends HttpServlet {
     protected void updateNotification(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Employee userLogged = (Employee) session.getAttribute("userLogged");
-        ArrayList<Notification> notifications = new ArrayList<>();
+        ArrayList<ImportantProblem> notifications = new ArrayList<>();
         if (userLogged.getOfficeLevel().equals("PAO")) {
             //notifications = new NotificationDAO().getListOfNotificationsForPAO();
             ArrayList<Municipality> municipalities = new MunicipalityDAO().getListOfMunicipalities();
             for (int a = 0; a < municipalities.size(); a++) {
-                ArrayList<Notification> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification3(municipalities.get(a).getMunicipalityID());
+                ArrayList<ImportantProblem> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification4(municipalities.get(a).getMunicipalityID());
                 notifications.addAll(pestDiseasesNotifications);
             }
         } else if (userLogged.getAuthority().equals("Technician")) {
             //notifications = new NotificationDAO().getListOfNotificationsForTechnician();
         } else {
             //notifications = new NotificationDAO().getListOfNotificationsForMAO();
-            ArrayList<Notification> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification3(userLogged.getMunicipalityID());
+            ArrayList<ImportantProblem> pestDiseasesNotifications = new Calculator().getPestAndDiseaseNotification4(userLogged.getMunicipalityID());
             for (int a = 0; a < pestDiseasesNotifications.size(); a++) {
                 notifications.add(0, pestDiseasesNotifications.get(a));
             }
         }
         System.out.println("notifications size: " + notifications.size());
-        session.setAttribute("notifications", notifications);
+        session.setAttribute("importantProblems", notifications);
     }
 
     /**

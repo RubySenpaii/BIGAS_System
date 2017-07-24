@@ -4,6 +4,8 @@
     Author     : RubySenpaii
 --%>
 
+<%@page import="extra.Formatter"%>
+<%@page import="extra.ImportantProblem"%>
 <%@page import="object.Employee"%>
 <%@page import="object.Notification"%>
 <%@page import="java.util.ArrayList"%>
@@ -31,7 +33,7 @@
                 </li>
 
                 <%
-                    ArrayList<Notification> notifications = (ArrayList<Notification>) session.getAttribute("notifications");
+                    ArrayList<ImportantProblem> notifications = (ArrayList<ImportantProblem>) session.getAttribute("importantProblems");
                 %>
                 <li role="presentation" class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
@@ -45,10 +47,12 @@
                         <li>
                             <a>
                                 <span>
-                                    <span><b>[<%=notifications.get(a).getType().toUpperCase()%>]</b> Provided by John Smith</span>
+                                    <span><b>[<%=notifications.get(a).getDamageType().toUpperCase()%> ON <%=notifications.get(a).getProblem().getType()%>]</b> System Alert</span>
                                 </span>
                                 <span class="message">
-                                    <%=notifications.get(a).getMessage()%>
+                                    <p><%=notifications.get(a).getProblem().getProblemName()%></p>
+                                    <p>Minor Damaged: <%=notifications.get(a).getTotalMinor()%> (<%=new Formatter().doubleToString(notifications.get(a).getTotalMinor() / notifications.get(a).getPlantableArea() * 100)%>%)</p>
+                                    <p>Major Damaged: <%=notifications.get(a).getTotalMajor()%> (<%=new Formatter().doubleToString(notifications.get(a).getTotalMajor() / notifications.get(a).getPlantableArea() * 100)%>%)</p>
                                 </span>
                             </a>
                         </li>

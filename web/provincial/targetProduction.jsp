@@ -57,7 +57,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Average Yield Per Municipality'
+                        text: 'Target Production Per Municipality'
                     },
                     xAxis: {
                         categories: category,

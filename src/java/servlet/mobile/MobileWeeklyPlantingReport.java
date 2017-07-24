@@ -63,6 +63,7 @@ public class MobileWeeklyPlantingReport extends HttpServlet {
                     //do nothing
                     updatePS.addBatch();
                 } else {
+                    System.out.println(weeklyPlantingReports.get(a).getPlantingReportID() + " " + weeklyPlantingReports.get(a).getDateReported());
                     addPS.setString(1, weeklyPlantingReports.get(a).getCropStage());
                     addPS.setString(2, weeklyPlantingReports.get(a).getDateReported());
                     addPS.setDouble(3, weeklyPlantingReports.get(a).getHeight());

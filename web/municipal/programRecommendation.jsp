@@ -93,7 +93,7 @@
                                                             <th style="width: 20%">Program Name</th>
                                                             <th style="width: 10%">Program Type</th>
                                                             <th style="width: 40%">Program Requirements</th>
-                                                            <th style="width: 15%">Success Rate</th>
+                                                            <th style="width: 15%">Effectivity Rate</th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
