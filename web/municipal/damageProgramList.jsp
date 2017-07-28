@@ -81,9 +81,9 @@
                                                             <td><%=incidents.get(a).getDeployedID()%></td>
                                                             <td><%=incidents.get(a).getProblemName()%></td>
                                                             <td><%=incidents.get(a).getBarangayName()%></td>
-                                                            <td><%=incidents.get(a).getFarmsAffected()%> farm(s)</td>
-                                                            <td><%=format.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
-                                                            <td><%=format.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
+                                                            <td style="text-align: right"><%=incidents.get(a).getFarmsAffected()%> farm(s)</td>
+                                                            <td style="text-align: right"><%=format.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
+                                                            <td style="text-align: right"><%=format.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
                                                             <td><%=incidents.get(a).getEscalationLevel()%></td>
                                                             <td>
                                                                 <a href="/BIGAS_System/MunicipalDamages?action=goToProgramDamagesOverview&problemID=<%=incidents.get(a).getProblemReported()%>&barangayName=<%=incidents.get(a).getBarangayName()%>&deployedID=<%=incidents.get(a).getDeployedID()%>" class="btn btn-success">

@@ -87,10 +87,10 @@
                                                             <td><%=incidents.get(a).getProblemName()%></td>
                                                             <td><%=incidents.get(a).getBarangayName()%></td>
                                                             <td><%=date%></td>
-                                                            <td><%=incidents.get(a).getFarmsAffected()%> farm(s)</td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getPlantableSize())%> ha</td>
+                                                            <td style="text-align: right"><%=incidents.get(a).getFarmsAffected()%> farm(s)</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getPlantableSize())%> ha</td>
                                                             <td><%=incidents.get(a).getEscalationLevel()%></td>
                                                             <td>
                                                                 <a href="/BIGAS_System/MunicipalDamages?action=goToApprovedDamagesOverview&problemID=<%=incidents.get(a).getProblemReported()%>&barangayName=<%=incidents.get(a).getBarangayName()%>" class="btn btn-success">

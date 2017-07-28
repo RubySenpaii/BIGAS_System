@@ -241,7 +241,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Total Harvest Production For March 16, 2016 - March 15, 2017'
+                        text: 'Total Harvest Production For March 16, 2017 - March 15, 2018'
                     },
                     subtitle: {
                         text: values[0].municipal
@@ -372,8 +372,8 @@
                                                             <td><%=newIncidents.get(a).getProblemName()%></td>
                                                             <td><%=newIncidents.get(a).getFarmName()%></td>
                                                             <td><%=date%></td>
-                                                            <td><%=formatter.doubleToString(newIncidents.get(a).getTotalAreaAffected())%> ha</td>
-                                                            <td><%=formatter.doubleToString(newIncidents.get(a).getTotalAreaDamaged())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(newIncidents.get(a).getTotalAreaAffected())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(newIncidents.get(a).getTotalAreaDamaged())%> ha</td>
                                                             <td>
                                                                 <a href="/BIGAS_System/MunicipalDamages?action=reviewDamages&incidentID=<%=newIncidents.get(a).getDamageIncidentID()%>" class="btn btn-success">
                                                                     View Problem

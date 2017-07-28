@@ -664,24 +664,25 @@ public class ProvincialProgram extends BaseServlet {
         ArrayList<ProgramProcedure> procedures = (ArrayList<ProgramProcedure>) session.getAttribute("newProcedures");
 
         boolean surveyExists = (boolean) session.getAttribute("surveyExists");
+        boolean surveyCreated = false;
         if (!surveyExists) {
             ArrayList<ProgramSurvey> survey = (ArrayList<ProgramSurvey>) session.getAttribute("surveys");
-            boolean surveyCreated = new ProgramSurveyDAO().addProgramSurvey(survey);
+            surveyCreated = new ProgramSurveyDAO().addProgramSurvey(survey);
             System.out.println("survey created: " + surveyCreated);
+        }
 
-            if (surveyCreated) {
-                boolean addPlan = new ProgramPlanDAO().addProgramPlan(programPlan);
-                System.out.println("add plan success: " + addPlan);
-                if (addPlan) {
-                    for (int a = 0; a < triggers.size(); a++) {
-                        boolean addTriggers = new ProgramTriggerDAO().addProgramTrigger(triggers.get(a));
-                        System.out.println("trigger " + a + " added: " + addTriggers);
-                    }
+        if (surveyCreated ||  surveyExists) {
+            boolean addPlan = new ProgramPlanDAO().addProgramPlan(programPlan);
+            System.out.println("add plan success: " + addPlan);
+            if (addPlan) {
+                for (int a = 0; a < triggers.size(); a++) {
+                    boolean addTriggers = new ProgramTriggerDAO().addProgramTrigger(triggers.get(a));
+                    System.out.println("trigger " + a + " added: " + addTriggers);
+                }
 
-                    for (int a = 0; a < procedures.size(); a++) {
-                        boolean addProcedure = new ProgramProcedureDAO().addProgramProcedure(procedures.get(a));
-                        System.out.println("procedure " + a + " added: " + addProcedure);
-                    }
+                for (int a = 0; a < procedures.size(); a++) {
+                    boolean addProcedure = new ProgramProcedureDAO().addProgramProcedure(procedures.get(a));
+                    System.out.println("procedure " + a + " added: " + addProcedure);
                 }
             }
         }

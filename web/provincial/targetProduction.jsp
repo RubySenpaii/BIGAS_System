@@ -100,7 +100,7 @@
                         var target = targetProduction * parseFloat(percent) / 100;
                         document.getElementById('recommendedTarget' + a).value = Math.round(target * 100) / 100;
                     } else {
-                        document.getElementById('recommendedTarget' + a).value = 0;
+                        document.getElementById('recommendedTarget' + a).value = 0.00;
                     }
                 }
             }
@@ -167,12 +167,12 @@
                                                             %>
                                                             <tr>
                                                                 <td><%=municipals.get(a).getAttribute1()%></td>
-                                                                <td><%=municipals.get(a).getAttribute2()%></td>
-                                                                <td><%=municipals.get(a).getAttribute3()%></td>
-                                                                <td><%=municipals.get(a).getAttribute4()%></td>
-                                                                <td id='percent<%=a%>'><%=municipals.get(a).getAttribute5()%></td>
-                                                                <td><%=municipals.get(a).getAttribute6()%></td>
-                                                                <td><input id="recommendedTarget<%=a%>" name="recommendedTarget<%=a%>" type="text"></td>
+                                                                <td style="text-align: right"><%=municipals.get(a).getAttribute2()%></td>
+                                                                <td style="text-align: right"><%=municipals.get(a).getAttribute3()%></td>
+                                                                <td style="text-align: right"><%=municipals.get(a).getAttribute4()%></td>
+                                                                <td style="text-align: right" id='percent<%=a%>'><%=municipals.get(a).getAttribute5()%></td>
+                                                                <td style="text-align: right"><%=municipals.get(a).getAttribute6()%></td>
+                                                                <td style="text-align: right"><input id="recommendedTarget<%=a%>" name="recommendedTarget<%=a%>" type="text"></td>
                                                             </tr>
                                                             <%
                                                                 }

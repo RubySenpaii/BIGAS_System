@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -49,11 +49,11 @@
 	</style>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<subDataset name="dataset1" uuid="ee8416b4-b09c-4c3f-9779-85ca3f8912a6">
-		<parameter name="municipal" class="java.lang.String">
-			<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
-		</parameter>
 		<parameter name="date" class="java.lang.String">
-			<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="municipal" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
 			<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
@@ -70,10 +70,10 @@ JOIN (SELECT WPR1.*
 										   FROM WeeklyPlantingReport WPR2
                                            WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{date}, '%m-%d-%Y')
                                            GROUP BY WPR2.PlantingReportID) IT1 
-	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2 
+	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
 ON T1.PlantingReportID = T2.PlantingReportID
 GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
-HAVING T1.MunicipalityName = $P{municipal}]]>
+HAVING T1.MunicipalityName = $P{municipal};]]>
 		</queryString>
 		<field name="BarangayName" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
@@ -87,7 +87,7 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 		<field name="PlantedArea" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="report_date" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["07-08-2017"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["06-10-2017"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="preparedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Cynthia Nunez"]]></defaultValueExpression>
@@ -99,7 +99,13 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 		<defaultValueExpression><![CDATA["Paombong"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea'
+		<![CDATA[SELECT GG1.BarangayName, GG1.MunicipalityName, GG2.NewlyPlanted, GG3.Tillering, GG4.Reproductive, GG5.Maturity
+ FROM
+ (SELECT B.BarangayName, M.MunicipalityName
+ FROM Barangay B JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
+ WHERE M.MunicipalityName = "Paombong") GG1
+ LEFT JOIN
+(SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'NewlyPlanted'
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
 	  FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
 							 JOIN Farm F ON P.FarmID = F.FarmID 
@@ -113,21 +119,79 @@ JOIN (SELECT WPR1.*
 										   FROM WeeklyPlantingReport WPR2
                                            WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{report_date}, '%m-%d-%Y')
                                            GROUP BY WPR2.PlantingReportID) IT1 
-	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2 
+	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
 ON T1.PlantingReportID = T2.PlantingReportID
 GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
-HAVING T1.MunicipalityName = $P{municipal}]]>
+HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Newly Planted") GG2 ON GG1.BarangayName = GG2.BarangayName AND GG1.MunicipalityName = GG2.MunicipalityName
+LEFT JOIN
+(SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'Tillering'
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
+	  FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
+							 JOIN Farm F ON P.FarmID = F.FarmID 
+                             JOIN Barangay B ON F.BarangayID = B.BarangayID
+                             JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+	  GROUP BY PR.PlotID) T1
+JOIN (SELECT WPR1.*
+	  FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
+										   FROM WeeklyPlantingReport WPR2
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+                                           GROUP BY WPR2.PlantingReportID) IT1 
+	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
+ON T1.PlantingReportID = T2.PlantingReportID
+GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
+HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Tillering") GG3 ON GG1.BarangayName = GG3.BarangayName AND GG1.MunicipalityName = GG3.MunicipalityName
+LEFT JOIN
+(SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'Reproductive'
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
+	  FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
+							 JOIN Farm F ON P.FarmID = F.FarmID 
+                             JOIN Barangay B ON F.BarangayID = B.BarangayID
+                             JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+	  GROUP BY PR.PlotID) T1
+JOIN (SELECT WPR1.*
+	  FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
+										   FROM WeeklyPlantingReport WPR2
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+                                           GROUP BY WPR2.PlantingReportID) IT1 
+	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
+ON T1.PlantingReportID = T2.PlantingReportID
+GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
+HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Reproductive") GG4 ON GG1.BarangayName = GG4.BarangayName AND GG1.MunicipalityName = GG4.MunicipalityName
+LEFT JOIN
+(SELECT T1.BarangayName, T1.MunicipalityName, T2.CropStage, SUM(T1.PlotSize) AS 'Maturity'
+FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, P.PlotSize, MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
+	  FROM PlantingReport PR JOIN Plot P ON PR.PlotID = P.PlotID
+							 JOIN Farm F ON P.FarmID = F.FarmID 
+                             JOIN Barangay B ON F.BarangayID = B.BarangayID
+                             JOIN Municipality M ON B.MunicipalityID = M.MunicipalityID
+	  WHERE STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y') > STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+			AND STR_TO_DATE(CONCAT(PR.PlantedMonth, '-', PR.PlantedDay, '-', PR.PlantedYear), '%m-%d-%Y') <= STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+	  GROUP BY PR.PlotID) T1
+JOIN (SELECT WPR1.*
+	  FROM WeeklyPlantingReport WPR1 JOIN (SELECT MAX(STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y')) AS 'LatestReport', WPR2.PlantingReportID
+										   FROM WeeklyPlantingReport WPR2
+                                           WHERE STR_TO_DATE(WPR2.DateReported, '%m-%d-%Y') < STR_TO_DATE($P{report_date}, '%m-%d-%Y')
+                                           GROUP BY WPR2.PlantingReportID) IT1 
+	  ON WPR1.PlantingReportID = IT1.PlantingReportID AND STR_TO_DATE(WPR1.DateReported, '%m-%d-%Y') = IT1.LatestReport) T2
+ON T1.PlantingReportID = T2.PlantingReportID
+GROUP BY T1.BarangayName, T1.MunicipalityName, T2.CropStage
+HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Maturity") GG5 ON GG1.BarangayName = GG5.BarangayName AND GG1.MunicipalityName = GG5.MunicipalityName;]]>
 	</queryString>
-	<field name="BarangayName" class="java.lang.String">
+	<field name="BarangayName" class="java.lang.String"/>
+	<field name="MunicipalityName" class="java.lang.String"/>
+	<field name="NewlyPlanted" class="java.lang.Double"/>
+	<field name="Tillering" class="java.lang.Double"/>
+	<field name="Reproductive" class="java.lang.Double"/>
+	<field name="Maturity" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="MunicipalityName" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="CropStage" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="PlantedArea" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
 	<pageHeader>
 		<band height="87" splitType="Stretch">
 			<staticText>
@@ -159,13 +223,61 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="364" y="3" width="152" height="84" uuid="8c06e34c-595b-4560-92e4-da656215574f"/>
+				<reportElement x="354" y="3" width="152" height="84" uuid="9a9398f3-8363-491d-ba26-662262de8f8f"/>
 				<imageExpression><![CDATA["C:\\Users\\RubySenpaii\\Desktop\\NetBeansProjects\\BIGAS System\\web\\images\\rsc\\logo_dept_agri.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="0" width="148" height="30" uuid="cc5b8e10-53bb-444c-bb4f-2f393609f1a0"/>
+				<text><![CDATA[Barangay Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="0" width="106" height="30" uuid="a72bc33b-4ce8-4ab7-b24c-43bd9dc09851"/>
+				<text><![CDATA[Newly Planted]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="254" y="0" width="100" height="30" uuid="77fe5b46-1653-4bd2-ad63-e5e580f3d87e"/>
+				<text><![CDATA[Tillering]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="0" width="113" height="30" uuid="ca65b030-ff40-43a3-806b-81a6737bc07b"/>
+				<text><![CDATA[Reproductive]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="466" y="0" width="116" height="30" uuid="85b51841-0013-4182-beab-036a9c17d6b0"/>
+				<text><![CDATA[Harvested]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27">
+			<textField>
+				<reportElement x="0" y="0" width="148" height="27" uuid="99955ada-2bd3-40e1-8a89-116fdcaccbd7"/>
+				<textFieldExpression><![CDATA[$F{BarangayName}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="148" y="0" width="106" height="27" uuid="990aa9f5-1947-4ac2-af76-49314046511e"/>
+				<textFieldExpression><![CDATA[( $F{NewlyPlanted} == null ? 0 : $F{NewlyPlanted} )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="254" y="0" width="100" height="27" uuid="bec775be-4516-4565-8baf-6492d2e8d228"/>
+				<textFieldExpression><![CDATA[( $F{Tillering} == null ? 0 : $F{Tillering} )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="353" y="1" width="113" height="26" uuid="c07d64c8-c501-482d-bde9-1326b690e02b"/>
+				<textFieldExpression><![CDATA[( $F{Reproductive} == null ? 0 : $F{Reproductive} )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement x="466" y="1" width="116" height="26" uuid="3d77f9b2-7f4e-46ed-8dca-f9ac41b5fabf"/>
+				<textFieldExpression><![CDATA[( $F{Maturity} == null ? 0 : $F{Maturity} )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
 	<pageFooter>
-		<band height="90" splitType="Stretch">
+		<band height="82" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="29" width="135" height="1" uuid="f65d4127-d3f2-4ccd-8591-bf6fd456480b"/>
 			</line>
@@ -189,41 +301,39 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 				<textFieldExpression><![CDATA[$P{approvedBy}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEE, d MMM yyyy HH:mm:ss Z">
-				<reportElement x="1" y="70" width="343" height="20" uuid="52840993-ed59-4d4c-ae6a-b7dce106d9ef"/>
+				<reportElement x="0" y="62" width="232" height="20" uuid="cf73f501-4e4c-4fcd-a247-ecd40c2cf65e"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="848" y="70" width="80" height="20" uuid="fa9a23b1-2d13-4146-b6ec-084951acb5ba"/>
+				<reportElement x="848" y="62" width="80" height="20" uuid="70c8f809-8445-46bb-b2f0-8948162829ce"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="928" y="70" width="40" height="20" uuid="dccb1d17-49ed-4c68-957b-e0d025060355"/>
+				<reportElement x="928" y="62" width="40" height="20" uuid="918c09b7-77df-4a0a-a3c7-1d1f1863bea6"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="572" splitType="Stretch">
-			<break>
-				<reportElement x="0" y="173" width="100" height="1" uuid="020ff5bf-6512-4285-afa5-c3219ccb7d2d"/>
-			</break>
-			<barChart>
+		<band height="184" splitType="Stretch">
+			<stackedBarChart>
 				<chart>
-					<reportElement mode="Transparent" x="0" y="190" width="968" height="382" uuid="a7b5658e-b81d-4232-8644-cab99ccd1e1c"/>
+					<reportElement x="0" y="0" width="968" height="184" uuid="0b764d49-0686-4e17-9c28-9be8ac05fdec"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
 				<categoryDataset>
 					<dataset>
-						<datasetRun subDataset="dataset1" uuid="b489c9ef-ed35-4119-aa85-80ed45082e7b">
-							<datasetParameter name="municipal">
-								<datasetParameterExpression><![CDATA[$P{municipal}]]></datasetParameterExpression>
-							</datasetParameter>
+						<datasetRun subDataset="dataset1" uuid="bc5c7ced-53fc-4649-acf2-35fe299b737c">
 							<datasetParameter name="date">
 								<datasetParameterExpression><![CDATA[$P{report_date}]]></datasetParameterExpression>
 							</datasetParameter>
+							<datasetParameter name="municipal">
+								<datasetParameterExpression><![CDATA[$P{municipal}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 						</datasetRun>
 					</dataset>
 					<categorySeries>
@@ -233,138 +343,19 @@ HAVING T1.MunicipalityName = $P{municipal}]]>
 					</categorySeries>
 				</categoryDataset>
 				<barPlot>
-					<plot labelRotation="-60.0"/>
+					<plot/>
 					<itemLabel/>
-					<categoryAxisFormat labelRotation="-60.0">
+					<categoryAxisFormat>
 						<axisFormat/>
 					</categoryAxisFormat>
 					<valueAxisFormat>
 						<axisFormat/>
 					</valueAxisFormat>
 				</barPlot>
-			</barChart>
-			<crosstab>
-				<reportElement x="1" y="0" width="968" height="160" uuid="74b63da6-ce24-48e5-92b4-73cb94ade337"/>
-				<crosstabHeaderCell>
-					<cellContents>
-						<staticText>
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="234" height="22" uuid="7b5e169f-388e-4ba0-a022-063512d24875"/>
-							<text><![CDATA[Barangay Name]]></text>
-						</staticText>
-					</cellContents>
-				</crosstabHeaderCell>
-				<rowGroup name="BarangayName" width="234" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{BarangayName}]]></bucketExpression>
-					</bucket>
-					<crosstabRowHeader>
-						<cellContents backcolor="#F0F8FF" mode="Opaque">
-							<box>
-								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textField>
-								<reportElement style="Crosstab Data Text" x="0" y="0" width="234" height="18" uuid="6c94793a-06ed-43ff-80cf-dcbcad29c3b7"/>
-								<textFieldExpression><![CDATA[$V{BarangayName}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabRowHeader>
-					<crosstabTotalRowHeader>
-						<cellContents backcolor="#BFE1FF" mode="Opaque">
-							<box>
-								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<staticText>
-								<reportElement x="0" y="0" width="234" height="18" uuid="bba564ac-dc69-438d-944f-579da7f7eeca"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Totals:]]></text>
-							</staticText>
-						</cellContents>
-					</crosstabTotalRowHeader>
-				</rowGroup>
-				<columnGroup name="CropStage" height="22" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{CropStage}]]></bucketExpression>
-					</bucket>
-					<crosstabColumnHeader>
-						<cellContents backcolor="#F0F8FF" mode="Opaque">
-							<box>
-								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textField>
-								<reportElement style="Crosstab Data Text" x="0" y="0" width="111" height="22" uuid="8525294f-d3cf-45bc-bd79-a2c2780402d9"/>
-								<textFieldExpression><![CDATA[$V{CropStage}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabColumnHeader>
-					<crosstabTotalColumnHeader>
-						<cellContents backcolor="#BFE1FF" mode="Opaque">
-							<box>
-								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<staticText>
-								<reportElement x="0" y="0" width="110" height="22" uuid="209a2e8e-27dc-46c5-a69f-0af3d40e17ef"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Total Planted Area]]></text>
-							</staticText>
-						</cellContents>
-					</crosstabTotalColumnHeader>
-				</columnGroup>
-				<measure name="PlantedAreaMeasure" class="java.lang.Double" calculation="Sum">
-					<measureExpression><![CDATA[$F{PlantedArea}]]></measureExpression>
-				</measure>
-				<crosstabCell width="111" height="18">
-					<cellContents>
-						<box>
-							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-						</box>
-						<textField pattern="#,##0.00 ha">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="111" height="18" uuid="0567dffa-5ac8-4908-97cc-7295256c6a73"/>
-							<textFieldExpression><![CDATA[$V{PlantedAreaMeasure}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="111" height="18" rowTotalGroup="BarangayName">
-					<cellContents backcolor="#BFE1FF" mode="Opaque">
-						<box>
-							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-						</box>
-						<textField pattern="#,##0.00 ha">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="111" height="18" uuid="2625816f-bb23-4bcf-8e9e-19822102e34b"/>
-							<textFieldExpression><![CDATA[$V{PlantedAreaMeasure_BarangayName_ALL}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="110" height="18" columnTotalGroup="CropStage">
-					<cellContents backcolor="#BFE1FF" mode="Opaque">
-						<box>
-							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-						</box>
-						<textField pattern="#,##0.00 ha">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="110" height="18" uuid="47a4c6fb-e6f2-467d-89b6-0f2eb0e585e6"/>
-							<textFieldExpression><![CDATA[$V{PlantedAreaMeasure_CropStage_ALL}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="110" height="18" rowTotalGroup="BarangayName" columnTotalGroup="CropStage">
-					<cellContents backcolor="#BFE1FF" mode="Opaque">
-						<box>
-							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-						</box>
-						<textField pattern="#,##0.00 ha">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="110" height="18" uuid="3890a11d-622f-453a-9dc0-8cfb32f6e1fb"/>
-							<textFieldExpression><![CDATA[$V{PlantedAreaMeasure_BarangayName_CropStage_ALL}]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-			</crosstab>
+			</stackedBarChart>
 		</band>
 	</summary>
 	<noData>
-		<band height="91">
-			<staticText>
-				<reportElement x="439" y="33" width="100" height="20" uuid="333de588-c97c-4604-8c83-717e820d0a89"/>
-				<text><![CDATA[Page left blank]]></text>
-			</staticText>
-		</band>
+		<band height="50"/>
 	</noData>
 </jasperReport>

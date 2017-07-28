@@ -140,10 +140,10 @@
                                                                         <td><%=plantingReports.get(a).getPlantingReportID()%></td>
                                                                         <td><%=plantingReports.get(a).getSeedVariety()%></td>
                                                                         <td><%=plantedDate%></td>
-                                                                        <td><%=formatter.doubleToString(plantingReports.get(a).getAmountPlanted())%> kg</td>
-                                                                        <td><%=formatter.doubleToString(plantingReports.get(a).getAmountHarvested())%> MT</td>
+                                                                        <td style="text-align: right"><%=formatter.doubleToString(plantingReports.get(a).getAmountPlanted())%> kg</td>
+                                                                        <td style="text-align: right"><%=formatter.doubleToString(plantingReports.get(a).getAmountHarvested())%> MT</td>
                                                                         <td><%=plantingReports.get(a).getStage()%></td>
-                                                                        <td><%=formatter.doubleToString(plantingReports.get(a).getAreaDamaged())%> ha</td>
+                                                                        <td style="text-align: right"><%=formatter.doubleToString(plantingReports.get(a).getAreaDamaged())%> ha</td>
                                                                     </tr>
                                                                     <%
                                                                         }

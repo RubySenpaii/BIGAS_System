@@ -163,9 +163,9 @@
                                                                         <td><%=deployedPrograms.get(a).getMunicipalName()%></td>
                                                                         <td><%=deployedPrograms.get(a).getDateStarted()%></td>
                                                                         <td><%=deployedPrograms.get(a).getStatus()%></td>
-                                                                        <td><%=deployedPrograms.get(a).getFarmCount()%></td>
-                                                                        <td><%=seedProvisisions%></td>
-                                                                        <td><%=fertilizerProvisions%></td>
+                                                                        <td style="text-align: right"><%=deployedPrograms.get(a).getFarmCount()%> farm(s)</td>
+                                                                        <td style="text-align: right"><%=seedProvisisions%> kg</td>
+                                                                        <td style="text-align: right"><%=fertilizerProvisions%> kg</td>
                                                                         <td><%=deployedPrograms.get(a).getEffectivityResult()%></td>
                                                                         <td>
                                                                             <a href="/BIGAS_System/MunicipalProgram?action=viewDeployedProgramDetails&deployedID=<%=deployedPrograms.get(a).getDeployedID()%>" class="btn btn-success">

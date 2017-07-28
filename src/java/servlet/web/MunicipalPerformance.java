@@ -64,6 +64,10 @@ public class MunicipalPerformance extends BaseServlet {
                 System.out.println("directing to monitorCropGrowth.jsp...");
                 viewCropGrowthMonitoring(request, response);
                 path = "/municipal/monitorCropGrowth.jsp";
+            } else if (action.equals("performanceSummary")) {
+                System.out.println("directing to performanceSummary.jsp...");
+                viewPerformanceSummary(request, response);
+                path = "/municipal/performanceSummary.jsp";
             } else if (action.equals("monitorCropHarvest")) {
                 System.out.println("directing to monitorHarvest.jsp...");
                 viewCropHarvestMonitoring(request, response);
@@ -279,5 +283,32 @@ public class MunicipalPerformance extends BaseServlet {
             barangays.get(a).setPlantableArea(plantableArea);
         }
         return barangays;
+    }
+    
+    private void viewPerformanceSummary(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Employee userLogged = (Employee) session.getAttribute("userLogged");
+        
+        Municipality municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID());
+        String date = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
+        ArrayList<Barangay> currentWeekBarangay = new BarangayDAO().getBarangayAreaMonitoring(userLogged.getMunicipalityID(), date);
+        ArrayList<Barangay> barangayCropStage = new BarangayDAO().getBarangayCropGrowthMonitoring(municipal.getMunicipalityName(), date);
+        for (int a = 0; a < currentWeekBarangay.size(); a++) {
+            for (int b = 0; b < barangayCropStage.size(); b++) {
+                if (currentWeekBarangay.get(a).getBarangayName().equals(barangayCropStage.get(b).getBarangayName())) {
+                    if (barangayCropStage.get(b).getCropStage().equals("Newly Planted")) {
+                        currentWeekBarangay.get(b).setNewlyPlantedArea(barangayCropStage.get(b).getArea());
+                    } else if (barangayCropStage.get(b).getCropStage().equals("Tillering")) {
+                        currentWeekBarangay.get(b).setTilleringArea(barangayCropStage.get(b).getArea());
+                    } else if (barangayCropStage.get(b).getCropStage().equals("Reproductive")) {
+                        currentWeekBarangay.get(b).setReproductiveArea(barangayCropStage.get(b).getArea());
+                    } else {
+                        currentWeekBarangay.get(b).setHarvestingArea(barangayCropStage.get(b).getArea());
+                    }
+                }
+            }
+        }
+        
+        session.setAttribute("barangays", currentWeekBarangay);
     }
 }

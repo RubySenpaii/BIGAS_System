@@ -188,6 +188,10 @@
         <servlet-name>EncoderProgram</servlet-name>
         <servlet-class>servlet.web.EncoderProgram</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MAOPerformanceSummary</servlet-name>
+        <servlet-class>servlet.ajax.MAOPerformanceSummary</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebLogin</servlet-name>
         <url-pattern>/WebLogin</url-pattern>
@@ -375,6 +379,10 @@
     <servlet-mapping>
         <servlet-name>EncoderProgram</servlet-name>
         <url-pattern>/EncoderProgram</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MAOPerformanceSummary</servlet-name>
+        <url-pattern>/MAOPerformanceSummary</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

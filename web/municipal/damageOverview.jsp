@@ -128,8 +128,8 @@
                                                             <td><%=incidents.get(a).getStatus()%></td>
                                                             <td><%=incidents.get(a).getFarmName()%></td>
                                                             <td><%=dateAffected%></td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
                                                             <td>
                                                                 <form action="MunicipalDamages">
                                                                     <input type="hidden" name="incidentID" value="<%=incidents.get(a).getDamageIncidentID()%>">

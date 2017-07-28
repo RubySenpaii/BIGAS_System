@@ -22,12 +22,13 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                     <li><a href="/BIGAS_System/MunicipalHomepage?action=goToHomePage"><i class="fa fa-home"></i>Home Page </a></li>
-                    <li><a><i class="fa fa-tachometer"></i>Current Week Summary <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
+                    <li><a href="/BIGAS_System/MunicipalPerformance?action=performanceSummary"><i class="fa fa-tachometer"></i>Current Week Summary</a></li>
+                        <!--ul class="nav child_menu">
                             <li><a href="/BIGAS_System/MunicipalPerformance?action=monitorAreaPlanted">Farm Area</a></li>
                             <li><a href="/BIGAS_System/MunicipalPerformance?action=monitorCropGrowth">Crop Growth</a></li>
-                            <!--li><a href="/BIGAS_System/MunicipalPerformance?action=monitorCropHarvest">Crop Harvest</a></li-->
+                            <!--li><a href="/BIGAS_System/MunicipalPerformance?action=monitorCropHarvest">Crop Harvest</a></li>
                         </ul>
+                    </li-->
                     <li><a><i class="fa fa-bug"></i>Damage Incident <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="/BIGAS_System/MunicipalDamages?action=goToApprovedDamages">Approved Damages</a></li>

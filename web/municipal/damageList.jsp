@@ -82,8 +82,8 @@
                                                             <td><%=incidents.get(a).getProblemName()%></td>
                                                             <td><%=incidents.get(a).getStatus()%></td>
                                                             <td><%=incidents.get(a).getFarmName()%></td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
-                                                            <td><%=formatter.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getTotalAreaAffected())%> ha</td>
+                                                            <td style="text-align: right"><%=formatter.doubleToString(incidents.get(a).getTotalAreaDamaged())%> ha</td>
                                                             <td><%=incidents.get(a).getEscalationLevel()%></td>
                                                             <td><%=incidents.get(a).getReportedName()%></td>
                                                         </tr>

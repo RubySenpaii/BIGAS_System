@@ -65,7 +65,7 @@ public class MobileDeployedEvaluation extends HttpServlet {
                 //} else {
                     addPS.setInt(1, deployedEvaluations.get(a).getDeployedID());
                     addPS.setString(2, deployedEvaluations.get(a).getEvaluationValues());
-                    addPS.setString(3, deployedEvaluations.get(a).getFeedback().substring(0, 30));
+                    addPS.setString(3, deployedEvaluations.get(a).getFeedback());
                     addPS.setString(4, deployedEvaluations.get(a).getRespondentName());
                     addPS.addBatch();
                 //}
