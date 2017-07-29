@@ -104,6 +104,17 @@ public class MunicipalReport extends BaseServlet {
                     RequestDispatcher rd = context.getRequestDispatcher(path);
                     rd.forward(request, response);
                 }
+            } else if (action.equals("createProgramReportv2")) {
+                path = "/MunicipalReport?action=viewReports";
+                try {
+                    Municipality municipality = new MunicipalityDAO().getMunicipalDetail(municipal);
+                    ArrayList<ProgramPlan> programPlans = new ProgramPlanDAO().getListOfProgramPlans();
+                    new JasperMunicipal().createMunicipalProgramReportv2(preparedBy, approvedBy, municipality, programPlans);
+                } catch (JRException | FileNotFoundException | SQLException ex) {
+                    Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+                    RequestDispatcher rd = context.getRequestDispatcher(path);
+                    rd.forward(request, response);
+                }
             }
         } else {
             //redirect to restricted access

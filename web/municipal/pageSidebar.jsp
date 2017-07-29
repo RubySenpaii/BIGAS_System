@@ -36,7 +36,8 @@
                             <li><a href="/BIGAS_System/MunicipalDamages?action=viewIncidentHistory">Incidents History</a></li>
                         </ul>
                     </li>
-                    <li><a href="/BIGAS_System/MunicipalProgram?action=viewProblemRecommendation"><i class="fa fa-home"></i>Problem List </a></li>
+                    <li><a href="/BIGAS_System/MunicipalProgram?action=viewProblemRecommendation"><i class="fa fa-home"></i>Critical Damages </a></li>
+                    <li><a href="/BIGAS_System/MunicipalDamages?action=viewProblems"><i class="fa fa-home"></i>Problem List </a></li>
                     <li><a href="/BIGAS_System/MunicipalPerformance?action=viewBarangayPerformance"><i class="fa fa-line-chart"></i>Barangay Monitoring </a></li>
                     <li><a><i class="fa fa-laptop"></i>Program <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">

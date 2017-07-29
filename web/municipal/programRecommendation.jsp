@@ -110,7 +110,7 @@
                                                             <td><%=programPlans.get(a).getProgramName()%></td>
                                                             <td><%=programPlans.get(a).getType()%></td>
                                                             <td><%=requirements%></td>
-                                                            <td><%=programPlans.get(a).getEffectivityStatus()%></td>
+                                                            <td><%=programPlans.get(a).getEffectivityStatus()%> (<%=formatter.doubleToString(programPlans.get(a).getEffectivityRating())%>)</td>
                                                             <td>
                                                                 <a href="/BIGAS_System/MunicipalProgram?action=goToProgramDeployment&programID=<%=programPlans.get(a).getProgramPlanID()%>" class="btn btn-success">Deploy Program</a>
                                                             </td>

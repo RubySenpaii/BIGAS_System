@@ -6,6 +6,7 @@
 package dao;
 
 import db.DBConnectionFactory;
+import extra.Calculator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,9 +65,18 @@ public class ProgramPlanDAO {
         } catch (SQLException x) {
             Logger.getLogger(ProgramPlanDAO.class.getName()).log(Level.SEVERE, null, x);
         }
+
+        for (int a = 0; a < programPlans.size(); a++) {
+            Calculator calculator = new Calculator();
+            double deployedResult = calculator.getProgramRating(programPlans.get(a).getProgramPlanID());
+            String effectivity = calculator.getEffectivityResult(deployedResult);
+            System.out.println(programPlans.get(a).getProgramName() + "-" + effectivity + "-" + deployedResult);
+            programPlans.get(a).setEffectivityStatus(effectivity);
+            programPlans.get(a).setEffectivityRating(deployedResult);
+        }
         return programPlans;
     }
-    
+
     public ProgramPlan getProgramPlanDetail(String programName) {
         ArrayList<ProgramPlan> programPlans = new ArrayList<>();
         try {
@@ -87,7 +97,7 @@ public class ProgramPlanDAO {
         }
         return programPlans.get(0);
     }
-    
+
     public ProgramPlan getProgramPlanDetail(int programPlanID) {
         ArrayList<ProgramPlan> programPlans = new ArrayList<>();
         try {

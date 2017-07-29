@@ -6,7 +6,9 @@
 package extra;
 
 import dao.FarmDAO;
+import dao.MunicipalityDAO;
 import dao.PlantingReportDAO;
+import dao.ProgramPlanDAO;
 import dao.ProgramProgressDAO;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,8 +20,10 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JRException;
+import object.Municipality;
 import object.PlantingReport;
 import object.ProgramProgress;
+import reporting.JasperMunicipal;
 
 /**
  *
@@ -29,7 +33,7 @@ public class Test {
 
     public static void main(String[] args) {
 //        try {
-            //        String evalValues = "1,4,5,4,4,4,5,4,4,4";
+        //        String evalValues = "1,4,5,4,4,4,5,4,4,4";
 //        Calculator calculator = new Calculator();
 //        double val = (double) 5 / 2;
 //        System.out.println(val);
@@ -45,8 +49,8 @@ public class Test {
 //            System.out.println("filenames[]: " + fileNames[a]);
 //        }
 
-            DecimalFormat df = new DecimalFormat("#,###.##");
-            System.out.println(df.format(2238472834.52525));
+        DecimalFormat df = new DecimalFormat("#,###.##");
+        System.out.println(df.format(2238472834.52525));
 //            new JasperJava().createMunicipalWeeklyDamagesReport("Jan", "Jemi", "Paombong");
 //        } catch (JRException ex) {
 //            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,5 +59,10 @@ public class Test {
 //        } catch (SQLException ex) {
 //            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+        try {
+            new JasperMunicipal().createMunicipalProgramReportv2("me", "you", new MunicipalityDAO().getMunicipalDetail(17), new ProgramPlanDAO().getListOfProgramPlans());
+        } catch (JRException | FileNotFoundException | SQLException ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

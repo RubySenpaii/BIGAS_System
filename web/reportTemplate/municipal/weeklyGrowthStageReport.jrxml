@@ -98,6 +98,9 @@ HAVING T1.MunicipalityName = $P{municipal};]]>
 	<parameter name="municipal" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Paombong"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="dateRange" class="java.lang.String">
+		<defaultValueExpression><![CDATA["July 21, 2017 - July 28, 2017"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT GG1.BarangayName, GG1.MunicipalityName, GG2.NewlyPlanted, GG3.Tillering, GG4.Reproductive, GG5.Maturity
  FROM
@@ -215,17 +218,17 @@ HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Maturity") GG5 ON
 				</textElement>
 				<text><![CDATA[Municipal Agriculture Office]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="453" y="66" width="172" height="21" uuid="87b038fb-0f1b-4a3f-af82-f5b1912541c4"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="354" y="3" width="152" height="84" uuid="9a9398f3-8363-491d-ba26-662262de8f8f"/>
 				<imageExpression><![CDATA["C:\\Users\\RubySenpaii\\Desktop\\NetBeansProjects\\BIGAS System\\web\\images\\rsc\\logo_dept_agri.jpg"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="453" y="66" width="172" height="21" uuid="2f67fb6a-6c70-4295-8bce-8d8a969ddb4f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateRange}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

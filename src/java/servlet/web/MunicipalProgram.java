@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -104,9 +106,9 @@ public class MunicipalProgram extends BaseServlet {
                     path = "/MunicipalHomepage?action=goToHomePage";
                 }
             } else if (action.equals("viewProblemRecommendation")) {
-                System.out.println("directing to problemList.jsp");
+                System.out.println("directing to criticalDamages.jsp");
                 viewProblemRecommendation(request, response);
-                path = "/municipal/problemList.jsp";
+                path = "/municipal/criticalDamages.jsp";
             } else if (action.equals("updateProgress")) {
                 System.out.println("directing to programDeployedDetail.jsp");
                 int deployedID = updateProgress(request, response);
@@ -159,6 +161,7 @@ public class MunicipalProgram extends BaseServlet {
         for (int a = 0; a < programPlans.size(); a++) {
             double programResult = calculator.getProgramRating(programPlans.get(a).getProgramPlanID());
             String effectivity = calculator.getEffectivityResult(programResult);
+            programPlans.get(a).setEffectivityRating(programResult);
             programPlans.get(a).setEffectivityStatus(effectivity);
 
             ArrayList<ProgramTrigger> programTriggers = new ProgramTriggerDAO().getListOfProgramTriggersForProgramID(programPlans.get(a).getProgramPlanID());
@@ -225,6 +228,8 @@ public class MunicipalProgram extends BaseServlet {
         for (int a = 0; a < remove.size(); a++) {
             programPlans.remove(remove.get(a));
         }
+
+        Collections.sort(programPlans, (ProgramPlan p1, ProgramPlan p2) -> Double.compare(p2.getEffectivityRating(), p1.getEffectivityRating()));
 
         session.setAttribute("importantProblem", importantProblem);
         session.setAttribute("programPlans", programPlans);
@@ -344,12 +349,6 @@ public class MunicipalProgram extends BaseServlet {
         Calculator calculator = new Calculator();
 
         ArrayList<ProgramPlan> programPlans = new ProgramPlanDAO().getListOfProgramPlans();
-        for (int a = 0; a < programPlans.size(); a++) {
-            double deployedResult = calculator.getProgramRating(programPlans.get(a).getProgramPlanID());
-            String effectivity = calculator.getEffectivityResult(deployedResult);
-            System.out.println(programPlans.get(a).getProgramName() + "-" + effectivity + "-" + deployedResult);
-            programPlans.get(a).setEffectivityStatus(effectivity);
-        }
 
         session.setAttribute("programPlans", programPlans);
     }

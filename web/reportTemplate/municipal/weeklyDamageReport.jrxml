@@ -83,6 +83,7 @@ GROUP BY IT2.ProblemName]]>
 	<parameter name="municipalityName" class="java.lang.String">
 		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="dateRange" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT IT1.BarangayName, IT1.MunicipalityName, SUM(IT1.PlantedArea) AS 'PlantedArea', SUM(IT2.MinorDamaged) AS 'MinorDamaged', SUM(IT2.MajorDamaged) AS 'MajorDamaged'
 FROM (SELECT PR.*, B.BarangayName, M.MunicipalityName, SUM(P.PlotSize) AS 'PlantedArea', MAX(STR_TO_DATE(CONCAT(PR.HarvestMonth, '-', PR.HarvestDay, '-', PR.HarvestYear), '%m-%d-%Y'))
@@ -139,17 +140,17 @@ GROUP BY IT1.BarangayName, IT1.MunicipalityName]]>
 				</textElement>
 				<text><![CDATA[Municipal Agriculture Office]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="245" y="75" width="172" height="21" uuid="87b038fb-0f1b-4a3f-af82-f5b1912541c4"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="156" y="12" width="152" height="84" uuid="8c06e34c-595b-4560-92e4-da656215574f"/>
 				<imageExpression><![CDATA["C:\\Users\\RubySenpaii\\Desktop\\NetBeansProjects\\BIGAS System\\web\\images\\rsc\\logo_dept_agri.jpg"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="245" y="75" width="172" height="21" uuid="1a62d7e6-1cd2-438d-9e5f-e8f93db74a1a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateRange}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

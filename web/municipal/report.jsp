@@ -58,6 +58,8 @@
                                                     <button type="submit" name="action" value="createDamages"class="btn btn-info">Generate Damage</button>
 
                                                     <button type="submit" name="action" value="createHarvest"class="btn btn-info">Generate Harvest</button>
+                                                    
+                                                    <button type="submit" name="action" value="createProgramReportv2"class="btn btn-info">Generate Program Plan</button>
                                                 </form>
                                             </div>
                                         </div>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="994" leftMargin="7" rightMargin="7" topMargin="7" bottomMargin="7" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="212"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -39,6 +39,9 @@
 	</parameter>
 	<parameter name="municipality_name" class="java.lang.String">
 		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateRange" class="java.lang.String">
+		<defaultValueExpression><![CDATA["July 21, 2017 - July 28, 2017"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT T1.BarangayName, T1.MunicipalityName, T1.SeedType, T1.SeedAcquisition, T2.CropStage, SUM(T1.PlotSize) AS 'PlantedArea', SUM(T1.AmountHarvested) AS 'Harvest'
@@ -103,17 +106,17 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 				</textElement>
 				<text><![CDATA[Municipal Agriculture Office]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="422" y="67" width="172" height="21" uuid="87b038fb-0f1b-4a3f-af82-f5b1912541c4"/>
-				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="333" y="4" width="152" height="84" uuid="8c06e34c-595b-4560-92e4-da656215574f"/>
 				<imageExpression><![CDATA["C:\\Users\\RubySenpaii\\Desktop\\NetBeansProjects\\BIGAS System\\web\\images\\rsc\\logo_dept_agri.jpg"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="422" y="67" width="172" height="20" uuid="e293a6f6-c427-4d50-b1e9-485763027365"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateRange}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<pageFooter>

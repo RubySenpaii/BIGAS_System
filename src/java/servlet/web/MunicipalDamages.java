@@ -15,6 +15,7 @@ import dao.MunicipalityDAO;
 import dao.PlotDAO;
 import dao.ProblemDAO;
 import dao.ProgramBeneficiaryDAO;
+import dao.ProgramPlanDAO;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
@@ -33,6 +34,7 @@ import object.Municipality;
 import object.Plot;
 import object.Problem;
 import object.ProgramBeneficiary;
+import object.ProgramPlan;
 
 /**
  *
@@ -81,6 +83,10 @@ public class MunicipalDamages extends BaseServlet {
                 System.out.println("changing damage status");
                 changeDamageStatus(request, response);
                 path = "/MunicipalDamages?action=goToApprovedDamages";
+            }  else if (action.equals("viewProblems")) {
+                System.out.println("view problem list");
+                viewProblemList(request, response);
+                path = "/municipal/problemList.jsp";
             } else {
                 //unknown action
             }
@@ -208,5 +214,16 @@ public class MunicipalDamages extends BaseServlet {
             incident.setRemarks(request.getParameter("remarks"));
         }
         return incidentDAO.updateDamageIncident(incident);
+    }
+    
+    private void viewProblemList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Employee userLogged = (Employee) session.getAttribute("userLogged");
+        
+        ArrayList<Problem> problems = new ProblemDAO().getListOfProblems();
+        ArrayList<ProgramPlan> programs = new ProgramPlanDAO().getListOfProgramPlans();
+        
+        session.setAttribute("problems", problems);
+        session.setAttribute("programs", programs);
     }
 }

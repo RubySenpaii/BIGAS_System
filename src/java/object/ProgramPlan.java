@@ -18,21 +18,26 @@ public class ProgramPlan {
     public static final String COLUMN_TYPE = "Type";
     public static final String COLUMN_FLAG = "Flag";
     
-    private int programPlanID;
-    private String programName;
-    private String description;
-    private int problemID;
-    private String type;
-    private int flag;
-    private int surveyForm;
+    public int programPlanID;
+    public String programName;
+    public String description;
+    public int problemID;
+    public String type;
+    public int flag;
+    public int surveyForm;
+    private int DeployedID;
     
     //additional attribute
-    private double programTriggerFarmArea;
-    private double programTriggerFarmCount;
-    private String effectivityStatus;
-    private double effectivityRating;
+    public double programTriggerFarmArea;
+    public double programTriggerFarmCount;
+    public String effectivityStatus;
+    public double effectivityRating;
     
-    private String programTrigger;
+    public String programTrigger;
+    
+    public ProgramPlan() {
+        
+    }
 
     /**
      * @return the programPlanID
@@ -77,6 +82,20 @@ public class ProgramPlan {
     }
 
     /**
+     * @return the problemID
+     */
+    public int getProblemID() {
+        return problemID;
+    }
+
+    /**
+     * @param problemID the problemID to set
+     */
+    public void setProblemID(int problemID) {
+        this.problemID = problemID;
+    }
+
+    /**
      * @return the type
      */
     public String getType() {
@@ -88,6 +107,34 @@ public class ProgramPlan {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * @return the flag
+     */
+    public int getFlag() {
+        return flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    /**
+     * @return the surveyForm
+     */
+    public int getSurveyForm() {
+        return surveyForm;
+    }
+
+    /**
+     * @param surveyForm the surveyForm to set
+     */
+    public void setSurveyForm(int surveyForm) {
+        this.surveyForm = surveyForm;
     }
 
     /**
@@ -119,34 +166,6 @@ public class ProgramPlan {
     }
 
     /**
-     * @return the flag
-     */
-    public int getFlag() {
-        return flag;
-    }
-
-    /**
-     * @param flag the flag to set
-     */
-    public void setFlag(int flag) {
-        this.flag = flag;
-    }
-
-    /**
-     * @return the programTrigger
-     */
-    public String getProgramTrigger() {
-        return programTrigger;
-    }
-
-    /**
-     * @param programTrigger the programTrigger to set
-     */
-    public void setProgramTrigger(String programTrigger) {
-        this.programTrigger = programTrigger;
-    }
-
-    /**
      * @return the effectivityStatus
      */
     public String getEffectivityStatus() {
@@ -175,30 +194,31 @@ public class ProgramPlan {
     }
 
     /**
-     * @return the problemID
+     * @return the programTrigger
      */
-    public int getProblemID() {
-        return problemID;
+    public String getProgramTrigger() {
+        return programTrigger;
     }
 
     /**
-     * @param problemID the problemID to set
+     * @param programTrigger the programTrigger to set
      */
-    public void setProblemID(int problemID) {
-        this.problemID = problemID;
+    public void setProgramTrigger(String programTrigger) {
+        this.programTrigger = programTrigger;
     }
 
     /**
-     * @return the surveyForm
+     * @return the DeployedID
      */
-    public int getSurveyForm() {
-        return surveyForm;
+    public int getDeployedID() {
+        return DeployedID;
     }
 
     /**
-     * @param surveyForm the surveyForm to set
+     * @param DeployedID the DeployedID to set
      */
-    public void setSurveyForm(int surveyForm) {
-        this.surveyForm = surveyForm;
+    public void setDeployedID(int DeployedID) {
+        this.DeployedID = DeployedID;
     }
+
 }
