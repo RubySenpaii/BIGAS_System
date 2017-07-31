@@ -51,13 +51,20 @@
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12">
                                                 <form class="MunicipalReport" method="">
-                                                    <button type="submit" name="action" value="createPlanting" class="btn btn-primary">Generate Planting</button>
+                                                    <%
+                                                        boolean showButton = (Boolean) session.getAttribute("showButton");
+                                                        String hide = "";
+                                                        if (showButton) {
+                                                            hide = "none";
+                                                        }
+                                                    %>
+                                                    <button type="submit" name="action" value="createPlanting" class="btn btn-primary" style="display: <%=hide%>">Generate Planting</button>
 
-                                                    <button type="submit" name="action" value="createGrowthStage" class="btn btn-success">Generate Growth Stage</button>
+                                                    <button type="submit" name="action" value="createGrowthStage" class="btn btn-success" style="display: <%=hide%>">Generate Growth Stage</button>
 
-                                                    <button type="submit" name="action" value="createDamages"class="btn btn-info">Generate Damage</button>
+                                                    <button type="submit" name="action" value="createDamages" class="btn btn-info" style="display: <%=hide%>">Generate Damage</button>
 
-                                                    <button type="submit" name="action" value="createHarvest"class="btn btn-info">Generate Harvest</button>
+                                                    <button type="submit" name="action" value="createHarvest" class="btn btn-info" style="display: <%=hide%>">Generate Harvest</button>
                                                     
                                                     <button type="submit" name="action" value="createProgramReportv2"class="btn btn-info">Generate Program Plan</button>
                                                 </form>

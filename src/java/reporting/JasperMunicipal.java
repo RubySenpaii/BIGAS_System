@@ -33,7 +33,7 @@ public class JasperMunicipal {
 
     private final String filepath = "C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal";
 
-    public void createMunicipalWeeklyPlantingReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
+    public void createMunicipalWeeklyPlantingReport(String preparedBy, String approvedBy, String municipal, String dateRange) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyPlantingReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -42,6 +42,7 @@ public class JasperMunicipal {
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
         parameters.put("municipality_name", municipal);
+        parameters.put("dateRange", dateRange);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
         try (Connection conn = myFactory.getConnection()) {
@@ -53,7 +54,7 @@ public class JasperMunicipal {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
 
-    public void createMunicipalWeeklyDamagesReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
+    public void createMunicipalWeeklyDamagesReport(String preparedBy, String approvedBy, String municipal, String dateRange) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyDamageReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -62,6 +63,7 @@ public class JasperMunicipal {
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
         parameters.put("municipalityName", municipal);
+        parameters.put("dateRange", dateRange);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
         try (Connection conn = myFactory.getConnection()) {
@@ -73,7 +75,7 @@ public class JasperMunicipal {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
 
-    public void createMunicipalWeeklyHarvestReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
+    public void createMunicipalWeeklyHarvestReport(String preparedBy, String approvedBy, String municipal, String dateRange) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyHarvestingReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -82,6 +84,7 @@ public class JasperMunicipal {
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
         parameters.put("municipality_name", municipal);
+        parameters.put("dateRange", dateRange);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
         try (Connection conn = myFactory.getConnection()) {
@@ -93,7 +96,7 @@ public class JasperMunicipal {
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
     }
 
-    public void createMunicipalWeeklyCropGrowthReport(String preparedBy, String approvedBy, String municipal) throws JRException, FileNotFoundException, SQLException {
+    public void createMunicipalWeeklyCropGrowthReport(String preparedBy, String approvedBy, String municipal, String dateRange) throws JRException, FileNotFoundException, SQLException {
         String source = "C:\\\\Users\\\\RubySenpaii\\\\Documents\\\\NetBeansProjects\\\\BIGAS System\\\\web\\\\reportTemplate\\\\municipal\\\\weeklyGrowthStageReport.jasper";
         File file = new File(source);
         String dateNow = new SimpleDateFormat("MM-dd-yyyy").format(Calendar.getInstance().getTime());
@@ -102,6 +105,7 @@ public class JasperMunicipal {
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
         parameters.put("municipal", municipal);
+        parameters.put("dateRange", dateRange);
         DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
         try (Connection conn = myFactory.getConnection()) {
@@ -144,7 +148,6 @@ public class JasperMunicipal {
         parameters.put("preparedBy", preparedBy);
         parameters.put("approvedBy", approvedBy);
         parameters.put("programPlanID", programPlans);
-        DBConnectionFactory myFactory = DBConnectionFactory.getInstance();
         JasperPrint jasperPrint;
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(programPlans, false);

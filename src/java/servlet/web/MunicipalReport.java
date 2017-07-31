@@ -16,7 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -44,6 +47,9 @@ public class MunicipalReport extends BaseServlet {
     protected void servletAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         ServletContext context = getServletContext();
+        Calculator calcu = new Calculator();
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("MMMM dd, yyyy");
 
         String action = request.getParameter("action");
         String path = "/homepage.jsp";
@@ -51,6 +57,15 @@ public class MunicipalReport extends BaseServlet {
         String preparedBy = userLogged.getFirstName() + " " + userLogged.getMiddleName().charAt(0) + ". " + userLogged.getLastName();
         String approvedBy = "Cynthia N. Nunez";
         String municipal = new MunicipalityDAO().getMunicipalDetail(userLogged.getMunicipalityID()).getMunicipalityName();
+        String dateNow = dbDateFormat.format(Calendar.getInstance().getTime());
+        String lastWeek = calcu.getLastWeekDate(dateNow);
+        String dateRange;
+        try {
+            dateRange = fullDateFormat.format(dbDateFormat.parse(lastWeek)) + "-" + fullDateFormat.format(dbDateFormat.parse(dateNow));
+        } catch (ParseException ex) {
+            dateRange = lastWeek + "-" + dateNow;
+            Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (userLogged.getOfficeLevel().equals("MAO")) {
             if (action.equals("viewReports")) {
                 System.out.println("directing to reports.jsp");
@@ -59,7 +74,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createPlanting")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperMunicipal().createMunicipalWeeklyPlantingReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyPlantingReport(preparedBy, approvedBy, municipal, dateRange);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -68,7 +83,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createGrowthStage")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperMunicipal().createMunicipalWeeklyCropGrowthReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyCropGrowthReport(preparedBy, approvedBy, municipal, dateRange);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -77,7 +92,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createDamages")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperMunicipal().createMunicipalWeeklyDamagesReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyDamagesReport(preparedBy, approvedBy, municipal, dateRange);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -86,7 +101,7 @@ public class MunicipalReport extends BaseServlet {
             } else if (action.equals("createHarvest")) {
                 path = "/MunicipalReport?action=viewReports";
                 try {
-                    new JasperMunicipal().createMunicipalWeeklyHarvestReport(preparedBy, approvedBy, municipal);
+                    new JasperMunicipal().createMunicipalWeeklyHarvestReport(preparedBy, approvedBy, municipal, dateRange);
                 } catch (JRException | FileNotFoundException | SQLException ex) {
                     Logger.getLogger(MunicipalReport.class.getName()).log(Level.SEVERE, null, ex);
                     RequestDispatcher rd = context.getRequestDispatcher(path);
@@ -128,7 +143,14 @@ public class MunicipalReport extends BaseServlet {
         HttpSession session = request.getSession();
         File file = new File("C:\\\\Users\\\\RubySenpaii\\\\Desktop\\\\pdfoutputs\\\\municipal");
         String fileNames[] = file.list();
+        
+        boolean isThursday = true;
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
+            isThursday = false;
+        }
 
+        session.setAttribute("showButton", isThursday);
         session.setAttribute("fileList", fileNames);
     }
 
