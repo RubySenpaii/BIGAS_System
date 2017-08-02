@@ -18,7 +18,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>B.I.G.A.S. System | Municipal - Problem List </title>
+        <title>B.I.G.A.S. System | Municipal - Critical Damages </title>
 
         <!-- Bootstrap -->
         <link href="/BIGAS_System/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,7 +47,7 @@
                     <div class="">
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Problem List</h3>
+                                <h3>Critical Damages</h3>
                             </div>
                         </div>
 

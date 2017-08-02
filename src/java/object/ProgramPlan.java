@@ -34,6 +34,7 @@ public class ProgramPlan {
     public double effectivityRating;
     
     public String programTrigger;
+    private int deployCount;
     
     public ProgramPlan() {
         
@@ -219,6 +220,20 @@ public class ProgramPlan {
      */
     public void setDeployedID(int DeployedID) {
         this.DeployedID = DeployedID;
+    }
+
+    /**
+     * @return the deployCount
+     */
+    public int getDeployCount() {
+        return deployCount;
+    }
+
+    /**
+     * @param deployCount the deployCount to set
+     */
+    public void setDeployCount(int deployCount) {
+        this.deployCount = deployCount;
     }
 
 }

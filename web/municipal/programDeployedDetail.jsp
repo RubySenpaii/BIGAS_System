@@ -155,6 +155,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div id="areaMonitor" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                                                <p style="background-color: yellow">Note: When the line changes color, it signifies that a program has started.</p>
                                             </div>
                                         </div>
                                         <!-- /status -->

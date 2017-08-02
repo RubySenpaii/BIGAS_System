@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="994" leftMargin="7" rightMargin="7" topMargin="7" bottomMargin="7" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="994" leftMargin="7" rightMargin="7" topMargin="7" bottomMargin="7" isSummaryWithPageHeaderAndFooter="true" whenResourceMissingType="Empty" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -29,7 +29,7 @@
 	</style>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<parameter name="report_date" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["01-10-2017"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["07-31-2017"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="preparedBy" class="java.lang.String">
 		<defaultValueExpression><![CDATA["Cynthia Nunez"]]></defaultValueExpression>
@@ -38,7 +38,7 @@
 		<defaultValueExpression><![CDATA["Gigi Carillo"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="municipality_name" class="java.lang.String">
-		<defaultValueExpression><![CDATA["San Rafael"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["Paombong"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="dateRange" class="java.lang.String">
 		<defaultValueExpression><![CDATA["July 21, 2017 - July 28, 2017"]]></defaultValueExpression>
@@ -144,7 +144,7 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 				<textFieldExpression><![CDATA[$P{approvedBy}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEE, d MMM yyyy HH:mm:ss Z">
-				<reportElement x="0" y="65" width="100" height="20" uuid="a2b24780-79d6-4e8a-b879-29d986ac6ee8"/>
+				<reportElement x="0" y="65" width="226" height="20" uuid="a2b24780-79d6-4e8a-b879-29d986ac6ee8"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -192,7 +192,7 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 				</barPlot>
 			</stackedBarChart>
 			<crosstab>
-				<reportElement x="0" y="0" width="994" height="265" uuid="a9269916-3ddc-475a-9e5b-d46349c6f2da"/>
+				<reportElement x="0" y="0" width="994" height="239" uuid="61af2376-47e8-4f69-bcf0-2aec04f70f52"/>
 				<rowGroup name="BarangayName" width="70" totalPosition="End">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{BarangayName}]]></bucketExpression>
@@ -203,7 +203,8 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField>
-								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" uuid="cb6fbcd6-8384-4080-86c6-23448451fd27"/>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" uuid="34c7d3f5-6658-4d54-9802-d42499cc2fac"/>
+								<textElement verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$V{BarangayName}]]></textFieldExpression>
 							</textField>
 						</cellContents>
@@ -214,41 +215,13 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="70" height="25" uuid="61b71a0a-6777-4cb3-a279-8ade9ca42b3f"/>
+								<reportElement x="0" y="0" width="70" height="25" uuid="bcd232f7-7335-4043-913c-7df035f1c879"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<text><![CDATA[Total BarangayName]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalRowHeader>
 				</rowGroup>
-				<columnGroup name="SeedAcquisition" height="30" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{SeedAcquisition}]]></bucketExpression>
-					</bucket>
-					<crosstabColumnHeader>
-						<cellContents backcolor="#F0F8FF" mode="Opaque">
-							<box>
-								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textField>
-								<reportElement style="Crosstab Data Text" x="0" y="0" width="100" height="30" uuid="68d41d70-3d84-43a3-a9ed-d3f3335eb81c"/>
-								<textFieldExpression><![CDATA[$V{SeedAcquisition}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabColumnHeader>
-					<crosstabTotalColumnHeader>
-						<cellContents backcolor="#005FB3" mode="Opaque">
-							<box>
-								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<staticText>
-								<reportElement x="0" y="0" width="50" height="60" forecolor="#FFFFFF" uuid="0134a2ce-b1c2-4cdb-99b5-a1df1be0f1f6"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Total SeedAcquisition]]></text>
-							</staticText>
-						</cellContents>
-					</crosstabTotalColumnHeader>
-				</columnGroup>
 				<columnGroup name="SeedType" height="30" totalPosition="End">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{SeedType}]]></bucketExpression>
@@ -259,8 +232,38 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField>
-								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="30" uuid="baff5849-8627-4060-9583-dc4cf5301cf5"/>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="104" height="30" uuid="cdddf439-8167-43cc-ac25-82221baa67bb"/>
+								<textElement verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$V{SeedType}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#005FB3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="60" forecolor="#FFFFFF" uuid="b54afa77-6d37-49e2-aa90-a7e7877861aa"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Grand Total]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<columnGroup name="SeedAcquisition" height="30" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{SeedAcquisition}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="53" height="30" uuid="ce20eaaf-c557-486b-a890-94a935893e44"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{SeedAcquisition}]]></textFieldExpression>
 							</textField>
 						</cellContents>
 					</crosstabColumnHeader>
@@ -270,78 +273,84 @@ HAVING T1.MunicipalityName = $P{municipality_name}]]>
 								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="50" height="30" uuid="abea6a4b-9bc5-4667-9059-64bcaf1a5bc0"/>
+								<reportElement x="0" y="0" width="50" height="30" uuid="d2dda579-de8b-4e87-8b5d-b6ee5619b224"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Total SeedType]]></text>
+								<text><![CDATA[Total]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
-				<measure name="HarvestMeasure" class="java.lang.Double">
+				<measure name="HarvestMeasure" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{Harvest}]]></measureExpression>
 				</measure>
-				<crosstabCell width="50" height="25">
+				<crosstabCell width="53" height="25">
 					<cellContents>
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField pattern="#,##0.00 MT" isBlankWhenNull="true">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="f06e088f-157d-4dfe-880a-d585ae326743"/>
+						<textField pattern="#,##0.00 MT">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="53" height="25" uuid="f890eca8-a787-4b12-a68e-21b39b8e35ab"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{HarvestMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell height="25" rowTotalGroup="BarangayName">
+				<crosstabCell width="53" height="25" rowTotalGroup="BarangayName">
 					<cellContents backcolor="#BFE1FF" mode="Opaque">
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField pattern="#,##0.00 MT" isBlankWhenNull="true">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="3a09e94c-77b7-4767-8c8f-c8c74c864ebc"/>
+						<textField pattern="#,##0.00 MT">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="53" height="25" uuid="2f7cb475-6264-4f87-aa92-05663101c796"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{HarvestMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="50" columnTotalGroup="SeedAcquisition">
+				<crosstabCell width="70" columnTotalGroup="SeedType">
 					<cellContents backcolor="#005FB3" mode="Opaque">
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField pattern="#,##0.00 MT" isBlankWhenNull="true">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF" uuid="b01b4d6f-b073-4836-a0c9-21cd386f2ef4"/>
+						<textField pattern="#,##0.00 MT">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" forecolor="#FFFFFF" uuid="da4da7ae-fbbf-47b1-90f8-59de65b9df69"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{HarvestMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell rowTotalGroup="BarangayName" columnTotalGroup="SeedAcquisition">
+				<crosstabCell width="70" rowTotalGroup="BarangayName" columnTotalGroup="SeedType">
 					<cellContents backcolor="#005FB3" mode="Opaque">
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField pattern="#,##0.00 MT" isBlankWhenNull="true">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF" uuid="db2212bc-2c07-4c24-b6d9-4b3a20c3a667"/>
+						<textField pattern="#,##0.00 MT">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" forecolor="#FFFFFF" uuid="74175032-e6cc-498b-8535-3da1ebc879b2"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{HarvestMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="50" columnTotalGroup="SeedType">
+				<crosstabCell width="51" columnTotalGroup="SeedAcquisition">
 					<cellContents backcolor="#BFE1FF" mode="Opaque">
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField pattern="#,##0.00 MT" isBlankWhenNull="true">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="07e6ab3a-76d2-4376-91f8-745a842dbf24"/>
+						<textField pattern="#,##0.00 MT">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="480376e9-b36a-44ed-b0c6-0f1abc289eec"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{HarvestMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell rowTotalGroup="BarangayName" columnTotalGroup="SeedType">
+				<crosstabCell width="51" rowTotalGroup="BarangayName" columnTotalGroup="SeedAcquisition">
 					<cellContents backcolor="#BFE1FF" mode="Opaque">
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField pattern="#,##0.00 MT" isBlankWhenNull="true">
-							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="50aa3a99-c171-4523-a20c-6f90cf22ba00"/>
+						<textField pattern="#,##0.00 MT">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="7a882e04-e875-4a7c-a255-ee058f730b1b"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{HarvestMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>

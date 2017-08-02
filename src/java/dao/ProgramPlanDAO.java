@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import object.DeployedProgram;
 import object.ProgramPlan;
 
 /**
@@ -67,12 +68,14 @@ public class ProgramPlanDAO {
         }
 
         for (int a = 0; a < programPlans.size(); a++) {
+            ArrayList<DeployedProgram> deployeds = new DeployedProgramDAO().getListOfDeployedProgramsForProgramPlan(programPlans.get(a).getProgramPlanID());
             Calculator calculator = new Calculator();
             double deployedResult = calculator.getProgramRating(programPlans.get(a).getProgramPlanID());
             String effectivity = calculator.getEffectivityResult(deployedResult);
             System.out.println(programPlans.get(a).getProgramName() + "-" + effectivity + "-" + deployedResult);
             programPlans.get(a).setEffectivityStatus(effectivity);
             programPlans.get(a).setEffectivityRating(deployedResult);
+            programPlans.get(a).setDeployCount(deployeds.size());
         }
         return programPlans;
     }

@@ -14,8 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -69,6 +72,7 @@ public class JasperMunicipal {
         try (Connection conn = myFactory.getConnection()) {
             JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
             jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
+            removeBlankPage(jasperPrint.getPages());
         }
         String filename = municipal + "WeeklyDamageReport" + dateNow;
         filename = filename.replaceAll(" ", "");
@@ -90,6 +94,7 @@ public class JasperMunicipal {
         try (Connection conn = myFactory.getConnection()) {
             JasperReport jasperPlantingReport = (JasperReport) JRLoader.loadObject(file);
             jasperPrint = JasperFillManager.fillReport(jasperPlantingReport, parameters, conn);
+            removeBlankPage(jasperPrint.getPages());
         }
         String filename = municipal + "WeeklyHarvestReport" + dateNow;
         filename = filename.replaceAll(" ", "");
@@ -156,5 +161,16 @@ public class JasperMunicipal {
         String filename = municipal.getMunicipalityName() + "ProgramReport" + dateNow;
         filename = filename.replaceAll(" ", "");
         JasperExportManager.exportReportToPdfFile(jasperPrint, filepath + File.separator + filename + ".pdf");
+    }
+    
+    private void removeBlankPage(List<JRPrintPage> pages) {
+        for (Iterator<JRPrintPage> i=pages.iterator(); i.hasNext();) {
+            JRPrintPage page = i.next();
+            if (page.getElements().isEmpty()) {
+                i.remove();
+            }
+        }
+        
+        pages.remove(0);
     }
 }

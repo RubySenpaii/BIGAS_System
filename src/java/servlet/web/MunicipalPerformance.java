@@ -297,13 +297,13 @@ public class MunicipalPerformance extends BaseServlet {
             for (int b = 0; b < barangayCropStage.size(); b++) {
                 if (currentWeekBarangay.get(a).getBarangayName().equals(barangayCropStage.get(b).getBarangayName())) {
                     if (barangayCropStage.get(b).getCropStage().equals("Newly Planted")) {
-                        currentWeekBarangay.get(b).setNewlyPlantedArea(barangayCropStage.get(b).getArea());
+                        currentWeekBarangay.get(a).setNewlyPlantedArea(barangayCropStage.get(b).getArea());
                     } else if (barangayCropStage.get(b).getCropStage().equals("Tillering")) {
-                        currentWeekBarangay.get(b).setTilleringArea(barangayCropStage.get(b).getArea());
+                        currentWeekBarangay.get(a).setTilleringArea(barangayCropStage.get(b).getArea());
                     } else if (barangayCropStage.get(b).getCropStage().equals("Reproductive")) {
-                        currentWeekBarangay.get(b).setReproductiveArea(barangayCropStage.get(b).getArea());
+                        currentWeekBarangay.get(a).setReproductiveArea(barangayCropStage.get(b).getArea());
                     } else {
-                        currentWeekBarangay.get(b).setHarvestingArea(barangayCropStage.get(b).getArea());
+                        currentWeekBarangay.get(a).setHarvestingArea(barangayCropStage.get(b).getArea());
                     }
                 }
             }

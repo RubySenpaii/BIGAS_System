@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="c6f77879-44d3-45b8-9016-b26b5a5bd3a9">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.2100000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
@@ -232,25 +232,30 @@ HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Maturity") GG5 ON
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="30">
+		<band height="41">
 			<staticText>
-				<reportElement x="0" y="0" width="148" height="30" uuid="cc5b8e10-53bb-444c-bb4f-2f393609f1a0"/>
+				<reportElement style="table" x="0" y="11" width="257" height="30" uuid="cc5b8e10-53bb-444c-bb4f-2f393609f1a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Barangay Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="0" width="106" height="30" uuid="a72bc33b-4ce8-4ab7-b24c-43bd9dc09851"/>
+				<reportElement style="table" x="257" y="11" width="175" height="30" uuid="a72bc33b-4ce8-4ab7-b24c-43bd9dc09851"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Newly Planted]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="0" width="100" height="30" uuid="77fe5b46-1653-4bd2-ad63-e5e580f3d87e"/>
+				<reportElement style="table" x="432" y="11" width="169" height="30" uuid="77fe5b46-1653-4bd2-ad63-e5e580f3d87e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Tillering]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="353" y="0" width="113" height="30" uuid="ca65b030-ff40-43a3-806b-81a6737bc07b"/>
+				<reportElement style="table" x="601" y="11" width="182" height="30" uuid="ca65b030-ff40-43a3-806b-81a6737bc07b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Reproductive]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="466" y="0" width="116" height="30" uuid="85b51841-0013-4182-beab-036a9c17d6b0"/>
+				<reportElement style="table" x="783" y="11" width="185" height="30" uuid="85b51841-0013-4182-beab-036a9c17d6b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Harvested]]></text>
 			</staticText>
 		</band>
@@ -258,24 +263,28 @@ HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Maturity") GG5 ON
 	<detail>
 		<band height="27">
 			<textField>
-				<reportElement x="0" y="0" width="148" height="27" uuid="99955ada-2bd3-40e1-8a89-116fdcaccbd7"/>
+				<reportElement style="table" x="0" y="0" width="257" height="27" uuid="99955ada-2bd3-40e1-8a89-116fdcaccbd7"/>
 				<textFieldExpression><![CDATA[$F{BarangayName}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
-				<reportElement x="148" y="0" width="106" height="27" uuid="990aa9f5-1947-4ac2-af76-49314046511e"/>
+				<reportElement style="table" x="257" y="0" width="175" height="27" uuid="990aa9f5-1947-4ac2-af76-49314046511e"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[( $F{NewlyPlanted} == null ? 0 : $F{NewlyPlanted} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
-				<reportElement x="254" y="0" width="100" height="27" uuid="bec775be-4516-4565-8baf-6492d2e8d228"/>
-				<textFieldExpression><![CDATA[( $F{Tillering} == null ? 0 : $F{Tillering} )]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
-				<reportElement x="353" y="1" width="113" height="26" uuid="c07d64c8-c501-482d-bde9-1326b690e02b"/>
+				<reportElement style="table" x="601" y="0" width="182" height="26" uuid="c07d64c8-c501-482d-bde9-1326b690e02b"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[( $F{Reproductive} == null ? 0 : $F{Reproductive} )]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
-				<reportElement x="466" y="1" width="116" height="26" uuid="3d77f9b2-7f4e-46ed-8dca-f9ac41b5fabf"/>
+				<reportElement style="table" x="783" y="0" width="185" height="26" uuid="3d77f9b2-7f4e-46ed-8dca-f9ac41b5fabf"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[( $F{Maturity} == null ? 0 : $F{Maturity} )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 ha" isBlankWhenNull="true">
+				<reportElement style="table" x="432" y="0" width="169" height="27" uuid="bec775be-4516-4565-8baf-6492d2e8d228"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[( $F{Tillering} == null ? 0 : $F{Tillering} )]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -358,7 +367,4 @@ HAVING T1.MunicipalityName = $P{municipal} AND T2.CropStage = "Maturity") GG5 ON
 			</stackedBarChart>
 		</band>
 	</summary>
-	<noData>
-		<band height="50"/>
-	</noData>
 </jasperReport>
